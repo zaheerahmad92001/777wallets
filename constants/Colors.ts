@@ -7,6 +7,15 @@ const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
 
 export const Colors = {
+ bg:'rgb(48,50,57)',
+ headerColor:"rgb(30,34,38)",
+ grayWhite:'rgb(164,168,173)',
+ lightBlack:"rgb(61,68,74)",
+ white:'#ffffff',
+ green:"rgb(80,176,131)",
+
+
+
   light: {
     text: '#11181C',
     background: '#fff',
@@ -14,6 +23,8 @@ export const Colors = {
     icon: '#687076',
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
+    black : '#000000',
+    white:'#ffffff'
   },
   dark: {
     text: '#ECEDEE',
