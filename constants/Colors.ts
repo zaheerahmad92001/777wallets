@@ -8,12 +8,13 @@ const tintColorDark = '#fff';
 
 export const Colors = {
  bg:'rgb(48,50,57)',
+ red:'red',
  headerColor:"rgb(30,34,38)",
  grayWhite:'rgb(164,168,173)',
  lightBlack:"rgb(61,68,74)",
  white:'#ffffff',
  green:"rgb(80,176,131)",
-
+lightWhite:"#CCCCCC",
 
 
   light: {

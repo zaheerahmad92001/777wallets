@@ -25,7 +25,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onPress, userName, greetings }) =
         </View>
         <Pressable onPress={onPress} style={styles.imageContainer}>
           <Image
-            source={require("../assets/images/react-logo.png")}
+            source={require("../assets/images/user.png")}
             style={styles.imageStyle}
           />
         </Pressable>

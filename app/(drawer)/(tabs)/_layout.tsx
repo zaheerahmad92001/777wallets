@@ -1,39 +1,35 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, useWindowDimensions } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
-import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { width } = useWindowDimensions();
+  const isWeb = Platform.OS === "web";
+  const isLargeScreen = width >= 768;
 
   return (
     <Tabs
+    initialRouteName='index'
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        // tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
         tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
+         tabBarPosition: isWeb && isLargeScreen ? "top" : "bottom",
+        // tabBarBackground: TabBarBackground,
 
-        // tabBarStyle: {
-        //   height: 70, // Change height here
-        //   backgroundColor: 'red', // Light gray (you can replace with your color)
-        //   borderTopWidth: 0, // remove border if you want a clean look
-        //   paddingBottom: Platform.OS === 'ios' ? 20 : 10, // adjust safe area
-        //   paddingTop: 10,
-        // },
-        tabBarStyle: Platform.select({
-          ios: {
-            // Transparent background on iOS for blur effect
-            position: 'absolute',
-            backgroundColor: 'red',
-          },
-          default: {},
-        }),
+        tabBarStyle: {
+          height: 80, // Change height here
+          backgroundColor: Colors.headerColor, // Light gray (you can replace with your color)
+          borderTopWidth: 0, // remove border if you want a clean look
+          paddingBottom: Platform.OS === 'ios' ? 20 : 10, // adjust safe area
+          paddingTop: 10,
+        },
       }}>
       
       {/* Home */}

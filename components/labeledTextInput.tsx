@@ -1,15 +1,19 @@
+import { Colors } from "@/constants/Colors";
 import React, { useState } from "react";
 import {
-    StyleSheet,
-    Text,
-    TextInput,
-    TextInputProps,
-    TextStyle,
-    View,
-    ViewStyle,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputProps,
+  TextStyle,
+  View,
+  ViewStyle,
 } from "react-native";
+import { responsiveFontSize, responsiveHeight } from "react-native-responsive-dimensions";
 
 type LabeledInputProps = TextInputProps & {
+  title?:string;
   label: string;
   containerStyle?: ViewStyle;
   inputStyle?: TextStyle;
@@ -22,13 +26,14 @@ type LabeledInputProps = TextInputProps & {
 };
 
 const LabeledTextInput: React.FC<LabeledInputProps> = ({
+  title,
   label,
   containerStyle,
   inputStyle,
   labelStyle,
   errorText,
   backgroundColor = "#FFFFFF",
-  borderColor = "#CCCCCC",
+  borderColor = Colors.grayWhite,
   activeBorderColor = "#007AFF",
   errorColor = "#D32F2F",
   onFocus,
@@ -41,6 +46,9 @@ const LabeledTextInput: React.FC<LabeledInputProps> = ({
   return (
     <View style={[styles.wrapper, containerStyle]}>
       {/* Border container */}
+      {title &&
+       <Text style={styles.selectCurrency}>{title}</Text>
+       }
       <View
         style={[
           styles.container,
@@ -57,7 +65,7 @@ const LabeledTextInput: React.FC<LabeledInputProps> = ({
           <Text
             style={[
               styles.label,
-              { color: hasError ? errorColor : focused ? activeBorderColor : "#666" },
+              { color: hasError ? errorColor : focused ? activeBorderColor : Colors.grayWhite },
               labelStyle,
             ]}
           >
@@ -68,10 +76,10 @@ const LabeledTextInput: React.FC<LabeledInputProps> = ({
         {/* Input */}
         <TextInput
           style={[styles.input, inputStyle]}
-          onFocus={(e) => {
-            setFocused(true);
-            onFocus?.(e);
-          }}
+          // onFocus={(e) => {
+          //   setFocused(true);
+          //   onFocus?.(e);
+          // }}
           onBlur={(e) => {
             setFocused(false);
             onBlur?.(e);
@@ -107,17 +115,27 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   label: {
-    fontSize: 12,
+    fontSize: Platform.OS==='web'? 12:14,
     fontWeight: "600",
+    color:'red'
   },
   input: {
     fontSize: 16,
     paddingVertical: 4,
+    outlineStyle:'dashed',
+    outlineWidth:0,
+    color:Colors.grayWhite, 
   },
   helperText: {
     marginTop: 6,
     fontSize: 12,
   },
+  selectCurrency:{
+      color: Colors.grayWhite,
+      marginBottom: responsiveHeight(Platform.OS ==='web'? 2.5 : 2.2),
+      fontSize: responsiveFontSize(Platform.OS==='web'?1.2: 1.8),
+      fontWeight: "500",
+    },
 });
 
 export default LabeledTextInput;

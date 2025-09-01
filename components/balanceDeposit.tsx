@@ -1,56 +1,89 @@
 import { Colors } from "@/constants/Colors";
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import {
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native";
+import {
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveWidth,
+} from "react-native-responsive-dimensions";
 
-const BalanceDeposit = () => {
+type BalanceDepositProps = {
+  amount: number | string; 
+  heading?: string;        
+  title?: string;          
+  onPress?: () => void;  
+};
+
+const BalanceDeposit: React.FC<BalanceDepositProps> = ({
+  amount,
+  heading,
+  title,
+  onPress,
+}) => {
   return (
     <View style={styles.container}>
       <View style={styles.rowContainer}>
         <View style={styles.columnContainer}>
-          <Text style={styles.amountText}>RS: 0</Text>
-          <Text style={styles.balanceText}>Account Balance</Text>
+          <Text style={styles.amountText}>RS: {amount}</Text>
+          {heading && <Text style={styles.balanceText}>{heading}</Text>}
         </View>
-      
-          <Pressable style={styles.buttonStyle}>
-            <Text style={{color: Colors.light.white}}>Deposit</Text>
+
+        {title && (
+          <Pressable style={styles.buttonStyle} onPress={onPress}>
+            <Text style={styles.buttonText}>{title}</Text>
           </Pressable>
-       
+        )}
       </View>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.lightBlack,
-    borderRadius: responsiveWidth(3),
-  },
+    borderRadius: responsiveWidth(Platform.OS==='web'?1.5:3),
+  } as ViewStyle,
   rowContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: responsiveWidth(4),
+    paddingVertical: responsiveWidth(Platform.OS==='web'?1 : 4),
     paddingHorizontal: responsiveWidth(4),
-  },
-  buttonStyle:{
+  } as ViewStyle,
+  buttonStyle: {
     backgroundColor: Colors.green,
-    paddingVertical: responsiveWidth(2),
-    paddingHorizontal: responsiveWidth(5),
+    paddingVertical: responsiveWidth(Platform.OS==='web'?1: 2),
+    width:responsiveWidth(Platform.OS==='web'?15: 20),
+    // paddingHorizontal: responsiveWidth(5),
     borderRadius: responsiveWidth(2),
-  },
-  columnContainer:{
-    gap: responsiveHeight(1)
-  },
-  amountText:{
+  } as ViewStyle,
+  columnContainer: {
+    gap: responsiveHeight(1),
+  } as ViewStyle,
+  amountText: {
     fontSize: responsiveFontSize(2),
-    fontWeight:'600',
-    color:Colors.grayWhite,
-  },
-  balanceText:{
-    color:Colors.grayWhite,
+    fontWeight: "600",
+    color: Colors.grayWhite,
+  } as TextStyle,
+  balanceText: {
+    color: Colors.grayWhite,
     fontSize: responsiveFontSize(1.5),
-    fontWeight:'400',
-  }
+    fontWeight: "400",
+  } as TextStyle,
+  buttonText: {
+    color: Colors.light.white,
+    fontSize: responsiveFontSize(1.7),
+    textAlign:'center',
+    fontWeight: "500",
+  } as TextStyle,
 });
 
 export default BalanceDeposit;

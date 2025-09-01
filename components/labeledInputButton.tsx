@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import { Colors } from "@/constants/Colors";
+import React from "react";
 import {
-    StyleSheet,
-    Text,
-    TextInput,
-    TextInputProps,
-    TextStyle,
-    View,
-    ViewStyle,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInputProps,
+  TextStyle,
+  View,
+  ViewStyle
 } from "react-native";
+import { responsiveFontSize, responsiveHeight } from "react-native-responsive-dimensions";
 
 type LabeledInputButton = TextInputProps & {
   label: string;
@@ -15,36 +18,40 @@ type LabeledInputButton = TextInputProps & {
   inputStyle?: TextStyle;
   labelStyle?: TextStyle;
   errorText?: string;
-  backgroundColor?: string; // background behind the label to mask the border
+  backgroundColor?: string;
   borderColor?: string;
   activeBorderColor?: string;
   errorColor?: string;
+  onPress: () => void;
+  value:string;
+
+
 };
 
-const LabeledTextInput: React.FC<LabeledInputButton> = ({
+const LabeledButton: React.FC<LabeledInputButton> = ({
   label,
   containerStyle,
   inputStyle,
   labelStyle,
   errorText,
   backgroundColor = "#FFFFFF",
-  borderColor = "#CCCCCC",
+  borderColor = Colors.grayWhite,
   activeBorderColor = "#007AFF",
   errorColor = "#D32F2F",
-  onFocus,
-  onBlur,
-  ...rest
+  onPress,
+  value
 }) => {
-  const [focused, setFocused] = useState(false);
   const hasError = !!errorText;
 
   return (
     <View style={[styles.wrapper, containerStyle]}>
       {/* Border container */}
-      <View
+      <Text style={styles.selectCurrency}>{'Select Currency'}</Text>
+      <Pressable
+        onPress={() => onPress() }
         style={[
           styles.container,
-          { borderColor: hasError ? errorColor : focused ? activeBorderColor : borderColor },
+          { borderColor: hasError ? errorColor : borderColor },
         ]}
       >
         {/* Label overlapping the top-left border */}
@@ -57,7 +64,7 @@ const LabeledTextInput: React.FC<LabeledInputButton> = ({
           <Text
             style={[
               styles.label,
-              { color: hasError ? errorColor : focused ? activeBorderColor : "#666" },
+              { color: hasError ? errorColor : Colors.grayWhite },
               labelStyle,
             ]}
           >
@@ -66,19 +73,10 @@ const LabeledTextInput: React.FC<LabeledInputButton> = ({
         </View>
 
         {/* Input */}
-        <TextInput
-          style={[styles.input, inputStyle]}
-          onFocus={(e) => {
-            setFocused(true);
-            onFocus?.(e);
-          }}
-          onBlur={(e) => {
-            setFocused(false);
-            onBlur?.(e);
-          }}
-          {...rest}
-        />
-      </View>
+        <View style={[styles.input, inputStyle]}>
+          <Text style={{fontSize:16, color:Colors.grayWhite}}>{value}</Text>
+        </View>
+      </Pressable>
 
       {/* Helper / Error */}
       {!!errorText && (
@@ -92,6 +90,12 @@ const styles = StyleSheet.create({
   wrapper: {
     width: "100%",
   },
+  selectCurrency:{
+    color: Colors.grayWhite,
+   marginBottom: responsiveHeight(Platform.OS ==='web'? 2.5 : 2.2),
+   fontSize: responsiveFontSize(Platform.OS==='web'?1.2: 1.8),
+   fontWeight: "500",
+  },
   container: {
     position: "relative",
     borderWidth: 1.5,
@@ -101,17 +105,17 @@ const styles = StyleSheet.create({
   },
   labelWrap: {
     position: "absolute",
-    top: -10,       // lifts label above the border
+    top: -10,
     left: 12,
-    paddingHorizontal: 6, // background padding so border is hidden behind
+    paddingHorizontal: 6,
     zIndex: 1,
   },
   label: {
     fontSize: 12,
     fontWeight: "600",
+    color: Colors.lightWhite,
   },
   input: {
-    fontSize: 16,
     paddingVertical: 4,
   },
   helperText: {
@@ -120,4 +124,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LabeledTextInput;
+export default LabeledButton;
