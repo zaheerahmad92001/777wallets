@@ -31,7 +31,7 @@ const LabeledButton: React.FC<LabeledInputButton> = ({
   const hasError = !!errorText;
 
   return (
-    <View className={`w-full ${containerStyle ?? ""}`}>
+    <View className={`${containerStyle ?? ""}`}>
       <Text
         className={`text-grayWhite font-medium mb-2 ${
           Platform.OS === "web" ? "text-sm" : "text-base"
