@@ -59,7 +59,7 @@ const DepositScreen = () => {
             keyboardType="default"
             autoCapitalize="none"
             backgroundColor={Colors.bg}
-            containerStyle={styles.inputContainer}
+            containerStyle="w-[92%] md:w-[50%] mx-auto"
             // labelStyle={{ color: Colors.lightWhite }}
           />
           <Spacer size={15} />
@@ -68,9 +68,9 @@ const DepositScreen = () => {
             label="Currency"
             value={selectedCurrency ? selectedCurrency : "Select Currency"}
             backgroundColor={Colors.bg}
-            inputStyle={{ paddingVertical: 4 }}
-            labelStyle={{ color: Colors.grayWhite }}
-            containerStyle={styles.inputContainer}
+            inputStyle={""}
+            labelStyle={""}
+            containerStyle="w-[92%] md:w-[50%] mx-auto"
           />
 
           <Spacer size={15} />
@@ -86,12 +86,12 @@ const DepositScreen = () => {
             keyboardType="numeric"
             autoCapitalize="none"
             backgroundColor={Colors.bg}
-            containerStyle={styles.inputContainer}
+            containerStyle="w-[92%] md:w-[50%] self-center"
             // labelStyle={{ color: Colors.lightWhite }}
           />
 
           <Spacer size={20} />
-          <View style={styles.inputContainer}>
+          <View className="w-[92%] md:w-[50%] self-center">
             <Text style={styles.depositTo}>{"Select Deposit Method"}</Text>
           </View>
           <AccountSelector

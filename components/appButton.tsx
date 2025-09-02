@@ -1,6 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import React, { useEffect, useRef } from "react";
 import { Animated, Platform, Pressable, PressableProps } from "react-native";
+import { responsiveFontSize } from "react-native-responsive-dimensions";
 
 interface AppButtonProps extends PressableProps {
   title: string;
@@ -35,11 +36,13 @@ const AppButton: React.FC<AppButtonProps> = ({
     <Pressable
       onPress={onPress}
       className={`rounded-md items-center justify-center px-5 
-        ${Platform.OS === "web" ? "py-5" : "py-3"} ${buttonStyle ?? ""}`}
+        ${Platform.OS === "web" ? "py-3" : "py-3"} ${buttonStyle ?? ""}`}
       {...rest}
     >
       <Animated.Text
-        style={[blink ? { opacity } : {}, {color:Colors.white}]}
+        style={[blink ? { opacity } : {}, {color:Colors.white,},
+          Platform.OS==='web'? {fontSize:responsiveFontSize(1.2)}:{}
+        ]}
         className={`text-white text-base font-bold ${textStyle ?? ""}`}
       >
         {title}

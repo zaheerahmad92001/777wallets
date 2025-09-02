@@ -33,7 +33,7 @@ const LabeledTextInput: React.FC<LabeledInputProps> = ({
   const hasError = !!errorText;
 
   return (
-    <View className={`w-full ${containerStyle ?? ""}`}>
+    <View className={`${containerStyle ?? ""}`}>
       {title && (
         <Text
           className={`text-grayWhite font-medium mb-2 ${labelStyle ?? ""} ${

@@ -45,7 +45,7 @@ const isImage = file?.mimeType?.startsWith("image/")
 
   return (
     <View style={styles.container}>
-      <AppButton title="Select File" onPress={pickDocument} buttonStyle={styles.buttonStyle} />
+      <AppButton title="Select File" onPress={pickDocument}  buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green mb-4" />
 
       {file && (
         <View style={
@@ -101,6 +101,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    alignSelf:'center',
+    width:responsiveScreenWidth(Platform.OS==='web'? 50: 90)
   },
   fileInfoImg:{
     marginTop: 16,
