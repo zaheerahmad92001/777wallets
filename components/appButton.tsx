@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/Colors";
 import React, { useEffect, useRef } from "react";
 import { Animated, Platform, Pressable, PressableProps } from "react-native";
 
@@ -6,7 +7,7 @@ interface AppButtonProps extends PressableProps {
   onPress: () => void;
   buttonStyle?: string | (string | undefined)[];
   textStyle?: string | (string | undefined)[];
-  blink?: boolean; // enable blinking text
+  blink?: boolean;
 }
 
 const AppButton: React.FC<AppButtonProps> = ({
@@ -23,16 +24,8 @@ const AppButton: React.FC<AppButtonProps> = ({
     if (blink) {
       Animated.loop(
         Animated.sequence([
-          Animated.timing(opacity, {
-            toValue: 0,
-            duration: 1000,
-            useNativeDriver: true,
-          }),
-          Animated.timing(opacity, {
-            toValue: 1,
-            duration: 500,
-            useNativeDriver: true,
-          }),
+          Animated.timing(opacity, { toValue: 0, duration: 1000, useNativeDriver: true }),
+          Animated.timing(opacity, { toValue: 1, duration: 500, useNativeDriver: true }),
         ])
       ).start();
     }
@@ -41,14 +34,12 @@ const AppButton: React.FC<AppButtonProps> = ({
   return (
     <Pressable
       onPress={onPress}
-      className={`bg-green rounded-md items-center justify-center px-5 
+      className={`rounded-md items-center justify-center px-5 
         ${Platform.OS === "web" ? "py-5" : "py-3"} ${buttonStyle ?? ""}`}
       {...rest}
     >
       <Animated.Text
-        style={[
-          blink ? { opacity } : {},
-        ]}
+        style={[blink ? { opacity } : {}, {color:Colors.white}]}
         className={`text-white text-base font-bold ${textStyle ?? ""}`}
       >
         {title}
@@ -58,6 +49,7 @@ const AppButton: React.FC<AppButtonProps> = ({
 };
 
 export default AppButton;
+
 
 // // import { Colors } from "@/constants/Colors";
 // // import React from "react";

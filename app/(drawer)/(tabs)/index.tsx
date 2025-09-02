@@ -83,7 +83,7 @@ export default function HomeScreen() {
 
           <Spacer size={20} />
           <AppButton title="www.world777.now" onPress={openWeb} 
-            buttonStyle={styles.buttonStyle}
+            buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green mb-4"
             />
           <Spacer size={10} />
           <AppButton
@@ -92,7 +92,7 @@ export default function HomeScreen() {
             onPress={() => {
               openWhatsApp();
             }}
-            buttonStyle={styles.buttonStyle}
+           buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green mb-4"
           />
         </ScrollView>
       </SafeAreaView>

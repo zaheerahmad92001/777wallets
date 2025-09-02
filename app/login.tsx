@@ -1,6 +1,5 @@
 
 
-// app/(auth)/login.tsx
 import AppButton from "@/components/appButton";
 import LabeledTextInput from "@/components/labeledTextInput";
 import Spacer from "@/components/spacer";
@@ -12,38 +11,29 @@ import { ScrollView } from "react-native-gesture-handler";
 export default function Login() {
   const router = useRouter();
 
-  const handleLogin = () => {
-    router.replace("/(drawer)/(tabs)");
-  };
-
-  const handleSignup = () => {
-    // router.push("/(auth)/signup");
-  };
+  const handleLogin = () => router.replace("/(drawer)/(tabs)");
+  const handleSignup = () => {};
 
   return (
-    <View className="flex-1 bg-bg">
+    <View className="flex-1 bg-bg px-4">
       <SafeAreaView className="flex-1 mt-12 px-4">
         <ScrollView className="flex-1">
           {/* Heading */}
-          <Text
-            className={`font-medium text-grayWhite ${
-              Platform.OS === "web" ? "text-2xl" : "text-4xl"
-            }`}
-          >
+          <Text className={`font-medium text-grayWhite ${Platform.OS === "web" ? "text-2xl" : "text-4xl"}`}>
             Login
           </Text>
 
           <View className={`${Platform.OS === "web" ? "mt-40" : "mt-20"}`}>
             {/* Phone Number */}
-            {/* <LabeledTextInput
+            <LabeledTextInput
               label="Phone Number"
               placeholder="Enter number"
               placeholderTextColor={Colors.grayWhite}
               keyboardType="numeric"
               autoCapitalize="none"
               backgroundColor={Colors.bg}
-              containerStyle="w-[90%] md:w-[50%] self-center"
-            /> */}
+              containerStyle="w-[90%] md:w-[50%] mx-auto"
+            />
 
             <Spacer size={Platform.OS === "web" ? 30 : 20} />
 
@@ -55,7 +45,7 @@ export default function Login() {
               secureTextEntry
               autoCapitalize="none"
               backgroundColor={Colors.bg}
-              containerStyle="w-[90%] md:w-[50%] self-center"
+              containerStyle="w-[90%] md:w-[50%] mx-auto"
             />
 
             <Spacer size={20} />
@@ -64,7 +54,7 @@ export default function Login() {
             <AppButton
               title="Login"
               onPress={handleLogin}
-              buttonStyle="mb-4 w-[90%] md:w-[20%] self-center bg-green"
+              buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green mb-4"
               textStyle="text-white text-lg font-bold"
             />
 
@@ -80,6 +70,7 @@ export default function Login() {
     </View>
   );
 }
+
 
 
 // // app/(auth)/login.tsx

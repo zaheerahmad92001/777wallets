@@ -12,7 +12,7 @@ export default function TabLayout() {
   const { width } = useWindowDimensions();
   const isWeb = Platform.OS === "web";
   const isLargeScreen = width >= 768;
-  const isLoggedIn = false
+  const isLoggedIn = true
 
   if(!isLoggedIn){
     return <Redirect href={'/login'}/>

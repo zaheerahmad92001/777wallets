@@ -1,21 +1,14 @@
-import { Colors } from "@/constants/Colors";
 import React, { useState } from "react";
-import {
-  Platform,
-  Text,
-  TextInput,
-  TextInputProps,
-  View,
-} from "react-native";
+import { Platform, Text, TextInput, TextInputProps, View } from "react-native";
 
 type LabeledInputProps = TextInputProps & {
   title?: string;
   label: string;
-  containerStyle?: string; // Tailwind className string
+  containerStyle?: string; // Tailwind class
   inputStyle?: string;
   labelStyle?: string;
   errorText?: string;
-  backgroundColor?: string; // for masking border behind label
+  backgroundColor?: string;
   borderColor?: string;
   activeBorderColor?: string;
   errorColor?: string;
@@ -28,8 +21,8 @@ const LabeledTextInput: React.FC<LabeledInputProps> = ({
   inputStyle,
   labelStyle,
   errorText,
-  backgroundColor = "#FFFFFF",
-  borderColor = Colors.grayWhite,
+  backgroundColor = "#fff",
+  borderColor = "rgb(164,168,173)",
   activeBorderColor = "#007AFF",
   errorColor = "#D32F2F",
   onFocus,
@@ -40,23 +33,19 @@ const LabeledTextInput: React.FC<LabeledInputProps> = ({
   const hasError = !!errorText;
 
   return (
-    <View className={`w-full ${containerStyle || ""}`}>
-      {/* Title above input */}
+    <View className={`w-full ${containerStyle ?? ""}`}>
       {title && (
         <Text
-          className="text-gray-400 font-medium"
-          style={{
-            marginBottom: Platform.OS === "web" ? 10 : 8,
-            fontSize: Platform.OS === "web" ? 12 : 16,
-          }}
+          className={`text-grayWhite font-medium mb-2 ${labelStyle ?? ""} ${
+            Platform.OS === "web" ? "text-sm" : "text-base"
+          }`}
         >
           {title}
         </Text>
       )}
 
-      {/* Input container with border */}
       <View
-        className={`relative rounded-lg px-4 py-3 border`}
+        className="relative rounded-lg border"
         style={{
           borderWidth: 1.5,
           borderColor: hasError
@@ -64,11 +53,12 @@ const LabeledTextInput: React.FC<LabeledInputProps> = ({
             : focused
             ? activeBorderColor
             : borderColor,
+          backgroundColor: backgroundColor,
         }}
       >
         {/* Floating label */}
         <View
-          className="absolute z-10 px-1"
+          className="absolute px-1 z-10"
           style={{
             top: -10,
             left: 12,
@@ -81,42 +71,38 @@ const LabeledTextInput: React.FC<LabeledInputProps> = ({
                 ? "text-red-600"
                 : focused
                 ? "text-blue-500"
-                : "text-gray-400"
-            } ${labelStyle || ""}`}
-            style={{ fontSize: Platform.OS === "web" ? 12 : 14 }}
+                : "text-grayWhite"
+            } ${labelStyle ?? ""} ${Platform.OS === "web" ? "text-sm" : "text-base"}`}
           >
             {label}
           </Text>
         </View>
 
-        {/* Input */}
         <TextInput
-          className={`text-base text-gray-400 py-1 ${inputStyle || ""}`}
+          className={`text-base text-grayWhite py-3 px-4 ${inputStyle ?? ""}`}
           style={{
-            outlineStyle: "dashed",
-            outlineWidth: 0,
+            outlineStyle:'dashed',
+            outlineWidth:0,
           }}
-          onFocus={(e) => {
-            setFocused(true);
-            onFocus?.(e);
-          }}
-          onBlur={(e) => {
-            setFocused(false);
-            onBlur?.(e);
-          }}
+          // onFocus={(e) => {
+          //   setFocused(true);
+          //   onFocus?.(e);
+          // }}
+          // onBlur={(e) => {
+          //   setFocused(false);
+          //   onBlur?.(e);
+          // }}
           {...rest}
         />
       </View>
 
-      {/* Error message */}
-      {!!errorText && (
-        <Text className="mt-1 text-xs text-red-600">{errorText}</Text>
-      )}
+      {errorText && <Text className="mt-1 text-xs text-red-600">{errorText}</Text>}
     </View>
   );
 };
 
 export default LabeledTextInput;
+
 
 
 
