@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Tabs } from 'expo-router';
+import { Redirect, Tabs } from 'expo-router';
 import React from 'react';
 import { Platform, useWindowDimensions } from 'react-native';
 
@@ -12,6 +12,11 @@ export default function TabLayout() {
   const { width } = useWindowDimensions();
   const isWeb = Platform.OS === "web";
   const isLargeScreen = width >= 768;
+  const isLoggedIn = false
+
+  if(!isLoggedIn){
+    return <Redirect href={'/login'}/>
+  }
 
   return (
     <Tabs
