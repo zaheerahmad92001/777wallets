@@ -35,7 +35,7 @@ export default function Login() {
 
           <View className={`${Platform.OS === "web" ? "mt-40" : "mt-20"}`}>
             {/* Phone Number */}
-            <LabeledTextInput
+            {/* <LabeledTextInput
               label="Phone Number"
               placeholder="Enter number"
               placeholderTextColor={Colors.grayWhite}
@@ -43,7 +43,7 @@ export default function Login() {
               autoCapitalize="none"
               backgroundColor={Colors.bg}
               containerStyle="w-[90%] md:w-[50%] self-center"
-            />
+            /> */}
 
             <Spacer size={Platform.OS === "web" ? 30 : 20} />
 
