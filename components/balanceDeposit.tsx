@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import AppButton from "./appButton";
 
 type BalanceDepositProps = {
@@ -16,7 +16,7 @@ const BalanceDeposit: React.FC<BalanceDepositProps> = ({
   onPress,
 }) => {
   return (
-    <View className="bg-headerColor rounded-xl w-[92%] mx-auto">
+    <Pressable onPress={onPress} className="bg-headerColor rounded-xl w-[92%] mx-auto">
       <View className="flex-row items-center justify-between py-3 px-4">
         {/* Left Section */}
         <View className="gap-1">
@@ -37,7 +37,7 @@ const BalanceDeposit: React.FC<BalanceDepositProps> = ({
           </View>
         )}
       </View>
-    </View>
+    </Pressable>
   );
 };
 

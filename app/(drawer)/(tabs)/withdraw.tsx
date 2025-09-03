@@ -1,5 +1,6 @@
 import AppButton from "@/components/appButton";
 import CurrencyModal from "@/components/currencyModal";
+import FloatingButton from "@/components/floatingButton";
 import LabeledTextInput from "@/components/labeledTextInput";
 import Spacer from "@/components/spacer";
 import { Colors } from "@/constants/Colors";
@@ -49,7 +50,18 @@ const WithdrawScreen = () => {
             backgroundColor={Colors.bg}
             containerStyle="w-[92%] md:w-[50%] mx-auto"
           />
-          <Spacer size={20} />
+          <Spacer size={15} />
+          <LabeledTextInput
+            title="Phone Number"
+            label="Phone Number"
+            placeholder="Enter phone number"
+            placeholderTextColor={Colors.grayWhite}
+            keyboardType='phone-pad'
+            autoCapitalize="none"
+            backgroundColor={Colors.bg}
+            containerStyle="w-[92%] md:w-[50%] mx-auto"
+          />
+          <Spacer size={15} />
 
           <LabeledTextInput
             title="Amount to Withdraw (Minimum RS: 1)"
@@ -148,6 +160,7 @@ const WithdrawScreen = () => {
             setSelectedCurrency(currency);
           }}
         />
+        <FloatingButton />
       </SafeAreaView>
     </View>
   );

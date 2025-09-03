@@ -1,6 +1,7 @@
 import AccountSelector from "@/components/accountSelector";
 import CurrencyModal from "@/components/currencyModal";
 import ExpoDocumentPickerComponent from "@/components/documentSelector";
+import FloatingButton from "@/components/floatingButton";
 import LabeledButton from "@/components/labeledInputButton";
 import LabeledTextInput from "@/components/labeledTextInput";
 import Spacer from "@/components/spacer";
@@ -61,6 +62,17 @@ const DepositScreen = () => {
             backgroundColor={Colors.bg}
             containerStyle="w-[92%] md:w-[50%] mx-auto"
             // labelStyle={{ color: Colors.lightWhite }}
+          />
+          <Spacer size={15} />
+          <LabeledTextInput
+            title="Phone Number"
+            label="Phone Number"
+            placeholder="Enter phone number"
+            placeholderTextColor={Colors.grayWhite}
+            keyboardType='phone-pad'
+            autoCapitalize="none"
+            backgroundColor={Colors.bg}
+            containerStyle="w-[92%] md:w-[50%] mx-auto"
           />
           <Spacer size={15} />
           <LabeledButton
@@ -138,6 +150,7 @@ const DepositScreen = () => {
           }}
         />
         {/* <Button title="Open Drawer" onPress={() => navigation.openDrawer()} /> */}
+        <FloatingButton />
       </SafeAreaView>
     </View>
   );
