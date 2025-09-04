@@ -28,6 +28,7 @@ const router = useRouter();
               iban="PK00HABB0000001234567890123"
               onEdit={() => alert("Edit bank account")}
               onDelete={() => alert("Delete bank account")}
+              containerStyle="w-[92%] md:w-[50%] self-center"
             />
             <BankAccountCard
               logo={require("../../../assets/images/jazzCash.png")}
@@ -37,6 +38,7 @@ const router = useRouter();
               iban="PK00HABB0000001234567890123"
               onEdit={() => alert("Edit bank account")}
               onDelete={() => alert("Delete bank account")}
+              containerStyle="w-[92%] md:w-[50%] self-center"
             />
             <BankAccountCard
               logo={require("../../../assets/images/ubl.png")}
@@ -46,6 +48,7 @@ const router = useRouter();
               iban="PK00HABB0000001234567890123"
               onEdit={() => alert("Edit bank account")}
               onDelete={() => alert("Delete bank account")}
+              containerStyle="w-[92%] md:w-[50%] self-center"
             />
           </View>
         </ScrollView>

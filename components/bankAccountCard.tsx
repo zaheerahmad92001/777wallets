@@ -12,6 +12,7 @@ interface BankAccountProps {
   iban: string;
   onDelete?: () => void;
   onEdit?: () => void;
+  containerStyle?:string
 }
 
 export default function BankAccountCard({
@@ -22,9 +23,10 @@ export default function BankAccountCard({
   iban,
   onDelete,
   onEdit,
+  containerStyle
 }: BankAccountProps) {
   return (
-    <View className="bg-headerColor p-4 rounded-lg shadow-md mb-4 relative">
+    <View className={`bg-headerColor p-4 rounded-lg shadow-md mb-4 relative ${containerStyle}`}>
       {/* Action icons (Edit + Delete) */}
       <View className="absolute right-3 top-3 flex-row space-x-2 gap-6">
         {onEdit && (
