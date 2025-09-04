@@ -7,26 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00F7AF16813AC24DA41D6911 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A685408859374878AC630D /* ExpoModulesProvider.swift */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		1E3C545747D1AACB0520D188 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = BC413F4328F4DBE6F3A8490C /* PrivacyInfo.xcprivacy */; };
+		2FDEA594DCB80D3E209FB306 /* libPods-777wallets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FDFEEAEF58E9138D8225F72 /* libPods-777wallets.a */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		71772BAF6DB05B7FFBC406A1 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3DDC3DB0AC6AAF167C6704 /* ExpoModulesProvider.swift */; };
-		9AD2A4874963B790717CB795 /* libPods-777wallets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 48DAE78BD5E630B9797221DF /* libPods-777wallets.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
+		FF7728391024C54411FC7FDF /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7D4C403FA06D27650C6A30B8 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		13B07F961A680F5B00A75B9A /* 777wallets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 777wallets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = 777wallets/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = 777wallets/Info.plist; sourceTree = "<group>"; };
-		2F1A3D874C6F398722E2A38F /* Pods-777wallets.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-777wallets.debug.xcconfig"; path = "Target Support Files/Pods-777wallets/Pods-777wallets.debug.xcconfig"; sourceTree = "<group>"; };
-		48DAE78BD5E630B9797221DF /* libPods-777wallets.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-777wallets.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42A685408859374878AC630D /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-777wallets/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		4FDFEEAEF58E9138D8225F72 /* libPods-777wallets.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-777wallets.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5DEE735F8BFD15F7F844C5F2 /* Pods-777wallets.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-777wallets.debug.xcconfig"; path = "Target Support Files/Pods-777wallets/Pods-777wallets.debug.xcconfig"; sourceTree = "<group>"; };
+		7D4C403FA06D27650C6A30B8 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = 777wallets/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = 777wallets/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		BC413F4328F4DBE6F3A8490C /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = 777wallets/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		BD3DDC3DB0AC6AAF167C6704 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-777wallets/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		C99DA8E1EF2F1CF86D8EF2CF /* Pods-777wallets.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-777wallets.release.xcconfig"; path = "Target Support Files/Pods-777wallets/Pods-777wallets.release.xcconfig"; sourceTree = "<group>"; };
+		C59508203E0A087CA4058C3F /* Pods-777wallets.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-777wallets.release.xcconfig"; path = "Target Support Files/Pods-777wallets/Pods-777wallets.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = 777wallets/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* 777wallets-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "777wallets-Bridging-Header.h"; path = "777wallets/777wallets-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -37,21 +37,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9AD2A4874963B790717CB795 /* libPods-777wallets.a in Frameworks */,
+				2FDEA594DCB80D3E209FB306 /* libPods-777wallets.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		10D9BBA49DFBF3FACF789BBF /* ExpoModulesProviders */ = {
-			isa = PBXGroup;
-			children = (
-				DFC474ACCF7B47328C2E660B /* 777wallets */,
-			);
-			name = ExpoModulesProviders;
-			sourceTree = "<group>";
-		};
 		13B07FAE1A68108700A75B9A /* 777wallets */ = {
 			isa = PBXGroup;
 			children = (
@@ -61,26 +53,16 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				BC413F4328F4DBE6F3A8490C /* PrivacyInfo.xcprivacy */,
+				7D4C403FA06D27650C6A30B8 /* PrivacyInfo.xcprivacy */,
 			);
 			name = 777wallets;
-			sourceTree = "<group>";
-		};
-		29FF4E654BE9A5AC1E206BB1 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				2F1A3D874C6F398722E2A38F /* Pods-777wallets.debug.xcconfig */,
-				C99DA8E1EF2F1CF86D8EF2CF /* Pods-777wallets.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				48DAE78BD5E630B9797221DF /* libPods-777wallets.a */,
+				4FDFEEAEF58E9138D8225F72 /* libPods-777wallets.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -99,8 +81,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				29FF4E654BE9A5AC1E206BB1 /* Pods */,
-				10D9BBA49DFBF3FACF789BBF /* ExpoModulesProviders */,
+				9E2BB5FCB4FC881C38D4F876 /* Pods */,
+				9C326146D1A8088907E03516 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -115,6 +97,24 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		9C326146D1A8088907E03516 /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				DE3F8A58C41CE3B9C9218BE6 /* 777wallets */,
+			);
+			name = ExpoModulesProviders;
+			sourceTree = "<group>";
+		};
+		9E2BB5FCB4FC881C38D4F876 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5DEE735F8BFD15F7F844C5F2 /* Pods-777wallets.debug.xcconfig */,
+				C59508203E0A087CA4058C3F /* Pods-777wallets.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
@@ -124,10 +124,10 @@
 			path = 777wallets/Supporting;
 			sourceTree = "<group>";
 		};
-		DFC474ACCF7B47328C2E660B /* 777wallets */ = {
+		DE3F8A58C41CE3B9C9218BE6 /* 777wallets */ = {
 			isa = PBXGroup;
 			children = (
-				BD3DDC3DB0AC6AAF167C6704 /* ExpoModulesProvider.swift */,
+				42A685408859374878AC630D /* ExpoModulesProvider.swift */,
 			);
 			name = 777wallets;
 			sourceTree = "<group>";
@@ -140,13 +140,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "777wallets" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				2A47B789DA525A064432879B /* [Expo] Configure project */,
+				6DEDF53D0222646B2B213B8E /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				9087BB7DAD58AF4DDE12A768 /* [CP] Embed Pods Frameworks */,
+				E9760872C1EB1AA87674A581 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -196,7 +196,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				1E3C545747D1AACB0520D188 /* PrivacyInfo.xcprivacy in Resources */,
+				FF7728391024C54411FC7FDF /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,7 +240,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		2A47B789DA525A064432879B /* [Expo] Configure project */ = {
+		6DEDF53D0222646B2B213B8E /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -297,7 +297,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-777wallets/Pods-777wallets-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9087BB7DAD58AF4DDE12A768 /* [CP] Embed Pods Frameworks */ = {
+		E9760872C1EB1AA87674A581 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -323,7 +323,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				71772BAF6DB05B7FFBC406A1 /* ExpoModulesProvider.swift in Sources */,
+				00F7AF16813AC24DA41D6911 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,7 +332,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2F1A3D874C6F398722E2A38F /* Pods-777wallets.debug.xcconfig */;
+			baseConfigurationReference = 5DEE735F8BFD15F7F844C5F2 /* Pods-777wallets.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -368,7 +368,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C99DA8E1EF2F1CF86D8EF2CF /* Pods-777wallets.release.xcconfig */;
+			baseConfigurationReference = C59508203E0A087CA4058C3F /* Pods-777wallets.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

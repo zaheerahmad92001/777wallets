@@ -27,6 +27,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signIn = async (token: string) => {
+  //   if (token === '03321122333') {
+  //   console.log('context token', typeof token, token === '03321122333')
+  //   return <Redirect href={"/(drawer)/(admin)/users"} />;
+  // }
     await AsyncStorage.setItem("authToken", token);
     setUserToken(token);
   };

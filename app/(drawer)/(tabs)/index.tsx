@@ -2,6 +2,7 @@ import AppButton from "@/components/appButton";
 import BalanceDeposit from "@/components/balanceDeposit";
 import FloatingButton from "@/components/floatingButton";
 import Spacer from "@/components/spacer";
+import { useAuth } from "@/contexts/AuthContext";
 import { router, useNavigation } from "expo-router";
 import {
   Alert,
@@ -17,8 +18,10 @@ import TextTicker from "react-native-text-ticker";
 export default function HomeScreen() {
   const navigation = useNavigation();
   const isWeb = Platform.OS === "web";
+  const {signOut} = useAuth()
 
   const openWhatsApp = () => {
+    signOut();
     let phoneNumber = "+923001234567";
     let message = "Hello, I want to create a new account.";
 

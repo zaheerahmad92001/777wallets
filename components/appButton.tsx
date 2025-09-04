@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import React, { useEffect, useRef } from "react";
-import { Animated, Platform, Pressable, PressableProps } from "react-native";
+import { ActivityIndicator, Animated, Platform, Pressable, PressableProps } from "react-native";
 import { responsiveFontSize } from "react-native-responsive-dimensions";
 
 interface AppButtonProps extends PressableProps {
@@ -9,6 +9,7 @@ interface AppButtonProps extends PressableProps {
   buttonStyle?: string | (string | undefined)[];
   textStyle?: string | (string | undefined)[];
   blink?: boolean;
+  isLoading?:boolean;
 }
 
 const AppButton: React.FC<AppButtonProps> = ({
@@ -17,6 +18,7 @@ const AppButton: React.FC<AppButtonProps> = ({
   buttonStyle,
   textStyle,
   blink = false,
+  isLoading=false,
   ...rest
 }) => {
   const opacity = useRef(new Animated.Value(1)).current;
@@ -39,6 +41,8 @@ const AppButton: React.FC<AppButtonProps> = ({
         ${Platform.OS === "web" ? "py-3" : "py-3"} ${buttonStyle ?? ""}`}
       {...rest}
     >
+      {isLoading ? 
+      <ActivityIndicator color={Colors.green} size={'small'}/>:
       <Animated.Text
         style={[blink ? { opacity } : {}, {color:Colors.white,},
           Platform.OS==='web'? {fontSize:responsiveFontSize(1.2)}:{}
@@ -47,6 +51,7 @@ const AppButton: React.FC<AppButtonProps> = ({
       >
         {title}
       </Animated.Text>
+      }
     </Pressable>
   );
 };

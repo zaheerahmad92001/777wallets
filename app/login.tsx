@@ -4,17 +4,23 @@ import AppButton from "@/components/appButton";
 import LabeledTextInput from "@/components/labeledTextInput";
 import Spacer from "@/components/spacer";
 import { Colors } from "@/constants/Colors";
+import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import { Platform, SafeAreaView, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
 export default function Login() {
   const router = useRouter();
+  const [phoneNumber , setPhoneNumber] = useState('')
+  const [password , setPassword] = useState('')
+    const { signIn, isLoading, userToken } = useAuth();
+    console.log('here is token login', userToken,isLoading)
 
-  // const handleLogin = () => router.navigate("/(drawer)/(tabs)");
-
-  const handleLogin =()=>{
-    router.replace("/(drawer)/(tabs)")
+  const handleLogin =async()=>{
+   await signIn(phoneNumber);
+  //  router.replace("/(drawer)/(tabs)");
+    // router.replace("/(drawer)/(tabs)")
   };
 
   return (
@@ -29,10 +35,12 @@ export default function Login() {
           <View className={`${Platform.OS === "web" ? "mt-40" : "mt-20"}`}>
             {/* Phone Number */}
             <LabeledTextInput
+              value={phoneNumber}
               label="Phone Number"
               placeholder="Enter number"
               placeholderTextColor={Colors.grayWhite}
-              keyboardType="numeric"
+              onChangeText={(val)=>setPhoneNumber(val)}
+              keyboardType="phone-pad"
               autoCapitalize="none"
               backgroundColor={Colors.bg}
               containerStyle="w-[90%] md:w-[50%] mx-auto"
@@ -42,9 +50,11 @@ export default function Login() {
 
             {/* Password */}
             <LabeledTextInput
+             value={password}
               label="Password"
               placeholder="Enter password"
               placeholderTextColor={Colors.grayWhite}
+              onChangeText={(value)=>setPassword(value)}
               secureTextEntry
               autoCapitalize="none"
               backgroundColor={Colors.bg}
@@ -59,6 +69,7 @@ export default function Login() {
               onPress={handleLogin}
               buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green mb-4"
               textStyle="text-white text-lg font-bold"
+              isLoading={isLoading}
             />
           </View>
         </ScrollView>
