@@ -31,6 +31,8 @@ export default function Users() {
               phone="+92 300 1234567"
               image="https://randomuser.me/api/portraits/men/32.jpg"
               containerStyle="w-[92%] md:w-[50%] self-center"
+              onEdit={() => router.navigate("/(drawer)/(admin)/updateUser")}
+              onDelete={() => alert("Delete User account")}
             />
 
             <UserCard
@@ -39,6 +41,8 @@ export default function Users() {
               phone="+92 301 7654321"
               image="https://randomuser.me/api/portraits/women/45.jpg"
               containerStyle="w-[92%] md:w-[50%] self-center"
+              onEdit={() => router.navigate("/(drawer)/(admin)/updateUser")}
+              onDelete={() => alert("Delete User account")}
             />
         
           </View>

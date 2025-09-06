@@ -88,14 +88,14 @@ export default function HomeScreen() {
             buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green mb-4"
           />
 
-          <Spacer size={10} />
+          {/* <Spacer size={10} />
 
           <AppButton
             title="Get New ID"
             blink
             onPress={openWhatsApp}
             buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green mb-4"
-          />
+          /> */}
         </ScrollView>
         <FloatingButton/>
       </SafeAreaView>

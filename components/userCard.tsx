@@ -1,8 +1,8 @@
 // components/UserCard.tsx
-import { MaterialIcons } from "@expo/vector-icons";
+import { Colors } from "@/constants/Colors";
+import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-
 interface UserCardProps {
   name: string;
   username: string;
@@ -10,7 +10,7 @@ interface UserCardProps {
   containerStyle?:string;
   image: string; // image URL
   onDelete?: () => void; // delete handler
-
+onEdit?: () => void;
 }
 
 export default function UserCard({
@@ -19,21 +19,25 @@ export default function UserCard({
   phone,
   image,
   onDelete,
+  onEdit,
   containerStyle = "",
 
 }: UserCardProps) {
   return (
     <View className={`bg-headerColor p-4 rounded-lg shadow-md mb-4 relative ${containerStyle}`}>
       {/* Delete Icon (top-right) */}
-      
-        <TouchableOpacity
-          onPress={onDelete}
-          className="absolute top-2 right-2"
-        >
-          <MaterialIcons name="delete" size={24} color="red" />
-        </TouchableOpacity>
-      
-
+ <View className="absolute right-3 top-3 flex-row space-x-2 gap-6">
+        {onEdit && (
+          <TouchableOpacity onPress={onEdit}>
+            <Ionicons name="create-outline" size={20} color={Colors.grayWhite} />
+          </TouchableOpacity>
+        )}
+        {onDelete && (
+          <TouchableOpacity onPress={onDelete}>
+            <Ionicons name="trash-outline" size={20} color="red" />
+          </TouchableOpacity>
+        )}
+      </View>
       {/* Row: Image + Name */}
       <View className="flex-row items-center mb-3">
         <Image

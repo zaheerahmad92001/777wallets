@@ -26,7 +26,7 @@ const router = useRouter();
               accountHolder="Zaheer Khan"
               accountNumber="1234 5678 9012"
               iban="PK00HABB0000001234567890123"
-              onEdit={() => alert("Edit bank account")}
+              onEdit={() => router.navigate("/(drawer)/(admin)/updateAccount")}
               onDelete={() => alert("Delete bank account")}
               containerStyle="w-[92%] md:w-[50%] self-center"
             />
@@ -36,7 +36,7 @@ const router = useRouter();
               accountHolder="Zaheer Khan"
               accountNumber="1234 5678 9012"
               iban="PK00HABB0000001234567890123"
-              onEdit={() => alert("Edit bank account")}
+              onEdit={() => router.navigate("/(drawer)/(admin)/updateAccount")}
               onDelete={() => alert("Delete bank account")}
               containerStyle="w-[92%] md:w-[50%] self-center"
             />
@@ -46,7 +46,7 @@ const router = useRouter();
               accountHolder="Zaheer Khan"
               accountNumber="1234 5678 9012"
               iban="PK00HABB0000001234567890123"
-              onEdit={() => alert("Edit bank account")}
+              onEdit={() => router.navigate("/(drawer)/(admin)/updateAccount")}
               onDelete={() => alert("Delete bank account")}
               containerStyle="w-[92%] md:w-[50%] self-center"
             />
