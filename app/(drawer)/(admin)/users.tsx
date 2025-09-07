@@ -4,7 +4,7 @@ import UserCard from "@/components/userCard";
 import { useAuth } from "@/contexts/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRouter } from "expo-router";
-import { Platform, SafeAreaView, View } from "react-native";
+import { Alert, Platform, SafeAreaView, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
 export default function Users() {
@@ -32,7 +32,7 @@ export default function Users() {
               image="https://randomuser.me/api/portraits/men/32.jpg"
               containerStyle="w-[92%] md:w-[50%] self-center"
               onEdit={() => router.navigate("/(drawer)/(admin)/updateUser")}
-              onDelete={() => alert("Delete User account")}
+              onDelete={() => Alert.alert("Delete User account")}
             />
 
             <UserCard
@@ -42,7 +42,7 @@ export default function Users() {
               image="https://randomuser.me/api/portraits/women/45.jpg"
               containerStyle="w-[92%] md:w-[50%] self-center"
               onEdit={() => router.navigate("/(drawer)/(admin)/updateUser")}
-              onDelete={() => alert("Delete User account")}
+              onDelete={() => Alert.alert("Delete User account")}
             />
         
           </View>

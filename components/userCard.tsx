@@ -25,8 +25,20 @@ export default function UserCard({
 }: UserCardProps) {
   return (
     <View className={`bg-headerColor p-4 rounded-lg shadow-md mb-4 relative ${containerStyle}`}>
-      {/* Delete Icon (top-right) */}
- <View className="absolute right-3 top-3 flex-row space-x-2 gap-6">
+
+
+      {/* Row: Image + Name */}
+      <View className="flex-row items-center justify-between mb-3 ">
+
+      <View className="flex-row items-center">
+        <Image
+          source={{ uri: image }}
+          className="w-12 h-12 rounded-full mr-3"
+        />
+        <Text className="text-lg font-semibold text-grayWhite">{name}</Text>
+      </View>
+
+       <View className="flex-row space-x-2 gap-6 self-start">
         {onEdit && (
           <TouchableOpacity onPress={onEdit}>
             <Ionicons name="create-outline" size={20} color={Colors.grayWhite} />
@@ -38,13 +50,7 @@ export default function UserCard({
           </TouchableOpacity>
         )}
       </View>
-      {/* Row: Image + Name */}
-      <View className="flex-row items-center mb-3">
-        <Image
-          source={{ uri: image }}
-          className="w-12 h-12 rounded-full mr-3"
-        />
-        <Text className="text-lg font-semibold text-grayWhite">{name}</Text>
+
       </View>
 
       {/* Column: Username + Phone */}

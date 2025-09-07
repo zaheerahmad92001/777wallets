@@ -71,7 +71,7 @@ import {
 } from "@react-navigation/drawer";
 import { useRouter } from "expo-router";
 import { Drawer } from "expo-router/drawer";
-import { Alert, StyleSheet, View } from "react-native";
+import { Alert, Platform, StyleSheet, View } from "react-native";
 
 export default function DrawerLayout() {
   const router = useRouter();
@@ -106,12 +106,16 @@ export default function DrawerLayout() {
               icon={({ color, size }) => (
                 <Ionicons name="log-out-outline" size={size} color={color} />
               )}
-              onPress={() =>
-                Alert.alert("Logout", "Are you sure you want to logout?", [
-                  { text: "Cancel", style: "cancel" },
-                  { text: "Logout", style: "destructive", onPress: handleLogout },
-                ])
-              }
+              onPress={() => {
+                if (Platform.OS === 'web') {
+                  handleLogout();
+                } else {
+                  Alert.alert("Logout", "Are you sure you want to logout?", [
+                    { text: "Cancel", style: "cancel" },
+                    { text: "Logout", style: "destructive", onPress: handleLogout },
+                  ]);
+                }
+              }}
             />
           </View>
         </View>
@@ -157,6 +161,16 @@ export default function DrawerLayout() {
           title: "Website URL",
           drawerIcon: ({ color, size }) => (
             <Ionicons name="globe-outline" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Drawer.Screen
+        name="(admin)/payments"
+        options={{
+          title: "Payments",
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="card-outline" size={size} color={color} />
           ),
         }}
       />
