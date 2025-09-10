@@ -54,7 +54,7 @@ export default function SignUp() {
 
             <LabeledTextInput
               label="UserName"
-              placeholder="Enter number"
+              placeholder="Enter User Name"
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
               autoCapitalize="none"

@@ -2,7 +2,6 @@ import AccountSelector from "@/components/accountSelector";
 import CurrencyModal from "@/components/currencyModal";
 import ExpoDocumentPickerComponent from "@/components/documentSelector";
 import FloatingButton from "@/components/floatingButton";
-import LabeledButton from "@/components/labeledInputButton";
 import LabeledTextInput from "@/components/labeledTextInput";
 import Spacer from "@/components/spacer";
 import { Colors } from "@/constants/Colors";
@@ -74,7 +73,7 @@ const DepositScreen = () => {
             backgroundColor={Colors.bg}
             containerStyle="w-[92%] md:w-[50%] mx-auto"
           />
-          <Spacer size={15} />
+          {/* <Spacer size={15} />
           <LabeledButton
             onPress={() => setModalVisible(true)}
             label="Currency"
@@ -83,7 +82,7 @@ const DepositScreen = () => {
             inputStyle={""}
             labelStyle={""}
             containerStyle="w-[92%] md:w-[50%] mx-auto"
-          />
+          /> */}
 
           <Spacer size={15} />
 

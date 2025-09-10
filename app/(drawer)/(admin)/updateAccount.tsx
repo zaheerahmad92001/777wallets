@@ -7,26 +7,26 @@ import Spacer from "@/components/spacer";
 import { Colors } from "@/constants/Colors";
 import { useNavigation, useRouter } from "expo-router";
 import {
-  Alert,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  View,
+    Alert,
+    Platform,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    View,
 } from "react-native";
 import {
-  responsiveFontSize,
-  responsiveHeight,
-  responsiveScreenHeight,
-  responsiveScreenWidth,
+    responsiveFontSize,
+    responsiveHeight,
+    responsiveScreenHeight,
+    responsiveScreenWidth,
 } from "react-native-responsive-dimensions";
 
-export default function AddBankAccount() {
+export default function UpdateBankAccount() {
   const router = useRouter();
   const navigation = useNavigation();
 
   const createBankAccount = () => {
-    Alert.alert("create bank account");
+    Alert.alert("update bank account");
   };
   const openMenu = () => {
     navigation.openDrawer();
@@ -35,7 +35,7 @@ export default function AddBankAccount() {
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.mainwrapper}>
-        <AdminHeader title="Add New Account" onMenuPress={() => openMenu()} />
+        <AdminHeader title="Update Account" onMenuPress={() => openMenu()} />
         <ScrollView style={styles.wrapper}>
           <View style={styles.inputWrapper}>
             <LabeledTextInput
@@ -88,7 +88,7 @@ export default function AddBankAccount() {
             <Spacer size={Platform.OS === "web" ? 40 : 30} />
 
             <AppButton
-              title="Add"
+              title="Update Account"
               onPress={() => {
                 createBankAccount();
               }}
