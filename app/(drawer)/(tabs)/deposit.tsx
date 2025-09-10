@@ -9,12 +9,11 @@ import { PickedFile } from "@/constants/types";
 import { useNavigation } from "expo-router";
 import React, { useState } from "react";
 import {
-  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
-  View,
+  View
 } from "react-native";
 import {
   responsiveFontSize,
@@ -32,6 +31,9 @@ const DepositScreen = () => {
   const [selectedAccount, setSelectedAccount] = useState<string>("");
   const [copiedValue, setCopiedValue] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<any>(null);
+  const [userName , setUserName]=useState<string>('');
+  const [phoneNumber , setPhoneNumber]=useState<string>('');
+  const [amount , setAmount]=useState<string>('');
   const [file, setFile] = useState<PickedFile | null>(null);
 
   const handleCopy = (value: string) => {
@@ -50,49 +52,38 @@ const DepositScreen = () => {
         <ScrollView showsVerticalScrollIndicator={false} style={styles.wrapper}>
           <Spacer size={20} />
 
-          {/* <Text style={styles.selectCurrency}>{"Username/ID"}</Text> */}
           <LabeledTextInput
             title="Username/ID"
             label="Username/ID"
             placeholder="Enter Username/ID"
+            onChangeText={(text) => setUserName(text)}
             placeholderTextColor={Colors.grayWhite}
             keyboardType="default"
             autoCapitalize="none"
             backgroundColor={Colors.bg}
             containerStyle="w-[92%] md:w-[50%] mx-auto"
-            // labelStyle={{ color: Colors.lightWhite }}
           />
           <Spacer size={15} />
           <LabeledTextInput
             title="Phone Number"
             label="Phone Number"
             placeholder="Enter phone number"
+            onChangeText={(text) => setPhoneNumber(text)}
             placeholderTextColor={Colors.grayWhite}
             keyboardType='phone-pad'
             autoCapitalize="none"
             backgroundColor={Colors.bg}
             containerStyle="w-[92%] md:w-[50%] mx-auto"
           />
-          {/* <Spacer size={15} />
-          <LabeledButton
-            onPress={() => setModalVisible(true)}
-            label="Currency"
-            value={selectedCurrency ? selectedCurrency : "Select Currency"}
-            backgroundColor={Colors.bg}
-            inputStyle={""}
-            labelStyle={""}
-            containerStyle="w-[92%] md:w-[50%] mx-auto"
-          /> */}
+          
 
           <Spacer size={15} />
 
-          {/* <Text style={styles.selectCurrency}>
-            {"Minimum Amount is RS:500 with 3% Bonus"}
-          </Text> */}
           <LabeledTextInput
             title="Minimum Amount is RS:500 with 3% Bonus"
             label="Amount"
             placeholder="Enter amount"
+            onChangeText={(text) => setAmount(text)}
             placeholderTextColor={Colors.grayWhite}
             keyboardType="numeric"
             autoCapitalize="none"
@@ -166,23 +157,13 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     marginHorizontal: responsiveScreenWidth(4),
-    // marginBottom:responsiveHeight(1),
   },
-  selectCurrency: {
-    color: Colors.grayWhite,
-    marginBottom: responsiveHeight(2),
-    fontSize: responsiveFontSize(1.8),
-    fontWeight: "500",
-  },
+ 
   depositTo: {
     color: Colors.grayWhite,
     marginBottom: responsiveHeight(1.5),
     fontSize: responsiveFontSize(2),
     fontWeight: "600",
-  },
-  inputContainer: {
-    width: responsiveScreenWidth(Platform.OS === "web" ? 50 : 90),
-    alignSelf: "center",
   },
 });
 

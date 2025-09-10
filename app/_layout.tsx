@@ -14,7 +14,10 @@ import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 import Toast from "react-native-toast-message";
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import { toastConfig } from "../components/toastConfig";
+import { persistor, store } from '../redux/store';
 
 // -------------------------
 // RootNavigator handles auth redirection
@@ -52,6 +55,8 @@ export default function RootLayout() {
   }
 
   return (
+     <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
     <AuthProvider>
       <GestureHandlerRootView style={styles.container}>
         <ThemeProvider
@@ -76,6 +81,8 @@ export default function RootLayout() {
         </ThemeProvider>
       </GestureHandlerRootView>
     </AuthProvider>
+    </PersistGate>
+    </Provider>
   );
 }
 
