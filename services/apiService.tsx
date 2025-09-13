@@ -1,7 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-const BASE_URL = "https://be.anaqa.sa/api";
+const BASE_URL = "https://us-central1-bpwallets.cloudfunctions.net";
+// const BASE_URL = "http://127.0.0.1:5001/bpwallets/us-central1";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -11,7 +12,7 @@ const api = axios.create({
   },
 });
 
-export const setToken = async (token) => {
+export const setToken = async (token:string) => {
   await AsyncStorage.setItem("authToken", token);
 };
 
@@ -89,7 +90,7 @@ api.interceptors.response.use(
 
 // 🔹 API Service Functions
 const apiService = {
-  get: async (endpoint, params = {}) => {
+  get: async (endpoint:string, params = {}) => {
     try {
       const response = await api.get(endpoint, { params });
       return response.data;
@@ -98,11 +99,11 @@ const apiService = {
     }
   },
 
-  post: async (endpoint, data = {}) => {
+  post: async (endpoint:string, data:any) => {
     try {
       const response = await api.post(endpoint, data);
       return response.data;
-    } catch (error) {
+    } catch (error:any) {
       if (error.response?.data?.message) {
         throw new Error(error.response.data.message);
       }
@@ -113,7 +114,7 @@ const apiService = {
     }
   },
 
-  postMultipart: async (endpoint, formData) => {
+  postMultipart: async (endpoint:string, formData:unknown) => {
     try {
       const response = await api.post(endpoint, formData, {
         headers: {
@@ -121,7 +122,7 @@ const apiService = {
         },
       });
       return response.data;
-    } catch (error) {
+    } catch (error:any) {
       if (error.response?.data?.message) {
         throw new Error(error.response.data.message);
       }
@@ -129,7 +130,7 @@ const apiService = {
     }
   },
 
-  putMultipart: async (endpoint, formData) => {
+  putMultipart: async (endpoint:string, formData:any) => {
     try {
       const response = await api.put(endpoint, formData, {
         headers: {
@@ -142,7 +143,7 @@ const apiService = {
     }
   },
 
-  put: async (endpoint, data = {}) => {
+  put: async (endpoint:string, data = {}) => {
     try {
       const response = await api.put(endpoint, data);
       return response.data;
@@ -151,11 +152,11 @@ const apiService = {
     }
   },
 
-  patch: async (endpoint, data = {}) => {
+  patch: async (endpoint:string, data = {}) => {
     try {
       const response = await api.patch(endpoint, data);
       return response.data;
-    } catch (error) {
+    } catch (error:any) {
       if (error.response?.data?.message) {
         throw new Error(error.response.data.message);
       }
@@ -163,11 +164,12 @@ const apiService = {
     }
   },
 
-  delete: async (endpoint) => {
+  delete: async (endpoint:string) => {
     try {
+      console.log('here is endpoint ', endpoint)
       const response = await api.delete(endpoint);
       return response.data;
-    } catch (error) {
+    } catch (error:any) {
       if (error.response?.data?.message) {
         throw new Error(error.response.data.message);
       }

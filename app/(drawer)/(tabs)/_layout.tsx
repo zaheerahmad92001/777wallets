@@ -10,16 +10,16 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const { userToken, isLoading  } = useAuth();
+  const { user:userData, isLoading  } = useAuth();
  
   const { width } = useWindowDimensions();
   const isWeb = Platform.OS === "web";
   const isLargeScreen = width >= 768;
   
-  if (!userToken) {
+  if (!userData) {
     return <Redirect href={"/login"} />;
   }
-  if (userToken==='03321122333') {
+  if (userData?.role==='admin') {
     return <Redirect href={"/(drawer)/(admin)/users"} />;
   }
   

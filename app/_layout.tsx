@@ -23,16 +23,16 @@ import { persistor, store } from '../redux/store';
 // RootNavigator handles auth redirection
 // -------------------------
 function RootNavigator() {
-  const { userToken, isLoading } = useAuth();
-
+  const {user:userData, isLoading } = useAuth();
+console.log('here is user data from layout', userData, isLoading)
   if (isLoading) return null;
 
-  if (!userToken) {
+  if (!userData) {
     // Not logged in
     return <Redirect href="/login" />;
   }
 
-  if (userToken === "03321122333") {
+  if (userData?.role === "admin") {
     // Admin user
     return <Redirect href="/(drawer)/(admin)/users" />;
   }

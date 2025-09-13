@@ -5,14 +5,16 @@ import ImagePickerComponent from "@/components/imagePickerComponent";
 import LabeledTextInput from "@/components/labeledTextInput";
 import Spacer from "@/components/spacer";
 import { Colors } from "@/constants/Colors";
+import { addBankAccount } from "@/redux/actions/bankAccountActions";
+import { AppDispatch, RootState } from "@/redux/store";
 import { useNavigation, useRouter } from "expo-router";
+import { useState } from "react";
 import {
-  Alert,
   Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  View,
+  View
 } from "react-native";
 import {
   responsiveFontSize,
@@ -20,14 +22,59 @@ import {
   responsiveScreenHeight,
   responsiveScreenWidth,
 } from "react-native-responsive-dimensions";
+import Toast from "react-native-toast-message";
+import { useDispatch, useSelector } from "react-redux";
+
 
 export default function AddBankAccount() {
   const router = useRouter();
   const navigation = useNavigation();
+  const dispatch = useDispatch<AppDispatch>();
+  const {inProgress} = useSelector((state:RootState) => state.bankAccounts)
 
-  const createBankAccount = () => {
-    Alert.alert("create bank account");
+  const [bankName, setBankName] = useState<string>("");
+  const [accountHolder, setAccountHolder] = useState<string>("");
+  const [accountNumber, setAccountNumber] = useState<string>("");
+  const [iban, setIban] = useState<string>("");
+  const [selectedImage, setSelectedImage] = useState<{
+    uri: string;
+    imagebase64: string;
+  } | null>(null);
+const [imageUri, setImageUri] = useState<string | null>(null);
+
+
+ const createBankAccount = async() => {
+    if (!bankName.trim() || !accountHolder.trim() || !accountNumber.trim() || !iban.trim() || !selectedImage) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Please fill all the fields.",
+      });
+      return;
+    }
+
+    const payload = {
+      bankName,
+      accountHolderName:accountHolder,
+      accountNumber:accountNumber,
+      iban,
+      bankLogoBase64: selectedImage.imagebase64,
+    };
+    console.log("New Account Data:", payload);
+    const response = await dispatch(addBankAccount(payload) as any).unwrap();
+    
+     setBankName("");
+    setAccountHolder("");
+    setAccountNumber("");
+    setIban("");
+    setSelectedImage(null);
+    setImageUri(null);
+    router.push("/(drawer)/(admin)/accounts");
+
   };
+
+
+
   const openMenu = () => {
     navigation.openDrawer();
   };
@@ -41,6 +88,8 @@ export default function AddBankAccount() {
             <LabeledTextInput
               label="Bank Name"
               placeholder="Enter bank name"
+              value={bankName}
+              onChangeText={(val) => setBankName(val)}
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
               autoCapitalize="none"
@@ -52,6 +101,10 @@ export default function AddBankAccount() {
             <LabeledTextInput
               label="Account Holder"
               placeholder="Enter account holder name"
+              value={accountHolder}
+              onChangeText={(val) =>
+                setAccountHolder(val)
+              }
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
               autoCapitalize="none"
@@ -62,6 +115,10 @@ export default function AddBankAccount() {
             <LabeledTextInput
               label="Account Number"
               placeholder="Enter account number"
+              value={accountNumber}
+              onChangeText={(val) =>
+                setAccountNumber(val)
+              }
               placeholderTextColor={Colors.grayWhite}
               keyboardType="numeric"
               autoCapitalize="none"
@@ -72,6 +129,8 @@ export default function AddBankAccount() {
             <LabeledTextInput
               label="IBAN"
               placeholder="Enter IBAN"
+              value={iban}
+              onChangeText={(val) => setIban(val)}
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
               autoCapitalize="none"
@@ -80,10 +139,12 @@ export default function AddBankAccount() {
             />
             <Spacer size={Platform.OS === "web" ? 30 : 20} />
             <ImagePickerComponent
-              label="Bank Logo"
-              onImageSelected={(uri) => {
-                console.log("Selected image:", uri);
-              }}
+               label="Bank Logo"
+               onImageSelected={({ uri, imagebase64 }) => {
+               setSelectedImage({ uri, imagebase64 });
+            }}
+            imageUri={imageUri}
+            setImageUri={setImageUri}
             />
             <Spacer size={Platform.OS === "web" ? 40 : 30} />
 
@@ -92,6 +153,7 @@ export default function AddBankAccount() {
               onPress={() => {
                 createBankAccount();
               }}
+              isLoading={inProgress}
               buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green mb-4"
               textStyle="text-white text-lg font-bold"
             />

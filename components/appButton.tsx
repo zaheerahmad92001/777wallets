@@ -42,7 +42,7 @@ const AppButton: React.FC<AppButtonProps> = ({
       {...rest}
     >
       {isLoading ? 
-      <ActivityIndicator color={Colors.green} size={'small'}/>:
+      <ActivityIndicator color={Colors.white} size={'small'}/>:
       <Animated.Text
         style={[blink ? { opacity } : {}, {color:Colors.white,},
           Platform.OS==='web'? {fontSize:responsiveFontSize(1.2)}:{}

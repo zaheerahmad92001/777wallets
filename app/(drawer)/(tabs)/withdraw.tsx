@@ -6,16 +6,26 @@ import Spacer from "@/components/spacer";
 import { Colors } from "@/constants/Colors";
 import { useNavigation } from "expo-router";
 import React, { Fragment, useState } from "react";
+import Toast from "react-native-toast-message";
+
+import { addTransaction } from "@/redux/actions/bankAccountActions";
+import { AppDispatch, RootState } from "@/redux/store";
 import {
   SafeAreaView,
   ScrollView,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 const WithdrawScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch<AppDispatch>();
+  const { bankAccounts, loading ,inProgress } = useSelector(
+    (state: RootState) => state.bankAccounts
+  );
+
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState<
     "RS" | "USDT" | null
@@ -26,6 +36,58 @@ const WithdrawScreen = () => {
     "JazzCash" | "EasyPaisa" | "Bank" | null
   >("JazzCash");
 
+  const [userName, setUserName] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
+
+  const [bankName, setBankName] = useState<string>("");
+  const [accountNumber, setAccountNumber] = useState<string>("");
+  const [accountTitle, setAccountTitle] = useState<string>("");
+
+  const handleWidral = async () => {
+    if (!userName || !phoneNumber || !amount) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Please fill all the fields.",
+      });
+      return;
+    } else if (Number(amount) < 1) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "minimum ammount is RS:1.",
+      });
+      return;
+    } else if (!accountNumber || !accountTitle) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Please add bank detail",
+      });
+      return;
+    } else if (selectedMethod === "Bank" && !bankName) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Please add bank name",
+      });
+      return;
+    }
+    const payload = {
+      username: userName,
+      phoneNumber: phoneNumber,
+      amount: amount,
+      accountType: selectedMethod,
+      bankName: bankName,
+      accountNumber: accountNumber,
+      accountTitle: accountTitle,
+      transactionType: "withdraw",
+      // imageBase64: fileBase64,
+    };
+    const resultAction = await dispatch(addTransaction(payload)).unwrap();
+  };
+
   return (
     <View className="flex-1 bg-bg">
       <SafeAreaView className="flex-1 mt-6">
@@ -34,15 +96,14 @@ const WithdrawScreen = () => {
           onPress={() => navigation.openDrawer()}
         /> */}
 
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          className="mx-[4%]"
-        >
+        <ScrollView showsVerticalScrollIndicator={false} className="mx-[4%]">
           <Spacer size={20} />
 
           <LabeledTextInput
             title="Username/ID"
             label="Username/ID"
+            value={userName}
+            onChangeText={(vale) => setUserName(vale)}
             placeholder="Enter Username/ID"
             placeholderTextColor={Colors.grayWhite}
             keyboardType="default"
@@ -54,9 +115,11 @@ const WithdrawScreen = () => {
           <LabeledTextInput
             title="Phone Number"
             label="Phone Number"
+            value={phoneNumber}
+            onChangeText={(value) => setPhoneNumber(value)}
             placeholder="Enter phone number"
             placeholderTextColor={Colors.grayWhite}
-            keyboardType='phone-pad'
+            keyboardType="phone-pad"
             autoCapitalize="none"
             backgroundColor={Colors.bg}
             containerStyle="w-[92%] md:w-[50%] mx-auto"
@@ -67,6 +130,8 @@ const WithdrawScreen = () => {
             title="Amount to Withdraw (Minimum RS: 1)"
             label="Amount"
             placeholder="Enter amount"
+            value={amount}
+            onChangeText={(value) => setAmount(value)}
             placeholderTextColor={Colors.grayWhite}
             keyboardType="numeric"
             autoCapitalize="none"
@@ -114,6 +179,8 @@ const WithdrawScreen = () => {
                 <Spacer size={25} />
                 <LabeledTextInput
                   label="Bank Name"
+                  value={bankName}
+                  onChangeText={(val) => setBankName(val)}
                   placeholder="Enter bank name"
                   placeholderTextColor={Colors.grayWhite}
                   autoCapitalize="words"
@@ -128,6 +195,8 @@ const WithdrawScreen = () => {
               <LabeledTextInput
                 label="Account Number"
                 placeholder="Enter account number"
+                value={accountNumber}
+                onChangeText={(val) => setAccountNumber(val)}
                 placeholderTextColor={Colors.grayWhite}
                 keyboardType="numeric"
                 autoCapitalize="none"
@@ -137,6 +206,8 @@ const WithdrawScreen = () => {
               <LabeledTextInput
                 label="Account Title"
                 placeholder="Enter account title"
+                value={accountTitle}
+                onChangeText={(val) => setAccountTitle(val)}
                 placeholderTextColor={Colors.grayWhite}
                 autoCapitalize="words"
                 backgroundColor={Colors.bg}
@@ -147,7 +218,10 @@ const WithdrawScreen = () => {
           <Spacer size={20} />
           <AppButton
             title="Withdraw"
-            onPress={() => {}}
+            onPress={() => {
+              handleWidral();
+            }}
+            isLoading={inProgress}
             buttonStyle="w-[92%] md:w-[20%] mx-auto bg-green mb-4"
           />
         </ScrollView>
@@ -167,241 +241,3 @@ const WithdrawScreen = () => {
 };
 
 export default WithdrawScreen;
-
-
-// import AppButton from "@/components/appButton";
-// import CurrencyModal from "@/components/currencyModal";
-// import LabeledTextInput from "@/components/labeledTextInput";
-// import Spacer from "@/components/spacer";
-// import { Colors } from "@/constants/Colors";
-// import { useNavigation } from "expo-router";
-// import React, { Fragment, useState } from "react";
-// import {
-//   Platform,
-//   SafeAreaView,
-//   ScrollView,
-//   StyleSheet,
-//   Text,
-//   TouchableOpacity,
-//   View,
-// } from "react-native";
-// import {
-//   responsiveFontSize,
-//   responsiveHeight,
-//   responsiveScreenWidth,
-// } from "react-native-responsive-dimensions";
-
-// const WithdrawScreen = () => {
-//   const navigation = useNavigation();
-//   const [isModalVisible, setModalVisible] = useState(false);
-//   const [selectedCurrency, setSelectedCurrency] = useState<
-//     "RS" | "USDT" | null
-//   >(null);
-
-//   // ✅ JazzCash is default
-//   const [selectedMethod, setSelectedMethod] = useState<
-//     "JazzCash" | "EasyPaisa" | "Bank" | null
-//   >("JazzCash");
-
-//   return (
-//     <View style={styles.container}>
-//       <SafeAreaView style={styles.mainwrapper}>
-//         {/* <AppHeader
-//           userName="Withdraw"
-//           onPress={() => navigation.openDrawer()}
-//         /> */}
-
-//         <ScrollView showsVerticalScrollIndicator={false} style={styles.wrapper}>
-//           <Spacer size={20} />
-
-//           <LabeledTextInput
-//            title="Username/ID"
-//             label="Username/ID"
-//             placeholder="Enter Username/ID"
-//             placeholderTextColor={Colors.grayWhite}
-//             keyboardType="default"
-//             autoCapitalize="none"
-//             backgroundColor={Colors.bg}
-//            containerStyle="w-[89%] md:w-[50%] mx-auto"
-//           />
-//           <Spacer size={20} />
-
-//           <LabeledTextInput
-//            title="Amount to Withdraw (Minimum RS: 1)"
-//             label="Amount"
-//             placeholder="Enter amount"
-//             placeholderTextColor={Colors.grayWhite}
-//             keyboardType="numeric"
-//             autoCapitalize="none"
-//             backgroundColor={Colors.bg}
-//             containerStyle="w-[89%] md:w-[50%] mx-auto"
-//           />
-
-//           <Spacer size={20} />
-//           <View style={styles.inputContainer}>
-//              <Text style={styles.depositTo}>{"Account Details"}</Text>
-//           </View>
-
-//           <View style={[styles.accountDetail,styles.inputContainer]}>
-//             <View style={styles.buttonRow}>
-//               {["JazzCash", "EasyPaisa", "Bank"].map((method) => (
-//                 <TouchableOpacity
-//                   key={method}
-//                   style={[
-//                     styles.button,
-//                     selectedMethod === method && styles.selectedButton,
-//                   ]}
-//                   onPress={() => setSelectedMethod(method as any)}
-//                 >
-//                   <Text
-//                     style={[
-//                       styles.buttonText,
-//                       selectedMethod === method && styles.selectedText,
-//                     ]}
-//                   >
-//                     {method}
-//                   </Text>
-//                 </TouchableOpacity>
-//               ))}
-//             </View>
-
-//             {/* ✅ Border below buttons */}
-//             <View style={styles.buttonBottomBorder} />
-
-//             {selectedMethod === "Bank" ? (
-//               <Fragment>
-//                 <Spacer size={25} />
-//                 <LabeledTextInput
-//                   label="Bank Name"
-//                   placeholder="Enter bank name"
-//                   placeholderTextColor={Colors.grayWhite}
-//                   autoCapitalize="words"
-//                   backgroundColor={Colors.bg}
-//                 />
-//               </Fragment>
-//             ) : null}
-
-//             {/* Input Fields */}
-//             <View style={styles.inputsContainer}>
-//               <Spacer size={10} />
-//               <LabeledTextInput
-//                 label="Account Number"
-//                 placeholder="Enter account number"
-//                 placeholderTextColor={Colors.grayWhite}
-//                 keyboardType="numeric"
-//                 autoCapitalize="none"
-//                 backgroundColor={Colors.bg}
-//               />
-//               <Spacer size={25} />
-//               <LabeledTextInput
-//                 label="Account Title"
-//                 placeholder="Enter account title"
-//                 placeholderTextColor={Colors.grayWhite}
-//                 autoCapitalize="words"
-//                 backgroundColor={Colors.bg}
-//               />
-//             </View>
-//           </View>
-//           <Spacer size={20} />
-//           <AppButton
-//             title="Withdraw"
-//             onPress={() => {}}
-//             buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green mb-4"
-//           />
-//         </ScrollView>
-
-//         <CurrencyModal
-//           visible={isModalVisible}
-//           selectedCurrency={selectedCurrency}
-//           onClose={() => setModalVisible(false)}
-//           onSelect={(currency) => {
-//             setSelectedCurrency(currency);
-//           }}
-//         />
-//       </SafeAreaView>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: Colors.bg,
-//   },
-//   mainwrapper: {
-//     flex: 1,
-//     marginTop: responsiveHeight(3),
-//   },
-//   wrapper: {
-//     marginHorizontal: responsiveScreenWidth(4),
-//   },
-//   selectCurrency: {
-//     color: Colors.grayWhite,
-//     marginBottom: responsiveHeight(2),
-//     fontSize: responsiveFontSize(1.8),
-//     fontWeight: "500",
-//   },
-//   depositTo: {
-//     color: Colors.grayWhite,
-//     marginBottom: responsiveHeight(1.5),
-//     fontSize: responsiveFontSize(2),
-//     fontWeight: "600",
-//   },
-//   buttonRow: {
-//     flexDirection: "row",
-//     justifyContent: "space-between",
-//     marginVertical: 10,
-//   },
-//   buttonBottomBorder: {
-//     borderBottomWidth: 1,
-//     borderBottomColor: Colors.grayWhite,
-//     marginTop: 3,
-//   },
-//   button: {
-//     flex: 1,
-//     paddingVertical: 12,
-//     borderWidth: 1,
-//     borderColor: Colors.grayWhite,
-//     borderRadius: 8,
-//     marginHorizontal: 5,
-//     alignItems: "center",
-//     backgroundColor: "transparent",
-//   },
-//   selectedButton: {
-//     backgroundColor: Colors.green,
-//     borderColor: Colors.green,
-//   },
-//   buttonText: {
-//     fontSize: 14,
-//     color: Colors.grayWhite,
-//     fontWeight: "500",
-//   },
-//   selectedText: {
-//     color: Colors.white,
-//   },
-//   inputsContainer: {
-//     marginTop: 15,
-//   },
-//   accountDetail: {
-//     borderWidth: 1,
-//     borderColor: Colors.grayWhite,
-//     borderRadius: 20,
-//     paddingHorizontal: 20,
-//     paddingTop: responsiveHeight(1.2),
-//     paddingBottom: responsiveHeight(3),
-//   },
-//   buttonStyle: {
-//     marginBottom: Platform.OS === "web" ? responsiveHeight(2) : 10,
-//     width:
-//       Platform.OS === "web"
-//         ? responsiveScreenWidth(20)
-//         : responsiveScreenWidth(100),
-//     alignSelf: "center",
-//   },
-//   inputContainer: {
-//     width: responsiveScreenWidth(Platform.OS === "web" ? 50 : 90),
-//     alignSelf: "center",
-//   },
-// });
-
-// export default WithdrawScreen;

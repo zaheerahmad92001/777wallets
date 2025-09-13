@@ -30,9 +30,9 @@ export default function BankAccountCard({
       className={`bg-headerColor p-4 rounded-lg shadow-md mb-4 relative ${containerStyle}`}
     >
       <View className="flex-row items-center justify-between mb-3">
-        <View className="flex-row items-center">
+        <View className="flex-1 flex-row items-center">
           <Image
-            source={logo}
+            source={{ uri: logo }}
             //   className="w-12 h-12 rounded-full mr-3"
             style={{ width: 50, height: 50, borderRadius: 25, marginRight: 12 }}
             resizeMode="contain"

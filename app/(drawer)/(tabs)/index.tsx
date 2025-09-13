@@ -3,40 +3,42 @@ import BalanceDeposit from "@/components/balanceDeposit";
 import FloatingButton from "@/components/floatingButton";
 import Spacer from "@/components/spacer";
 import { useAuth } from "@/contexts/AuthContext";
+import { fetchWebsiteURL } from "@/redux/actions/authActions";
+import { AppDispatch, RootState } from "@/redux/store";
 import { router, useNavigation } from "expo-router";
-import {
-  Alert,
-  Linking,
-  Platform,
-  SafeAreaView,
-  View,
-} from "react-native";
+import { useEffect } from "react";
+import { Alert, Linking, Platform, SafeAreaView, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { responsiveFontSize } from "react-native-responsive-dimensions";
 import TextTicker from "react-native-text-ticker";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
+  const dispatch = useDispatch<AppDispatch>();
+  const { websiteURL } = useSelector((state: RootState) => state.auth);
+  const siteURL=websiteURL?.websiteURL
+
+
   const isWeb = Platform.OS === "web";
-  const {signOut} = useAuth()
+  const { signOut } = useAuth();
 
-  const openWhatsApp = () => {
-    signOut();
-    let phoneNumber = "+923001234567";
-    let message = "Hello, I want to create a new account.";
+  useEffect(() => {
+    fetchWebsite();
+  }, [dispatch]);
 
-    let url = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(
-      message
-    )}`;
-
-    Linking.openURL(url).catch(() => {
-      Alert.alert("Error", "Make sure WhatsApp is installed on your device");
-    });
+  const fetchWebsite = async () => {
+    try {
+      const response = await dispatch(fetchWebsiteURL()).unwrap();
+    } catch (error) {
+      console.log("Failed to fetch WhatsApp number:", error);
+    }
   };
-
+  
 
   const openWeb = async () => {
-    const url = "https://bpexch.net/";
+
+    const url =siteURL? siteURL: "https://bpexch.net/";
     const supported = await Linking.canOpenURL(url);
     if (supported) {
       await Linking.openURL(url);
@@ -45,29 +47,36 @@ export default function HomeScreen() {
     }
   };
 
+  const handleLogout = () => {
+    signOut();
+  };
+
   return (
     <View className="flex-1 bg-bg">
       <SafeAreaView className="flex-1 mt-6">
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          className="mx-4"
-        >
+        <ScrollView showsVerticalScrollIndicator={false} className="mx-4">
           <Spacer size={20} />
 
-          <BalanceDeposit 
-          onPress={() => router.push("/deposit")}
-          amount={0} heading="Balance" title="Deposit" />
+          <BalanceDeposit
+            onPress={() => router.push("/deposit")}
+            amount={0}
+            heading="Balance"
+            title="Deposit"
+          />
           <Spacer size={20} />
 
-          <BalanceDeposit 
-          onPress={() => router.push("/withdraw")}
-          amount={0} heading="Balance" title="Withdraw" />
+          <BalanceDeposit
+            onPress={() => router.push("/withdraw")}
+            amount={0}
+            heading="Balance"
+            title="Withdraw"
+          />
           <Spacer size={20} />
 
           {/* Ticker View */}
           <View className="bg-white py-3 rounded-lg">
             <TextTicker
-             style={{ fontSize: responsiveFontSize(2.5) }}
+              style={{ fontSize: responsiveFontSize(2.5) }}
               duration={10000}
               loop
               bounce={false}
@@ -83,21 +92,19 @@ export default function HomeScreen() {
 
           {/* Buttons */}
           <AppButton
-            title="https://bpexch.net"
+            title={siteURL?siteURL:"https://bpexch.net"}
             onPress={openWeb}
             buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green mb-4"
           />
 
-          {/* <Spacer size={10} />
-
           <AppButton
-            title="Get New ID"
-            blink
-            onPress={openWhatsApp}
+            title="Logout"
+            onPress={handleLogout}
             buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green mb-4"
-          /> */}
+          />
+    
         </ScrollView>
-        <FloatingButton/>
+        <FloatingButton />
       </SafeAreaView>
     </View>
   );

@@ -1,12 +1,16 @@
 // app/(auth)/login.tsx
 import AppButton from "@/components/appButton";
 import AdminHeader from "@/components/appHeader";
+import ImagePickerComponent from "@/components/imagePickerComponent";
 import LabeledTextInput from "@/components/labeledTextInput";
 import Spacer from "@/components/spacer";
 import { Colors } from "@/constants/Colors";
+import { signUp } from "@/redux/actions/authActions";
+import { AppDispatch, RootState } from "@/redux/store";
+import { CreateUserPayload } from "@/types";
 import { useNavigation, useRouter } from "expo-router";
+import { useState } from "react";
 import {
-  Alert,
   Platform,
   SafeAreaView,
   ScrollView,
@@ -19,13 +23,77 @@ import {
   responsiveScreenHeight,
   responsiveScreenWidth,
 } from "react-native-responsive-dimensions";
+import Toast from "react-native-toast-message";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function SignUp() {
   const router = useRouter();
   const navigation = useNavigation();
+  const dispatch = useDispatch<AppDispatch>();
+  const {inProgress} = useSelector((state:RootState) => state.auth)
 
-  const createUser = () => {
-  Alert.alert('create user')
+    const [selectedImage, setSelectedImage] = useState<{
+    uri: string;
+    imagebase64: string;
+  } | null>(null);
+  const [imageUri, setImageUri] = useState<string | null>(null);
+  const [name , setName]=useState<string>('');
+  const [username , setUsername]=useState<string>('');
+  const [phone , setPhone]=useState<string>('');
+  const [password , setPassword]=useState<string>('');
+  const [confirmPassword , setConfirmPassword]=useState<string>('');
+  
+
+  const createUser = async() => {
+   try {
+    if (!name || !username || !phone || !password || !confirmPassword) {
+      Toast.show({
+        type: "error",
+        text1: "Validation Error",
+        text2: "All fields are required.",
+      });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Toast.show({
+        type: "error",
+        text1: "Validation Error",
+        text2: "Passwords do not match.",
+      });
+      return;
+    }
+    const payload:CreateUserPayload = {
+      name,
+      username,
+      phone,
+      password,
+      role: "user", // default role
+      imageBase64: selectedImage?.imagebase64 || null, // optional
+    };
+    const response = await dispatch(signUp(payload)).unwrap();
+  
+
+      // Reset fields
+      setName("");
+      setUsername("");
+      setPhone("");
+      setPassword("");
+      setConfirmPassword("");
+      setSelectedImage(null);
+      setImageUri(null);
+      router.back();
+    
+  } catch (error: any) {
+    console.error("Error creating user:", error?.response || error.message);
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: error?.response?.data?.error || "Something went wrong",
+    });
+  };
+
+
   };
   const openMenu = () => {
     navigation.openDrawer();
@@ -44,6 +112,8 @@ export default function SignUp() {
             <LabeledTextInput
               label="Name"
               placeholder="Enter name"
+              value={name}
+              onChangeText={setName}
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
               autoCapitalize="none"
@@ -55,6 +125,8 @@ export default function SignUp() {
             <LabeledTextInput
               label="UserName"
               placeholder="Enter User Name"
+              value={username}
+              onChangeText={setUsername}
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
               autoCapitalize="none"
@@ -65,6 +137,8 @@ export default function SignUp() {
             <LabeledTextInput
               label="Phone Number"
               placeholder="Enter number"
+              value={phone}
+              onChangeText={setPhone}
               placeholderTextColor={Colors.grayWhite}
               keyboardType="numeric"
               autoCapitalize="none"
@@ -75,6 +149,8 @@ export default function SignUp() {
             <LabeledTextInput
               label="Password"
               placeholder="Enter password"
+              value={password}
+              onChangeText={setPassword}
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
               autoCapitalize="none"
@@ -85,11 +161,23 @@ export default function SignUp() {
             <LabeledTextInput
               label="Confirm Password"
               placeholder="Confirm password"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
               autoCapitalize="none"
               backgroundColor={Colors.bg}
               containerStyle="w-[90%] md:w-[50%] mx-auto"
+            />
+
+            <Spacer size={Platform.OS === "web" ? 30 : 20} />
+            <ImagePickerComponent
+               label="User Image"
+               onImageSelected={({ uri, imagebase64 }) => {
+               setSelectedImage({ uri, imagebase64 });
+            }}
+            imageUri={imageUri}
+            setImageUri={setImageUri}
             />
             <Spacer size={Platform.OS==='web'? 40: 30} />
 
