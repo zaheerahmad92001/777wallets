@@ -1,10 +1,11 @@
-import { AccountState, BankAccount, DeleteBankAccountResponse } from "@/types";
+import { AccountState, BankAccount, DeleteBankAccountResponse, UpdateBankAccountResponse } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   addBankAccount,
   addTransaction,
   deleteBankAccount,
   fetchBankAccounts,
+  updateBankAccount
 } from "../actions/bankAccountActions";
 
 const initialState: AccountState = {
@@ -99,6 +100,32 @@ const accountSlice = createSlice({
         }
       )
       .addCase(deleteBankAccount.rejected, (state, action) => {
+        state.inProgress = false;
+        state.error =
+          (action.payload as string) ??
+          action.error.message ??
+          "Something went wrong";
+      })
+
+
+       // update bank account cases
+      .addCase(updateBankAccount.pending, (state) => {
+        state.inProgress = true;
+        state.error = null;
+      })
+      .addCase(
+        updateBankAccount.fulfilled,
+        (state, action: PayloadAction<UpdateBankAccountResponse>) => {
+          console.log("account update checking");
+          console.log(action.payload);
+          const bankId = action.payload.bankId;
+          state.inProgress = false;
+          state.bankAccounts = state.bankAccounts.filter(
+            (account) => account.id !== bankId
+          );
+        }
+      )
+      .addCase(updateBankAccount.rejected, (state, action) => {
         state.inProgress = false;
         state.error =
           (action.payload as string) ??

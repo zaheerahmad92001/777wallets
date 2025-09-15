@@ -40,6 +40,7 @@ export default function AddBankAccount() {
     uri: string;
     imagebase64: string;
   } | null>(null);
+
 const [imageUri, setImageUri] = useState<string | null>(null);
 
 

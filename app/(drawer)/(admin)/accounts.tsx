@@ -59,7 +59,13 @@ console.log("bank accounts in screen", bankAccounts);
       accountHolder={item.accountHolderName}
       accountNumber={item.accountNumber}
       iban={item.iban}
-      onEdit={() => router.navigate("/(drawer)/(admin)/updateAccount")}
+      //onEdit={() => router.navigate("/(drawer)/(admin)/updateAccount")}
+       onEdit={() =>
+        router.push({
+          pathname: "/(drawer)/(admin)/updateAccount",
+          params: { bank: JSON.stringify(item) }, // pass object as string
+        })
+      }
       onDelete={()=>onDeleteHandler(item?.id)}
       containerStyle="w-[92%] md:w-[50%] self-center"
     />

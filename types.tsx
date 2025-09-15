@@ -9,6 +9,22 @@ export interface BankAccount {
   userId: string;
   id: string;
 }
+
+
+export interface Transactions {
+  accountHolderName: string;
+  accountNumber: string;
+  bankLogoPath: string | null;
+  bankLogoUrl: string | null;
+   logo: string | null;
+  bankName: string;
+  iban: string;
+  userId: string;
+  id: string;
+}
+
+
+
 export interface BankAccountPayload {
   bankName: string;
   accountHolderName: string;
@@ -38,12 +54,33 @@ export interface TransactionPayload {
 export interface DeleteBankAccountPayload {
   bankId: string;
 }
+
+
 export interface DeleteBankAccountResponse {
   bankId: string;
   response: {
     message: string;
   };
 }
+
+
+export interface UpdateBankAccountPayload {
+  bankId: string;
+  payload: {
+    bankName?: string;
+    accountHolderName?: string;
+    accountNumber?: string;
+    iban?: string;
+    bankLogoBase64?: string;
+  };
+}
+export interface UpdateBankAccountResponse {
+  bankId: string;
+  response: {
+    message: string;
+  };
+}
+
 
 export interface WhatsAppNumberResponse {
   updatedAt: string;   

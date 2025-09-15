@@ -5,7 +5,7 @@ import LabeledTextInput from "@/components/labeledTextInput";
 import Spacer from "@/components/spacer";
 import { Colors } from "@/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
-import { useNavigation, useRouter } from "expo-router";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { useState } from "react";
 import {
   Alert,
@@ -27,10 +27,18 @@ import {
 export default function UpdateUser() {
   const router = useRouter();
   const navigation = useNavigation();
-const [profileImage, setProfileImage] = useState<string | null>(null);
+  const { user } = useLocalSearchParams();
+  const parsedUser = user ? JSON.parse(user as string) : null;
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [name, setName] = useState(parsedUser?.name ?? "");
+  const [username, setUsername] = useState(parsedUser?.username ?? "");
+  const [phone, setPhone] = useState(parsedUser?.phone ?? "");
+  const [password, setPassword] = useState("");           // usually not returned by API
+  const [confirmPassword, setConfirmPassword] = useState("");
+
 
   const createUser = () => {
-  Alert.alert('Update user')
+  Alert.alert('Update user',parsedUser.name)
   };
   const openMenu = () => {
     navigation.openDrawer();
@@ -76,7 +84,7 @@ const [profileImage, setProfileImage] = useState<string | null>(null);
 <View style={{ alignItems: "center", marginVertical: 20 }}>
   <View style={{ position: "relative" }}>
     <Image
-      source={require("../../../assets/images/easyPaisa.png")} 
+      source={{uri:parsedUser.imageUrl}} 
       style={{
         width: 150,
         height: 150,
@@ -106,6 +114,8 @@ const [profileImage, setProfileImage] = useState<string | null>(null);
 
             
             <LabeledTextInput
+            value={name}
+             onChangeText={setName}
               label="Name"
               placeholder="Enter name"
               placeholderTextColor={Colors.grayWhite}
@@ -117,6 +127,8 @@ const [profileImage, setProfileImage] = useState<string | null>(null);
             <Spacer size={Platform.OS === "web" ? 30 : 20} />
 
             <LabeledTextInput
+            value= {username}
+             onChangeText={setUsername}
               label="UserName"
               placeholder="Enter User Name"
               placeholderTextColor={Colors.grayWhite}
@@ -127,6 +139,8 @@ const [profileImage, setProfileImage] = useState<string | null>(null);
             />
             <Spacer size={Platform.OS === "web" ? 30 : 20} />
             <LabeledTextInput
+             value= {phone}
+              onChangeText={setPhone}
               label="Phone Number"
               placeholder="Enter number"
               placeholderTextColor={Colors.grayWhite}
@@ -137,6 +151,8 @@ const [profileImage, setProfileImage] = useState<string | null>(null);
             />
             <Spacer size={Platform.OS === "web" ? 30 : 20} />
             <LabeledTextInput
+             value= {password}
+              onChangeText={setPassword}
               label="Password"
               placeholder="Enter password"
               placeholderTextColor={Colors.grayWhite}
@@ -147,6 +163,8 @@ const [profileImage, setProfileImage] = useState<string | null>(null);
             />
             <Spacer size={Platform.OS === "web" ? 30 : 20} />
             <LabeledTextInput
+             value= {confirmPassword}
+              onChangeText={setConfirmPassword}
               label="Confirm Password"
               placeholder="Confirm password"
               placeholderTextColor={Colors.grayWhite}

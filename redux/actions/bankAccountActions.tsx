@@ -1,4 +1,4 @@
-import { BankAccountPayload, DeleteBankAccountPayload, TransactionPayload } from '@/types';
+import { BankAccountPayload, DeleteBankAccountPayload, TransactionPayload, UpdateBankAccountPayload } from '@/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import apiService from '../../services/apiService';
 
@@ -102,6 +102,35 @@ export const deleteBankAccount = createAsyncThunk<any , DeleteBankAccountPayload
       const errorMessage =
         error?.response?.data?.message ||
         'delete bank account failed. Please try again.';
+      return rejectWithValue(errorMessage);
+    }
+  },
+);
+
+
+
+// update bank account api call here
+
+export const updateBankAccount = createAsyncThunk<any , UpdateBankAccountPayload>(
+  'update-bank-account',
+  async ({bankId, payload}, {rejectWithValue}) => {
+    try {
+      console.log('update endpoint',`/updateBankAccount?bankId=${bankId}`)
+      const response = await apiService.patch(`/updateBankAccount?bankId=${bankId}`,payload);
+      console.log('update bank account response', response)
+      return {response, bankId}; 
+
+    } catch (error:any) {
+
+      console.log('update bank account error', error)
+      if (!error.response) {
+        return rejectWithValue(
+          'Network error: Please check your internet connection.',
+        );
+      }
+      const errorMessage =
+        error?.response?.data?.message ||
+        'update bank account failed. Please try again.';
       return rejectWithValue(errorMessage);
     }
   },
