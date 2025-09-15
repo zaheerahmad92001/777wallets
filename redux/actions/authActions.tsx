@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import apiService from "../../services/apiService";
 
 import { storagekeys } from "@/constants/staticData";
-import { AllUser, CreateUserPayload, CreateUserResponse, LoginPayload, LoginResponse } from "@/types";
+import { AddWebsitePayload, AddWebsiteResponse, AddWhatsAppPayload, AddWhatsResponse, AllUser, CreateUserPayload, CreateUserResponse, DeleteUserPayload, DeleteUserResponse, LoginPayload, LoginResponse, updateWebsitePayload, updateWebsiteResponse, updateWhatsAppPayload, updateWhatsAppResponse } from "@/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 
@@ -13,14 +13,13 @@ export const signUp = createAsyncThunk<
   CreateUserPayload,
   { rejectValue: string }
 >("create-user", async (payload, { rejectWithValue }) => {
-  console.log("create user api call", payload);
+  // console.log("create user api call", payload);
   try {
     const response = await apiService.post("/createUser", payload);
     console.log("here is response createUser", response);
  
     return response;
   } catch (error: any) {
-    Alert.alert("createUser Failed", "Please check your credentials and try again.");
     console.log("createUser api error", error);
     if (!error.response) {
       return rejectWithValue(
@@ -66,7 +65,6 @@ export const fetchAllUser = createAsyncThunk<
   ("fetch-all-user", async (_, { rejectWithValue }) => {
   try {
     const response = await apiService.get("/getAllUsers");
-    console.log("here is response all user", response?.users);
 
     return response?.users;
   } catch (error: any) {
@@ -83,6 +81,53 @@ export const fetchAllUser = createAsyncThunk<
   }
 });
 
+
+export const deleteUser = createAsyncThunk<DeleteUserResponse , DeleteUserPayload>(
+  'delete-bank-account',
+  async ({userId}, {rejectWithValue}) => {
+  try {
+    const response = await apiService.delete(`/deleteUser?userId=${userId}`);
+    console.log("here is response delete", response);
+
+    return response;
+  } catch (error: any) {
+    console.log("delete user api error", error);
+    if (!error.response) {
+      return rejectWithValue(
+        "Network error: Please check your internet connection."
+      );
+    }
+    const errorMessage =
+      error?.response?.data?.message ||
+      "delete user failed. Please try again.";
+    return rejectWithValue(errorMessage);
+  }
+});
+
+// add whatsApp Number
+
+export const addWhatsAppNum = createAsyncThunk<AddWhatsResponse , AddWhatsAppPayload>(
+  "add-whatsapp-number",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await apiService.post("/addWhatsAppNumber",payload);
+      return response;
+    } catch (error: any) {
+      console.log("add whatsapp number api error", error);
+      if (!error.response) {
+        return rejectWithValue(
+          "Network error: Please check your internet connection."
+        );
+      }
+      const errorMessage =
+        error?.response?.data?.message ||
+        "add whatsapp failed. Please try again.";
+      return rejectWithValue(errorMessage);
+    }
+  }
+)
+
+
 export const fetchWhatsApp = createAsyncThunk(
   "fetch-whatsapp",
   async (_, { rejectWithValue }) => {
@@ -90,7 +135,6 @@ export const fetchWhatsApp = createAsyncThunk(
       const response = await apiService.get("/getWhatsAppNumber");
       return response;
     } catch (error: any) {
-      //  Alert.alert("whatsApp number Failed", "Please check your network and try again.");
       console.log("getting whatsapp number api error", error);
       if (!error.response) {
         return rejectWithValue(
@@ -104,6 +148,52 @@ export const fetchWhatsApp = createAsyncThunk(
     }
   }
 );
+
+export const updateWhatsApp = createAsyncThunk<updateWhatsAppResponse, updateWhatsAppPayload>(
+  "update-whatsapp",
+  async (payload, { rejectWithValue }) => {
+    console.log('here is payload', payload)
+    try {
+      const response = await apiService.put("/updateWhatsAppNumber",payload);
+      return response;
+    } catch (error: any) {
+      console.log("update whatsapp number api error", error?.response?.data);
+      if (!error.response) {
+        return rejectWithValue(
+          "Network error: Please check your internet connection."
+        );
+      }
+      const errorMessage =
+        error?.response?.data?.message ||
+        "update whatsapp failed. Please try again.";
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+
+
+
+export const addWebsite = createAsyncThunk<AddWebsiteResponse, AddWebsitePayload>(
+  "add-website-url",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await apiService.post("/addSiteURL",payload);
+      return response;
+    } catch (error: any) {
+      console.log("add website url api error", error);
+      if (!error.response) {
+        return rejectWithValue(
+          "Network error: Please check your internet connection."
+        );
+      }
+      const errorMessage =
+        error?.response?.data?.message ||
+        "add website url failed. Please try again.";
+      return rejectWithValue(errorMessage);
+    }
+  }
+)
 
 export const fetchWebsiteURL = createAsyncThunk(
   "fetch-website-url",
@@ -123,6 +213,28 @@ export const fetchWebsiteURL = createAsyncThunk(
       const errorMessage =
         error?.response?.data?.message ||
         "getting website failed. Please try again.";
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const updateWebsite = createAsyncThunk<updateWebsiteResponse, updateWebsitePayload>(
+  "update-website",
+  async (payload, { rejectWithValue }) => {
+    console.log('here is payload', payload)
+    try {
+      const response = await apiService.put("/updateSiteURL",payload);
+      return response;
+    } catch (error: any) {
+      console.log("update website URL api error", error?.response?.data);
+      if (!error.response) {
+        return rejectWithValue(
+          "Network error: Please check your internet connection."
+        );
+      }
+      const errorMessage =
+        error?.response?.data?.message ||
+        "update website failed. Please try again.";
       return rejectWithValue(errorMessage);
     }
   }

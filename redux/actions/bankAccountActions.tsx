@@ -1,4 +1,4 @@
-import { BankAccountPayload, DeleteBankAccountPayload, TransactionPayload, UpdateBankAccountPayload } from '@/types';
+import { BankAccountPayload, DeleteBankAccountPayload, DeleteBankAccountResponse, TransactionPayload, UpdateBankAccountPayload } from '@/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import apiService from '../../services/apiService';
 
@@ -61,7 +61,6 @@ export const addBankAccount = createAsyncThunk<any , BankAccountPayload>(
   async (payload, {rejectWithValue}) => {
     try {
       const response = await apiService.post('/addBankAccount',payload);
-      console.log('add bank response', response)
       return response; 
 
     } catch (error:any) {
@@ -82,13 +81,12 @@ export const addBankAccount = createAsyncThunk<any , BankAccountPayload>(
 
 // delete bank account api call here
 
-export const deleteBankAccount = createAsyncThunk<any , DeleteBankAccountPayload>(
+export const deleteBankAccount = createAsyncThunk<DeleteBankAccountResponse , DeleteBankAccountPayload>(
   'delete-bank-account',
   async ({bankId}, {rejectWithValue}) => {
     try {
       console.log('delete endpoint',`/deleteBankAccount?bankId=${bankId}`)
       const response = await apiService.delete(`/deleteBankAccount?bankId=${bankId}`);
-      console.log('delete bank account response', response)
       return {response, bankId}; 
 
     } catch (error:any) {

@@ -1,8 +1,10 @@
 // components/WebsiteCard.tsx
 import { Colors } from "@/constants/Colors";
+import { RootState } from "@/redux/store";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Platform, Text, TouchableOpacity, View } from "react-native";
+import { useSelector } from "react-redux";
 import AppButton from "./appButton";
 import LabeledTextInput from "./labeledTextInput";
 import Spacer from "./spacer";
@@ -12,11 +14,14 @@ interface WebsiteCardProps {
   label?:string;
   placeholder?:string;
   keybarodType?:string;
+  isEditing:boolean,
+   setIsEditing: (value: boolean) => void;
   onUpdate: (newUrl: string) => void;
 }
 
-export default function WebsiteCard({ url, onUpdate , label , placeholder , keybarodType }: WebsiteCardProps) {
-  const [isEditing, setIsEditing] = useState(false);
+export default function WebsiteCard({ url, onUpdate , label , placeholder , keybarodType, isEditing, setIsEditing }: WebsiteCardProps) {
+   const {inProgress } = useSelector((state: RootState) => state.auth);
+  // const [isEditing, setIsEditing] = useState(false);
   const [newUrl, setNewUrl] = useState(url);
 
   return (
@@ -49,8 +54,9 @@ export default function WebsiteCard({ url, onUpdate , label , placeholder , keyb
               title="Update"
                onPress={() => {
               onUpdate(newUrl);
-              setIsEditing(false);
+              // setIsEditing(false);
             }}
+            isLoading={inProgress}
               buttonStyle="w-[100%] md:w-[30%] mx-auto bg-green mb-4"
               textStyle="text-white text-lg font-bold"
             />

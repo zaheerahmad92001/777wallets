@@ -6,7 +6,7 @@ const BASE_URL = "https://us-central1-bpwallets.cloudfunctions.net";
 
 const api = axios.create({
   baseURL: BASE_URL,
-  timeout: 10000,
+  timeout: 40000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -104,6 +104,7 @@ const apiService = {
       const response = await api.post(endpoint, data);
       return response.data;
     } catch (error:any) {
+      console.log('here is error', error)
       if (error.response?.data?.message) {
         throw new Error(error.response.data.message);
       }
