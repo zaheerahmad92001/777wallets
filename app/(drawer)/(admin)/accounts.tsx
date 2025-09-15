@@ -75,7 +75,6 @@ export default function Accounts() {
             pathname: "/(drawer)/(admin)/updateAccount",
             params: { bankItem: JSON.stringify(item) },
           })
-          // router.navigate("/(drawer)/(admin)/updateAccount")
         }
         onDelete={() => onDeleteHandler(item?.id)}
         containerStyle="w-[92%] md:w-[50%] self-center"
