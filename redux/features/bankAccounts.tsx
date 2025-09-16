@@ -4,11 +4,14 @@ import {
   addBankAccount,
   addTransaction,
   deleteBankAccount,
+  editBankAccount,
   fetchBankAccounts,
+  fetchPayments,
 } from "../actions/bankAccountActions";
 
 const initialState: AccountState = {
   bankAccounts: [],
+  transactions: [],
   loading: false,
   inProgress: false,
   error: null,
@@ -33,7 +36,33 @@ const accountSlice = createSlice({
       )
       .addCase(fetchBankAccounts.rejected, (state, action) => {
         state.loading = false;
-        // rejected payload defaults to `unknown` unless you use rejectWithValue
+        state.error =
+          (action.payload as string) ??
+          action.error.message ??
+          "Something went wrong";
+      })
+
+      // edit bank account
+      .addCase(editBankAccount.pending, (state) => {
+        state.inProgress = true;
+        state.error = null;
+      })
+      .addCase(
+        editBankAccount.fulfilled,
+        (state,action: PayloadAction<{id: string;updatedFields: Partial<BankAccount>}>) => {
+          state.inProgress = false;
+          const { id, updatedFields } = action.payload;
+          const index = state.bankAccounts.findIndex((bank) => bank.id === id);
+          if (index !== -1) {
+            state.bankAccounts[index] = {
+              ...state.bankAccounts[index],
+              ...updatedFields,
+            };
+          }
+        }
+      )
+      .addCase(editBankAccount.rejected, (state, action) => {
+        state.inProgress = false;
         state.error =
           (action.payload as string) ??
           action.error.message ??
@@ -53,6 +82,25 @@ const accountSlice = createSlice({
       )
       .addCase(addTransaction.rejected, (state, action) => {
         state.inProgress = false;
+        state.error =
+          (action.payload as string) ??
+          action.error.message ??
+          "Something went wrong";
+      })
+
+      // get all transactions
+      .addCase(fetchPayments.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        fetchPayments.fulfilled,
+        (state, action: PayloadAction<BankAccount[]>) => {
+          state.loading = false;
+        }
+      )
+      .addCase(fetchPayments.rejected, (state, action) => {
+        state.loading = false;
         state.error =
           (action.payload as string) ??
           action.error.message ??

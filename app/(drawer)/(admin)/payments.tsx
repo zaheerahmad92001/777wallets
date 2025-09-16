@@ -2,15 +2,21 @@ import AdminHeader from "@/components/appHeader";
 import FloatingButton from "@/components/floatingButton";
 import PaymentCard from "@/components/paymentsCard";
 import { Colors } from "@/constants/Colors";
+import { AppDispatch, RootState } from "@/redux/store";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRouter } from "expo-router";
 import React, { useState } from "react";
 import { FlatList, SafeAreaView, TextInput, TouchableOpacity, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Payments(){
 
     const navigation = useNavigation();
     const router = useRouter();
+    const dispatch = useDispatch<AppDispatch>();
+    const { loading, inProgress, allUser } = useSelector((state: RootState) => state.auth);
+
+
     const [searchQuery, setSearchQuery] = useState("");
       const openMenu = () => {
         navigation.openDrawer();

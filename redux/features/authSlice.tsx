@@ -10,6 +10,7 @@ import {
   fetchWhatsApp,
   loginUser,
   signUp,
+  updateUser,
   updateWebsite,
   updateWhatsApp,
 } from "../actions/authActions";
@@ -42,11 +43,11 @@ const authSlice = createSlice({
       state.user = null;
       AsyncStorage.removeItem(storagekeys.authToken);
     },
-    updateUser: (state, action) => {
-      if (state.user) {
-        state.user = { ...state.user, ...action.payload };
-      }
-    },
+    // updateUser: (state, action) => {
+    //   if (state.user) {
+    //     state.user = { ...state.user, ...action.payload };
+    //   }
+    // },
   },
   extraReducers: (builder) => {
     builder
@@ -77,6 +78,36 @@ const authSlice = createSlice({
           action.error.message ??
           "Something went wrong";
       })
+
+      // update user
+      .addCase(updateUser.pending, (state) => {
+        state.inProgress = true;
+        state.error = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        const { userId, updatedFields } = action.payload;
+
+        state.inProgress = false;
+
+        const index = state.allUser.findIndex((u) => u.userId === userId);
+
+        if (index !== -1) {
+          state.allUser[index] = {
+            ...state.allUser[index],
+            ...updatedFields, // merge only updated fields
+            // userId, // keep ID
+          };
+        }
+      })
+
+      .addCase(updateUser.rejected, (state, action) => {
+        state.inProgress = false;
+        state.error =
+          (action.payload as string) ??
+          action.error.message ??
+          "Something went wrong";
+      })
+
       // login user cases
       .addCase(loginUser.pending, (state) => {
         state.inProgress = true;
@@ -151,7 +182,7 @@ const authSlice = createSlice({
           action.error.message ??
           "Something went wrong";
       })
-// fetch whatsApp number
+      // fetch whatsApp number
       .addCase(fetchWhatsApp.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -168,17 +199,17 @@ const authSlice = createSlice({
           "Something went wrong";
       })
 
-// update whatsApp number cases
+      // update whatsApp number cases
       .addCase(updateWhatsApp.pending, (state) => {
         state.inProgress = true;
         state.error = null;
       })
       .addCase(updateWhatsApp.fulfilled, (state, action) => {
-        const { id,whatsAppNumber } = action.payload;
-        const newWhatsAppNum={
+        const { id, whatsAppNumber } = action.payload;
+        const newWhatsAppNum = {
           id,
-          whatsAppNumber
-        }
+          whatsAppNumber,
+        };
         state.inProgress = false;
         state.contactNumber = newWhatsAppNum;
       })
@@ -190,17 +221,17 @@ const authSlice = createSlice({
           "Something went wrong";
       })
 
-  // update website url cases
+      // update website url cases
       .addCase(updateWebsite.pending, (state) => {
         state.inProgress = true;
         state.error = null;
       })
       .addCase(updateWebsite.fulfilled, (state, action) => {
-        const {id,websiteURL} = action.payload;
-        const newSiteURL={
+        const { id, websiteURL } = action.payload;
+        const newSiteURL = {
           id,
-          websiteURL
-        }
+          websiteURL,
+        };
         state.inProgress = false;
         state.websiteURL = newSiteURL;
       })
@@ -212,7 +243,7 @@ const authSlice = createSlice({
           "Something went wrong";
       })
 
-      // fetch website 
+      // fetch website
 
       .addCase(fetchWebsiteURL.pending, (state) => {
         state.loading = true;
@@ -232,5 +263,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, updateUser } = authSlice.actions;
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;

@@ -1,4 +1,4 @@
-import { BankAccountPayload, DeleteBankAccountPayload, DeleteBankAccountResponse, TransactionPayload } from '@/types';
+import { BankAccountPayload, DeleteBankAccountPayload, DeleteBankAccountResponse, editBankAccountPayload, TransactionPayload } from '@/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import apiService from '../../services/apiService';
 
@@ -30,6 +30,7 @@ export const fetchBankAccounts = createAsyncThunk(
     }
   },
 );
+
 // add transaction api call here
 
 export const addTransaction = createAsyncThunk<any , TransactionPayload>(
@@ -79,6 +80,32 @@ export const addBankAccount = createAsyncThunk<any , BankAccountPayload>(
   },
 );
 
+// update bank account
+
+export const editBankAccount = createAsyncThunk<any , editBankAccountPayload>(
+  'edit-bank-account',
+  async ({payload, bankId}, {rejectWithValue}) => {
+    try {
+      const response = await apiService.put(`/updateBankAccount?bankId=${bankId}`,payload);
+      console.log('here is response edit bank account', response)
+      return response; 
+
+    } catch (error:any) {
+
+      console.log('edit bank error', error)
+      if (!error.response) {
+        return rejectWithValue(
+          'Network error: Please check your internet connection.',
+        );
+      }
+      const errorMessage =
+        error?.response?.data?.message ||
+        'edit bank account failed. Please try again.';
+      return rejectWithValue(errorMessage);
+    }
+  },
+);
+
 // delete bank account api call here
 
 export const deleteBankAccount = createAsyncThunk<DeleteBankAccountResponse , DeleteBankAccountPayload>(
@@ -100,6 +127,32 @@ export const deleteBankAccount = createAsyncThunk<DeleteBankAccountResponse , De
       const errorMessage =
         error?.response?.data?.message ||
         'delete bank account failed. Please try again.';
+      return rejectWithValue(errorMessage);
+    }
+  },
+);
+
+// fetch payments 
+
+export const fetchPayments = createAsyncThunk(
+  'fetch-payments',
+  async (_, {rejectWithValue}) => {
+    try {
+      const response = await apiService.get('/getTransactions');
+      console.log('here is transactions', response)
+      return response; 
+
+    } catch (error:any) {
+
+      console.log('getting transaction error', error)
+      if (!error.response) {
+        return rejectWithValue(
+          'Network error: Please check your internet connection.',
+        );
+      }
+      const errorMessage =
+        error?.response?.data?.message ||
+        'getting transaction failed. Please try again.';
       return rejectWithValue(errorMessage);
     }
   },

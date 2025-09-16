@@ -5,42 +5,106 @@ import ImagePickerComponent from "@/components/imagePickerComponent";
 import LabeledTextInput from "@/components/labeledTextInput";
 import Spacer from "@/components/spacer";
 import { Colors } from "@/constants/Colors";
-import { useNavigation, useRouter } from "expo-router";
+import { editBankAccount } from "@/redux/actions/bankAccountActions";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import {
-    Alert,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    View,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  View
 } from "react-native";
 import {
-    responsiveFontSize,
-    responsiveHeight,
-    responsiveScreenHeight,
-    responsiveScreenWidth,
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveScreenHeight,
+  responsiveScreenWidth,
 } from "react-native-responsive-dimensions";
+import Toast from "react-native-toast-message";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function UpdateBankAccount() {
   const router = useRouter();
   const navigation = useNavigation();
+  const dispatch = useDispatch<AppDispatch>();
+  const {inProgress} = useSelector((state:RootState)=>state.bankAccounts)
 
-  const createBankAccount = () => {
-    Alert.alert("update bank account");
+
+  const { bankItem } = useLocalSearchParams();
+  const parsedBankItem = bankItem ? JSON.parse(bankItem as string) : null;
+  const bankId = parsedBankItem.id;
+  const [bankName, setBankName] = useState<string>(parsedBankItem?.bankName || "");
+  const [accountHolder, setAccountHolder] = useState<string>(parsedBankItem?.accountHolderName || "");
+  const [accountNumber, setAccountNumber] = useState<string>(parsedBankItem?.accountNumber ||"");
+  const [iban, setIban] = useState<string>(parsedBankItem?.iban || "");
+  const [imageUri, setImageUri] = useState<string | null>(parsedBankItem?.bankLogoUrl || null);
+  const [selectedImage, setSelectedImage] = useState<{
+    uri: string;
+    imagebase64: string;
+  } | null>(null);
+
+
+useEffect(() => {
+  if (bankItem) {
+    const parsed = JSON.parse(bankItem as string);
+    setBankName(parsed.bankName || "");
+    setAccountHolder(parsed.accountHolderName || "");
+    setAccountNumber(parsed.accountNumber || "");
+    setIban(parsed.iban || "");
+    setImageUri(parsed.bankLogoUrl || null);
+  }
+}, [bankItem]);
+
+  const handleUpdate = async() => {
+   
+ if (!bankName.trim() || !accountHolder.trim() || !accountNumber.trim() || !iban.trim()) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Please fill all the fields.",
+      });
+      return;
+    }
+
+    const payload:any = {
+      bankName,
+      accountHolderName:accountHolder,
+      accountNumber:accountNumber,
+      iban,
+    };
+    if (selectedImage?.imagebase64) {
+    payload.bankLogoBase64 = selectedImage.imagebase64;
+  }
+    const response = await dispatch(editBankAccount({payload,bankId}) as any).unwrap();
+    if(response?.status){
+      Toast.show({
+        type: "success",
+        text1: "Bank account",
+        text2: response?.message,
+      });
+    }
+    router.push("/(drawer)/(admin)/accounts");
+
   };
   const openMenu = () => {
     navigation.openDrawer();
   };
 
+  console.log('bank name is', bankName)
+
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.mainwrapper}>
-        <AdminHeader title="Update Account" onMenuPress={() => openMenu()} />
+        <AdminHeader title="Update Account" onBackPress={()=>{router.push("/(drawer)/(admin)/accounts")}} onMenuPress={() => openMenu()} />
         <ScrollView style={styles.wrapper}>
           <View style={styles.inputWrapper}>
             <LabeledTextInput
               label="Bank Name"
               placeholder="Enter bank name"
+               value={bankName}
+              onChangeText={(val) => setBankName(val)}
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
               autoCapitalize="none"
@@ -52,6 +116,10 @@ export default function UpdateBankAccount() {
             <LabeledTextInput
               label="Account Holder"
               placeholder="Enter account holder name"
+                value={accountHolder}
+              onChangeText={(val) =>
+                setAccountHolder(val)
+              }
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
               autoCapitalize="none"
@@ -62,6 +130,10 @@ export default function UpdateBankAccount() {
             <LabeledTextInput
               label="Account Number"
               placeholder="Enter account number"
+               value={accountNumber}
+              onChangeText={(val) =>
+                setAccountNumber(val)
+              }
               placeholderTextColor={Colors.grayWhite}
               keyboardType="numeric"
               autoCapitalize="none"
@@ -72,6 +144,8 @@ export default function UpdateBankAccount() {
             <LabeledTextInput
               label="IBAN"
               placeholder="Enter IBAN"
+               value={iban}
+              onChangeText={(val) => setIban(val)}
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
               autoCapitalize="none"
@@ -81,17 +155,20 @@ export default function UpdateBankAccount() {
             <Spacer size={Platform.OS === "web" ? 30 : 20} />
             <ImagePickerComponent
               label="Bank Logo"
-              onImageSelected={(uri) => {
-                console.log("Selected image:", uri);
+              onImageSelected={({ uri, imagebase64 }) => {
+                setSelectedImage({ uri, imagebase64 });
               }}
+              imageUri={imageUri}
+              setImageUri={setImageUri}
             />
             <Spacer size={Platform.OS === "web" ? 40 : 30} />
 
             <AppButton
               title="Update Account"
               onPress={() => {
-                createBankAccount();
+                handleUpdate();
               }}
+              isLoading={inProgress}
               buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green mb-4"
               textStyle="text-white text-lg font-bold"
             />

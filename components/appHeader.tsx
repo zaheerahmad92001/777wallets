@@ -8,15 +8,24 @@ import { Text, TouchableOpacity, View } from "react-native";
 interface AppHeaderProps {
   title: string;
   onMenuPress?: () => void;
+  onBackPress?: () => void;
 }
 
-export default function AdminHeader({ title, onMenuPress }: AppHeaderProps) {
+export default function AdminHeader({ title, onMenuPress ,onBackPress }: AppHeaderProps) {
   const navigation = useNavigation();
 
   return (
     <View className="flex-row items-center justify-between px-4 py-3 bg-bg shadow-md">
       {/* Back Button */}
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        onPress={() => {
+          if (onBackPress && typeof onBackPress==='function' ) {
+            onBackPress();
+          } else {
+            navigation.goBack();
+          }
+        }}
+      >
         <Ionicons name="arrow-back" size={24} color={Colors.grayWhite} />
       </TouchableOpacity>
 

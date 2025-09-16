@@ -70,7 +70,13 @@ export default function Accounts() {
         accountHolder={item.accountHolderName}
         accountNumber={item.accountNumber}
         iban={item.iban}
-        onEdit={() => router.navigate("/(drawer)/(admin)/updateAccount")}
+        onEdit={() => 
+           router.navigate({
+            pathname: "/(drawer)/(admin)/updateAccount",
+            params: { bankItem: JSON.stringify(item) },
+          })
+          // router.navigate("/(drawer)/(admin)/updateAccount")
+        }
         onDelete={() => onDeleteHandler(item?.id)}
         containerStyle="w-[92%] md:w-[50%] self-center"
       />
