@@ -3,7 +3,6 @@ import { configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import authReducer from './features/authSlice';
 import bankAccountReducer from './features/bankAccounts';
-import paymentsReducer from './features/paymentSlice';
 
 const persistConfig = {
   key: 'auth',
@@ -17,8 +16,6 @@ export const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
     bankAccounts: bankAccountReducer,
-    transactions:paymentsReducer
-    
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

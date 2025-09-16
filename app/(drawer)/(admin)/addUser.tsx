@@ -72,7 +72,14 @@ export default function SignUp() {
       imageBase64: selectedImage?.imagebase64 || null, // optional
     };
     const response = await dispatch(signUp(payload)).unwrap();
-  
+   if(response?.success===false){
+    Toast.show({
+        type: "error",
+        text1: "User Create Error",
+        text2: response?.error,
+      });
+      return 
+   }
 
       // Reset fields
       setName("");
@@ -186,6 +193,7 @@ export default function SignUp() {
               onPress={() => {
                 createUser();
               }}
+              isLoading={inProgress}
               buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green"
               textStyle="text-white text-lg font-bold"
             />

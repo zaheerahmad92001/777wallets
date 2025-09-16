@@ -15,7 +15,7 @@ export default function ImagePickerComponent({
   imageUri,
   setImageUri
 }: Props) {
-console.log('here is image uri', imageUri)
+
 
   const pickImage = async () => {
     const permissionResult =

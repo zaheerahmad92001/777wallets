@@ -40,7 +40,6 @@ export default function AddBankAccount() {
     uri: string;
     imagebase64: string;
   } | null>(null);
-
 const [imageUri, setImageUri] = useState<string | null>(null);
 
 
@@ -61,7 +60,6 @@ const [imageUri, setImageUri] = useState<string | null>(null);
       iban,
       bankLogoBase64: selectedImage.imagebase64,
     };
-    console.log("New Account Data:", payload);
     const response = await dispatch(addBankAccount(payload) as any).unwrap();
     
      setBankName("");
