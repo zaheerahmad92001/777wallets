@@ -75,13 +75,13 @@ export default function Users() {
         phone={item.phone}
         image={item.imageUrl} // fallback if null
         containerStyle="w-[92%] md:w-[50%] self-center"
-        //onEdit={() => router.navigate("/(drawer)/(admin)/updateUser")}
         onEdit={() =>
-        router.push({
-          pathname: "/(drawer)/(admin)/updateUser",
-          params: { user: JSON.stringify(item) }, // pass object as string
-        })
-      }
+          router.push({
+            pathname: "/(drawer)/(admin)/updateUser",
+            params: { userItem: JSON.stringify(item) },
+          })
+        }
+        // onEdit={() => router.navigate("/(drawer)/(admin)/updateUser")}
         onDelete={() => onDeleteHandler(item?.userId)}
       />
     );

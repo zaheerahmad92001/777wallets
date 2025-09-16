@@ -1,11 +1,12 @@
-import { AccountState, BankAccount, DeleteBankAccountResponse, UpdateBankAccountResponse } from "@/types";
+import { AccountState, BankAccount, DeleteBankAccountResponse } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   addBankAccount,
   addTransaction,
   deleteBankAccount,
+  editBankAccount,
   fetchBankAccounts,
-  updateBankAccount
+  fetchPayments,
 } from "../actions/bankAccountActions";
 
 const initialState: AccountState = {
@@ -34,7 +35,33 @@ const accountSlice = createSlice({
       )
       .addCase(fetchBankAccounts.rejected, (state, action) => {
         state.loading = false;
-        // rejected payload defaults to `unknown` unless you use rejectWithValue
+        state.error =
+          (action.payload as string) ??
+          action.error.message ??
+          "Something went wrong";
+      })
+
+      // edit bank account
+      .addCase(editBankAccount.pending, (state) => {
+        state.inProgress = true;
+        state.error = null;
+      })
+      .addCase(
+        editBankAccount.fulfilled,
+        (state,action: PayloadAction<{id: string;updatedFields: Partial<BankAccount>}>) => {
+          state.inProgress = false;
+          const { id, updatedFields } = action.payload;
+          const index = state.bankAccounts.findIndex((bank) => bank.id === id);
+          if (index !== -1) {
+            state.bankAccounts[index] = {
+              ...state.bankAccounts[index],
+              ...updatedFields,
+            };
+          }
+        }
+      )
+      .addCase(editBankAccount.rejected, (state, action) => {
+        state.inProgress = false;
         state.error =
           (action.payload as string) ??
           action.error.message ??
@@ -54,6 +81,25 @@ const accountSlice = createSlice({
       )
       .addCase(addTransaction.rejected, (state, action) => {
         state.inProgress = false;
+        state.error =
+          (action.payload as string) ??
+          action.error.message ??
+          "Something went wrong";
+      })
+
+      // get all transactions
+      .addCase(fetchPayments.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        fetchPayments.fulfilled,
+        (state, action: PayloadAction<BankAccount[]>) => {
+          state.loading = false;
+        }
+      )
+      .addCase(fetchPayments.rejected, (state, action) => {
+        state.loading = false;
         state.error =
           (action.payload as string) ??
           action.error.message ??
@@ -107,31 +153,6 @@ const accountSlice = createSlice({
           "Something went wrong";
       })
 
-
-       // update bank account cases
-      .addCase(updateBankAccount.pending, (state) => {
-        state.inProgress = true;
-        state.error = null;
-      })
-      .addCase(
-        updateBankAccount.fulfilled,
-        (state, action: PayloadAction<UpdateBankAccountResponse>) => {
-          console.log("account update checking");
-          console.log(action.payload);
-          const bankId = action.payload.bankId;
-          state.inProgress = false;
-          state.bankAccounts = state.bankAccounts.filter(
-            (account) => account.id !== bankId
-          );
-        }
-      )
-      .addCase(updateBankAccount.rejected, (state, action) => {
-        state.inProgress = false;
-        state.error =
-          (action.payload as string) ??
-          action.error.message ??
-          "Something went wrong";
-      });
   },
 });
 

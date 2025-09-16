@@ -189,3 +189,36 @@ export interface AddWebsiteResponse {
   userId:string;
   websiteURL: string;
 }
+
+export interface editBankAccountPayload {
+  payload:{
+  bankName: string;
+  accountHolderName: string;
+  accountNumber: string;
+  iban: string;
+  bankLogoBase64: string; // base64 encoded image
+  };
+  bankId:string;
+}
+
+export interface UpdateUserPayload {
+  payload: {
+    name: string;
+    username: string;
+    phone: string;
+    role: "user" | "admin";
+    imageBase64?: string; // optional, no null
+  };
+  userId: string;
+}
+export interface UpdateUserResponse {
+  message: string;
+  success: boolean;
+  userId: string;
+  updatedFields: {
+    name?: string;
+    phone?: string;
+    role?: "user" | "admin";
+    imageUrl?: string;
+  };
+}

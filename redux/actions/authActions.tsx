@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import apiService from "../../services/apiService";
 
 import { storagekeys } from "@/constants/staticData";
-import { AddWebsitePayload, AddWebsiteResponse, AddWhatsAppPayload, AddWhatsResponse, AllUser, CreateUserPayload, CreateUserResponse, DeleteUserPayload, DeleteUserResponse, LoginPayload, LoginResponse, updateWebsitePayload, updateWebsiteResponse, updateWhatsAppPayload, updateWhatsAppResponse } from "@/types";
+import { AddWebsitePayload, AddWebsiteResponse, AddWhatsAppPayload, AddWhatsResponse, AllUser, CreateUserPayload, CreateUserResponse, DeleteUserPayload, DeleteUserResponse, LoginPayload, LoginResponse, UpdateUserPayload, updateWebsitePayload, updateWebsiteResponse, updateWhatsAppPayload, updateWhatsAppResponse } from "@/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 
@@ -13,7 +13,7 @@ export const signUp = createAsyncThunk<
   CreateUserPayload,
   { rejectValue: string }
 >("create-user", async (payload, { rejectWithValue }) => {
-  // console.log("create user api call", payload);
+  console.log("create user api call", payload);
   try {
     const response = await apiService.post("/createUser", payload);
     console.log("here is response createUser", response);
@@ -28,6 +28,32 @@ export const signUp = createAsyncThunk<
     }
     const errorMessage =
       error?.response?.data?.message || "createUser failed. Please try again.";
+    return rejectWithValue(errorMessage);
+  }
+});
+
+// update user
+
+export const updateUser = createAsyncThunk<
+  UpdateUserResponse,
+  UpdateUserPayload,
+  { rejectValue: string }
+>("update-user", async ({payload,userId}, { rejectWithValue }) => {
+  // console.log("create user api call", payload);
+  try {
+    const response = await apiService.put(`/updateUser?userId=${userId}`, payload);
+    console.log("here is response update user", response);
+ 
+    return response;
+  } catch (error: any) {
+    console.log("update api error", error);
+    if (!error.response) {
+      return rejectWithValue(
+        "Network error: Please check your internet connection."
+      );
+    }
+    const errorMessage =
+      error?.response?.data?.message || "update failed. Please try again.";
     return rejectWithValue(errorMessage);
   }
 });

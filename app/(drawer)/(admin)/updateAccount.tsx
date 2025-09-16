@@ -5,10 +5,10 @@ import ImagePickerComponent from "@/components/imagePickerComponent";
 import LabeledTextInput from "@/components/labeledTextInput";
 import Spacer from "@/components/spacer";
 import { Colors } from "@/constants/Colors";
-import { updateBankAccount } from "@/redux/actions/bankAccountActions";
+import { editBankAccount } from "@/redux/actions/bankAccountActions";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Platform,
   SafeAreaView,
@@ -27,64 +27,77 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function UpdateBankAccount() {
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
-  const {inProgress} = useSelector((state:RootState) => state.bankAccounts)
   const navigation = useNavigation();
-const { bank } = useLocalSearchParams();
-  const parsedBank = bank ? JSON.parse(bank as string) : null;
-  console.log('here is parsebank', parsedBank)
+  const dispatch = useDispatch<AppDispatch>();
+  const {inProgress} = useSelector((state:RootState)=>state.bankAccounts)
 
-const [bankName, setBankName] = useState(parsedBank?.bankName ?? "");
-  const [accountHolder, setAccountHolder] = useState(parsedBank?.accountHolderName ?? "");
-  const [accountNumber, setAccountNumber] = useState(parsedBank?.accountNumber ?? "");
-  const [iban, setIban] = useState(parsedBank?.iban ?? "");
-const [selectedImage, setSelectedImage] = useState<{
+
+  const { bankItem } = useLocalSearchParams();
+  const parsedBankItem = bankItem ? JSON.parse(bankItem as string) : null;
+  const bankId = parsedBankItem.id;
+  const [bankName, setBankName] = useState<string>(parsedBankItem?.bankName || "");
+  const [accountHolder, setAccountHolder] = useState<string>(parsedBankItem?.accountHolderName || "");
+  const [accountNumber, setAccountNumber] = useState<string>(parsedBankItem?.accountNumber ||"");
+  const [iban, setIban] = useState<string>(parsedBankItem?.iban || "");
+  const [imageUri, setImageUri] = useState<string | null>(parsedBankItem?.bankLogoUrl || null);
+  const [selectedImage, setSelectedImage] = useState<{
     uri: string;
     imagebase64: string;
   } | null>(null);
 
-const [imageUri, setImageUri] = useState<string | null>(
-    parsedBank?.bankLogoUrl || null // show existing bank logo first
-  );
 
-  const updateBankAccountApi = async() => {
-       
-      if (!bankName.trim() || !accountHolder.trim() || !accountNumber.trim() || !iban.trim()) {
-        Toast.show({
-          type: "error",
-          text1: "Error",
-          text2: "Please fill all the fields.",
-        });
-        return;
-      }
-  
-   const payload = {
+useEffect(() => {
+  if (bankItem) {
+    const parsed = JSON.parse(bankItem as string);
+    setBankName(parsed.bankName || "");
+    setAccountHolder(parsed.accountHolderName || "");
+    setAccountNumber(parsed.accountNumber || "");
+    setIban(parsed.iban || "");
+    setImageUri(parsed.bankLogoUrl || null);
+  }
+}, [bankItem]);
+
+  const handleUpdate = async() => {
+   
+ if (!bankName.trim() || !accountHolder.trim() || !accountNumber.trim() || !iban.trim()) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Please fill all the fields.",
+      });
+      return;
+    }
+
+    const payload:any = {
       bankName,
       accountHolderName:accountHolder,
       accountNumber:accountNumber,
       iban,
-      bankLogoBase64: selectedImage?.imagebase64,
     };
-      console.log("New Account Data:", payload);
-      const response = await dispatch(updateBankAccount({bankId: parsedBank.id,payload:payload})).unwrap();
-      
-      //  setBankName("");
-      // setAccountHolder("");
-      // setAccountNumber("");
-      // setIban("");
-      // setSelectedImage(null);
-      // setImageUri(null);
-       router.push("/(drawer)/(admin)/accounts");
-  
-    };
+    if (selectedImage?.imagebase64) {
+    payload.bankLogoBase64 = selectedImage.imagebase64;
+  }
+    const response = await dispatch(editBankAccount({payload,bankId}) as any).unwrap();
+    if(response?.status){
+      Toast.show({
+        type: "success",
+        text1: "Bank account",
+        text2: response?.message,
+      });
+    }
+    router.push("/(drawer)/(admin)/accounts");
+
+  };
   const openMenu = () => {
     navigation.openDrawer();
   };
 
+  console.log('bank name is', bankName)
+
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.mainwrapper}>
-        <AdminHeader title="Update Account" onMenuPress={() => openMenu()} />
+        <AdminHeader title="Update Account" onBackPress={()=>{router.push("/(drawer)/(admin)/accounts")}} onMenuPress={() => openMenu()} />
         <ScrollView style={styles.wrapper}>
           <View style={styles.inputWrapper}>
             <LabeledTextInput
@@ -92,6 +105,8 @@ const [imageUri, setImageUri] = useState<string | null>(
               onChangeText={setBankName}
               label="Bank Name"
               placeholder="Enter bank name"
+               value={bankName}
+              onChangeText={(val) => setBankName(val)}
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
               autoCapitalize="none"
@@ -105,6 +120,10 @@ const [imageUri, setImageUri] = useState<string | null>(
               onChangeText={setAccountHolder}
               label="Account Holder"
               placeholder="Enter account holder name"
+                value={accountHolder}
+              onChangeText={(val) =>
+                setAccountHolder(val)
+              }
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
               autoCapitalize="none"
@@ -117,7 +136,10 @@ const [imageUri, setImageUri] = useState<string | null>(
               onChangeText={setAccountNumber}
               label="Account Number"
               placeholder="Enter account number"
-
+               value={accountNumber}
+              onChangeText={(val) =>
+                setAccountNumber(val)
+              }
               placeholderTextColor={Colors.grayWhite}
               keyboardType="numeric"
               autoCapitalize="none"
@@ -130,6 +152,8 @@ const [imageUri, setImageUri] = useState<string | null>(
               onChangeText={setIban}
               label="IBAN"
               placeholder="Enter IBAN"
+               value={iban}
+              onChangeText={(val) => setIban(val)}
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
               autoCapitalize="none"
@@ -138,21 +162,19 @@ const [imageUri, setImageUri] = useState<string | null>(
             />
             <Spacer size={Platform.OS === "web" ? 30 : 20} />
             <ImagePickerComponent
-                label="Bank Logo"
-                onImageSelected={({ uri, imagebase64 }) => {
+              label="Bank Logo"
+              onImageSelected={({ uri, imagebase64 }) => {
                 setSelectedImage({ uri, imagebase64 });
-                setImageUri(uri); // update preview when new image is chosen
-                }}
-                imageUri={imageUri} // will show either initial URL or selected image
-                setImageUri={setImageUri}
+              }}
+              imageUri={imageUri}
+              setImageUri={setImageUri}
             />
             <Spacer size={Platform.OS === "web" ? 40 : 30} />
 
             <AppButton
               title="Update Account"
               onPress={() => {
-                //Alert.alert(accountHolder)
-                updateBankAccountApi();
+                handleUpdate();
               }}
               isLoading={inProgress}
               buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green mb-4"

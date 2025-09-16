@@ -62,26 +62,26 @@ export default function Accounts() {
     }
   };
 
- const renderItem: ListRenderItem<BankAccount> = ({ item, index }) => {
-  return (
-    <BankAccountCard
-      logo={item.bankLogoUrl}
-      bankName={item.bankName}
-      accountHolder={item.accountHolderName}
-      accountNumber={item.accountNumber}
-      iban={item.iban}
-      //onEdit={() => router.navigate("/(drawer)/(admin)/updateAccount")}
-       onEdit={() =>
-        router.push({
-          pathname: "/(drawer)/(admin)/updateAccount",
-          params: { bank: JSON.stringify(item) }, // pass object as string
-        })
-      }
-      onDelete={()=>onDeleteHandler(item?.id)}
-      containerStyle="w-[92%] md:w-[50%] self-center"
-    />
-  );
-};
+  const renderItem: ListRenderItem<BankAccount> = ({ item, index }) => {
+    return (
+      <BankAccountCard
+        logo={item.bankLogoUrl}
+        bankName={item.bankName}
+        accountHolder={item.accountHolderName}
+        accountNumber={item.accountNumber}
+        iban={item.iban}
+        onEdit={() => 
+           router.navigate({
+            pathname: "/(drawer)/(admin)/updateAccount",
+            params: { bankItem: JSON.stringify(item) },
+          })
+          // router.navigate("/(drawer)/(admin)/updateAccount")
+        }
+        onDelete={() => onDeleteHandler(item?.id)}
+        containerStyle="w-[92%] md:w-[50%] self-center"
+      />
+    );
+  };
 
   return (
     <View className="flex-1 bg-bg px-4">
