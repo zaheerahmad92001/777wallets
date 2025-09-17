@@ -12,18 +12,28 @@ export interface BankAccount {
 
 
 export interface Transactions {
-  accountHolderName: string;
   accountNumber: string;
-  bankLogoPath: string | null;
-  bankLogoUrl: string | null;
-   logo: string | null;
+  accountTitle: string;
+  accountType: string;       
+  amount: string;            
   bankName: string;
-  iban: string;
+  imageUrl: string | null;
+  phoneNumber: string;
+  transStatus: string;       
+  transactionType: string;   
   userId: string;
-  id: string;
+  username: string;
+  transactionId:string;
+  updatedAt:string;
+  createdAt:string;
 }
 
-
+export interface TransactiontState {
+  allTransactions: Transactions[];
+  loading: boolean;
+  inProgress: boolean;
+  error: string | null;
+}
 
 export interface BankAccountPayload {
   bankName: string;
@@ -74,6 +84,13 @@ export interface UpdateBankAccountPayload {
     bankLogoBase64?: string;
   };
 }
+
+export interface UpdatePaymentPayload {
+  transactionId: string;
+  transStatus: string;
+  
+}
+
 export interface UpdateBankAccountResponse {
   bankId: string;
   response: {
@@ -222,3 +239,14 @@ export interface UpdateUserResponse {
     imageUrl?: string;
   };
 }
+
+export interface UpdatePaymentResponse {
+  message: string;
+  transactionId: string;
+  transStatus: "accepted" | "pending" | "rejected" | string;
+}
+export interface UpdatePaymentPayloadInterface {
+  transactionId: string;
+  transStatus: "accepted" | "pending" | "rejected" | string;
+}
+

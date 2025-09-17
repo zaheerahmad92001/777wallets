@@ -50,24 +50,31 @@ console.log('here is image uri', imageUri)
     }
   };
 
-  return (
-    <View className="my-5 items-center">
-      {label ? (
-        <Text className="text-lg font-semibold text-gray-200 mb-2">{label}</Text>
-      ) : null}
+return (
+  <View className="my-5 items-center">
+    {label ? (
+      <Text className="text-lg font-semibold text-gray-200 mb-2">{label}</Text>
+    ) : null}
 
-      <TouchableOpacity
-        className="w-[90%] max-w-[300px] h-40 border border-dashed border-gray-300 rounded-xl items-center justify-center bg-gray-800"
-        onPress={pickImage}
-      >
-        {imageUri ? (
-          <Image source={{ uri: imageUri }} className="w-32 h-32 rounded-lg" />
-        ) : (
-          <Text className="text-gray-400">Tap to upload</Text>
-        )}
-      </TouchableOpacity>
-    </View>
-  );
+    <TouchableOpacity
+      className="w-40 h-40 border border-dashed border-gray-300 rounded-full items-center justify-center bg-gray-800 overflow-hidden"
+      onPress={pickImage}
+    >
+      {imageUri ? (
+        <Image
+          source={{ uri: imageUri }}
+          className="w-full h-full rounded-full"
+          resizeMode="cover"
+        />
+      ) : (
+        <Text className="text-gray-400">Tap to upload</Text>
+      )}
+    </TouchableOpacity>
+  </View>
+);
+
+
+
 }
 
 

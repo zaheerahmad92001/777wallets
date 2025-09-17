@@ -14,10 +14,11 @@ import {
   FlatList,
   ListRenderItem,
   Platform,
+  RefreshControl,
   SafeAreaView,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,6 +43,18 @@ export default function Users() {
     const response = dispatch(fetchAllUser()).unwrap();
   };
 
+  const [refreshing, setRefreshing] = useState(false);
+  
+    const onRefresh = async () => {
+      setRefreshing(true);
+      try {
+          await fetchAllUser();
+      } catch (err) {
+        console.error("Refresh failed:", err);
+      } finally {
+        setRefreshing(false);
+      }
+    };
   const openMenu = () => {
     navigation.openDrawer();
   };
@@ -90,7 +103,7 @@ export default function Users() {
   return (
     <View className="flex-1 bg-bg px-4">
       <SafeAreaView className="flex-1 mt-12 px-4">
-        <AdminHeader title="User" onMenuPress={() => openMenu()} />
+        <AdminHeader title="User" onMenuPress={() => openMenu()} showBackButton = {false} />
 
         {/*Search Bar */}
         <View className="flex-row items-center mt-4 mb-4">
@@ -117,6 +130,14 @@ export default function Users() {
               data={allUser}
               keyExtractor={(item) => item?.userId}
               renderItem={renderItem}
+              refreshControl={
+                                <RefreshControl
+                                  refreshing={refreshing}
+                                  onRefresh={onRefresh}
+                                  tintColor="#fff"            // iOS spinner color
+                                  colors={[Colors.green]}     // Android spinner color
+                                />
+                              }
             />
           </View>
         )}

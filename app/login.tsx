@@ -113,7 +113,7 @@ export default function Login() {
               placeholder="Enter password"
               placeholderTextColor={Colors.grayWhite}
               onChangeText={(value) => setPassword(value)}
-              secureTextEntry
+              secureTextEntry={true}
               autoCapitalize="none"
               backgroundColor={Colors.bg}
               containerStyle="w-[90%] md:w-[50%] mx-auto"

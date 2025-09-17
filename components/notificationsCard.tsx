@@ -1,9 +1,7 @@
-// components/BankAccount.tsx
 import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import AppButton from "./appButton";
 
 interface PaymentsProps {
   recepitimage: string; // bank logo URL
@@ -51,7 +49,7 @@ const getStatusColor = (status: string) => {
       return "gray";
   }
 };
-export default function PaymentsCard({
+export default function NotificationsCard({
   accountNumber,
   accountTitle,
   imageUrl,
@@ -136,15 +134,28 @@ export default function PaymentsCard({
 
 
         {/* Right-side View Image Button */}
-       {transactionType === "deposit" && ( <View className="absolute top-4 right-4">
+
+
+{transactionType === "deposit" && (
+  <View className="absolute top-4 right-4">
+    <TouchableOpacity
+      className="bg-gray-700 p-2 rounded-full"
+      onPress={onViewImage}
+    >
+      <Ionicons name="image-outline" size={20} color="white" />
+    </TouchableOpacity>
+  </View>
+)}
+
+
+        {/* <View className="absolute top-4 right-4">
           <TouchableOpacity
             className="bg-gray-700 p-2 rounded-full"
             onPress={onViewImage}
           >
             <Ionicons name="image-outline" size={20} color="white" />
           </TouchableOpacity>
-        </View>
-       )}
+        </View> */}
 
         {/* Bottom Accept / Reject Buttons */}
         <View className="flex-row justify-between mt-4">
@@ -180,7 +191,7 @@ export default function PaymentsCard({
               Reject
             </Text>
           </TouchableOpacity> */}
-          <AppButton title="Accept" onPress={onAccept}
+          {/* <AppButton title="Accept" onPress={onAccept}
             buttonStyle="w-[40%] md:w-[20%] mx-auto bg-green mb-4 py-2"
             textStyle="text-white text-lg font-bold"
             isLoading={selectedStatus==='accepted' && isSelectedIndex}
@@ -195,7 +206,7 @@ export default function PaymentsCard({
             isLoading={selectedStatus==='rejected' && isSelectedIndex}
             disabled={transStatus !== "pending"}
             bgColor={Colors.red}
-            />
+            /> */}
           {/* <TouchableOpacity
               className="flex-1 ml-2 py-2 rounded-lg"
               style={{

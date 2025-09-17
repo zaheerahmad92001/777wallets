@@ -116,6 +116,14 @@ export default function SignUp() {
         <ScrollView style={styles.wrapper}>
           {/* <Text style={styles.heading}>Sign Up</Text> */}
           <View style={styles.inputWrapper}>
+            <ImagePickerComponent
+               label="User Image"
+               onImageSelected={({ uri, imagebase64 }) => {
+               setSelectedImage({ uri, imagebase64 });
+            }}
+            imageUri={imageUri}
+            setImageUri={setImageUri}
+            />
             <LabeledTextInput
               label="Name"
               placeholder="Enter name"
@@ -157,6 +165,7 @@ export default function SignUp() {
               label="Password"
               placeholder="Enter password"
               value={password}
+              secureTextEntry={true}
               onChangeText={setPassword}
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
@@ -169,6 +178,7 @@ export default function SignUp() {
               label="Confirm Password"
               placeholder="Confirm password"
               value={confirmPassword}
+              secureTextEntry={true}
               onChangeText={setConfirmPassword}
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
@@ -177,7 +187,7 @@ export default function SignUp() {
               containerStyle="w-[90%] md:w-[50%] mx-auto"
             />
 
-            <Spacer size={Platform.OS === "web" ? 30 : 20} />
+            {/* <Spacer size={Platform.OS === "web" ? 30 : 20} />
             <ImagePickerComponent
                label="User Image"
                onImageSelected={({ uri, imagebase64 }) => {
@@ -185,8 +195,8 @@ export default function SignUp() {
             }}
             imageUri={imageUri}
             setImageUri={setImageUri}
-            />
-            <Spacer size={Platform.OS==='web'? 40: 30} />
+            /> */}
+           // <Spacer size={Platform.OS==='web'? 40: 30} />
 
             <AppButton
               title="Create User"

@@ -3,6 +3,7 @@ import BankAccountCard from "@/components/bankAccountCard";
 import CustomAlert from "@/components/customAlert";
 import FloatingButton from "@/components/floatingButton";
 import Loader from "@/components/Loader";
+import { Colors } from "@/constants/Colors";
 import {
   deleteBankAccount,
   fetchBankAccounts,
@@ -12,7 +13,7 @@ import { BankAccount } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ListRenderItem, Platform, SafeAreaView, View } from "react-native";
+import { ListRenderItem, Platform, RefreshControl, SafeAreaView, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,6 +40,19 @@ export default function Accounts() {
       console.error("Failed to load bank accounts:", error);
     }
   };
+
+  const [refreshing, setRefreshing] = useState(false);
+    
+      const onRefresh = async () => {
+        setRefreshing(true);
+        try {
+            await loadBankAccounts();
+        } catch (err) {
+          console.error("Refresh failed:", err);
+        } finally {
+          setRefreshing(false);
+        }
+      };
 
   const openMenu = () => {
     navigation.openDrawer();
@@ -95,6 +109,14 @@ export default function Accounts() {
               data={bankAccounts}
               renderItem={renderItem}
               keyExtractor={(item) => item.id}
+              refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    tintColor="#fff"            // iOS spinner color
+                    colors={[Colors.green]}     // Android spinner color
+                  />
+                }
             />
           )}
         </View>

@@ -1,4 +1,5 @@
 import AppButton from "@/components/appButton";
+import AppHeader from "@/components/appHeader";
 import BalanceDeposit from "@/components/balanceDeposit";
 import FloatingButton from "@/components/floatingButton";
 import Spacer from "@/components/spacer";
@@ -54,6 +55,15 @@ export default function HomeScreen() {
   return (
     <View className="flex-1 bg-bg">
       <SafeAreaView className="flex-1 mt-6">
+          <AppHeader
+                  title="Home"
+                  showBackButton = {false}
+                  showNotification
+                  onNotificationPress={() => 
+                        router.push("/notifications") 
+                  }
+                  
+                />
         <ScrollView showsVerticalScrollIndicator={false} className="mx-4">
           <Spacer size={20} />
 

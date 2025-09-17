@@ -33,9 +33,8 @@ export default function BankAccountCard({
         <View className="flex-1 flex-row items-center">
           <Image
             source={{ uri: logo }}
-            //   className="w-12 h-12 rounded-full mr-3"
-            style={{ width: 50, height: 50, borderRadius: 25, marginRight: 12 }}
-            resizeMode="contain"
+            className="w-12 h-12 rounded-full mr-3"
+          resizeMode="cover"
           />
           <Text className="text-lg font-bold text-grayWhite">{bankName}</Text>
         </View>

@@ -4,10 +4,11 @@ import FloatingButton from "@/components/floatingButton";
 import LabeledTextInput from "@/components/labeledTextInput";
 import Spacer from "@/components/spacer";
 import { Colors } from "@/constants/Colors";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import React, { Fragment, useState } from "react";
 import Toast from "react-native-toast-message";
 
+import AppHeader from "@/components/appHeader";
 import { addTransaction } from "@/redux/actions/bankAccountActions";
 import { AppDispatch, RootState } from "@/redux/store";
 import {
@@ -15,12 +16,13 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 const WithdrawScreen = () => {
   const navigation = useNavigation();
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { bankAccounts, loading ,inProgress } = useSelector(
     (state: RootState) => state.bankAccounts
@@ -43,58 +45,151 @@ const WithdrawScreen = () => {
   const [bankName, setBankName] = useState<string>("");
   const [accountNumber, setAccountNumber] = useState<string>("");
   const [accountTitle, setAccountTitle] = useState<string>("");
+  const { user} = useSelector(
+    (state: RootState) => state.auth
+  );
+  
+  // const handleWidral = async () => {
+  //   if (user.username != userName) {
+  //     Toast.show({
+  //       type: "error",
+  //       text1: "Error",
+  //       text2: "Username/ID does not match",
+  //     });
+  //     return;
+  //   } else
+  //   if (!phoneNumber || !amount) {
+  //     Toast.show({
+  //       type: "error",
+  //       text1: "Error",
+  //       text2: "Please fill all the fields.",
+  //     });
+  //     return;
+  //   } else if (Number(amount) < 1) {
+  //     Toast.show({
+  //       type: "error",
+  //       text1: "Error",
+  //       text2: "minimum ammount is RS:1.",
+  //     });
+  //     return;
+  //   } else if (!accountNumber || !accountTitle) {
+  //     Toast.show({
+  //       type: "error",
+  //       text1: "Error",
+  //       text2: "Please add bank detail",
+  //     });
+  //     return;
+  //   } else if (selectedMethod === "Bank" && !bankName) {
+  //     Toast.show({
+  //       type: "error",
+  //       text1: "Error",
+  //       text2: "Please add bank name",
+  //     });
+  //     return;
+  //   }
+  //   const payload = {
+  //     username: userName,
+  //     phoneNumber: phoneNumber,
+  //     amount: amount,
+  //     accountType: selectedMethod,
+  //     bankName: bankName,
+  //     accountNumber: accountNumber,
+  //     accountTitle: accountTitle,
+  //     transactionType: "withdraw",
+  //     // imageBase64: fileBase64,
+  //   };
+  //   const resultAction = await dispatch(addTransaction(payload)).unwrap();
+  // };
+
 
   const handleWidral = async () => {
-    if (!userName || !phoneNumber || !amount) {
-      Toast.show({
-        type: "error",
-        text1: "Error",
-        text2: "Please fill all the fields.",
-      });
-      return;
-    } else if (Number(amount) < 1) {
-      Toast.show({
-        type: "error",
-        text1: "Error",
-        text2: "minimum ammount is RS:1.",
-      });
-      return;
-    } else if (!accountNumber || !accountTitle) {
-      Toast.show({
-        type: "error",
-        text1: "Error",
-        text2: "Please add bank detail",
-      });
-      return;
-    } else if (selectedMethod === "Bank" && !bankName) {
-      Toast.show({
-        type: "error",
-        text1: "Error",
-        text2: "Please add bank name",
-      });
-      return;
-    }
-    const payload = {
-      username: userName,
-      phoneNumber: phoneNumber,
-      amount: amount,
-      accountType: selectedMethod,
-      bankName: bankName,
-      accountNumber: accountNumber,
-      accountTitle: accountTitle,
-      transactionType: "withdraw",
-      // imageBase64: fileBase64,
-    };
-    const resultAction = await dispatch(addTransaction(payload)).unwrap();
+  if (user.username != userName) {
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: "Username/ID does not match",
+    });
+    return;
+  } else if (!phoneNumber || !amount) {
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: "Please fill all the fields.",
+    });
+    return;
+  } else if (Number(amount) < 1) {
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: "minimum amount is RS:1.",
+    });
+    return;
+  } else if (!accountNumber || !accountTitle) {
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: "Please add bank detail",
+    });
+    return;
+  } else if (selectedMethod === "Bank" && !bankName) {
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: "Please add bank name",
+    });
+    return;
+  }
+
+  const payload = {
+    username: userName,
+    phoneNumber: phoneNumber,
+    amount: amount,
+    accountType: selectedMethod,
+    bankName: bankName || selectedMethod,
+    accountNumber: accountNumber,
+    accountTitle: accountTitle,
+    transactionType: "withdraw",
+    // imageBase64: fileBase64,
   };
+
+  try {
+    const resultAction = await dispatch(addTransaction(payload)).unwrap();
+
+    // ✅ Reset all fields after successful API call
+    setSelectedMethod("JazzCash");
+    setUserName("");
+    setPhoneNumber("");
+    setAmount("");
+    setBankName("");
+    setAccountNumber("");
+    setAccountTitle("");
+
+    Toast.show({
+      type: "success",
+      text1: "Success",
+      text2: "Withdrawal request submitted successfully!",
+    });
+    router.push("/notifications"); 
+  } catch (error) {
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: "Something went wrong. Please try again.",
+    });
+  }
+};
 
   return (
     <View className="flex-1 bg-bg">
       <SafeAreaView className="flex-1 mt-6">
-        {/* <AppHeader
-          userName="Withdraw"
-          onPress={() => navigation.openDrawer()}
-        /> */}
+        <AppHeader
+          title="Withdraw"
+          showNotification
+          onNotificationPress={() => 
+                router.push("/notifications") 
+          }
+          
+        />
 
         <ScrollView showsVerticalScrollIndicator={false} className="mx-[4%]">
           <Spacer size={20} />
@@ -165,6 +260,7 @@ const WithdrawScreen = () => {
                         : "text-grayWhite"
                     }`}
                   >
+                    
                     {method}
                   </Text>
                 </TouchableOpacity>

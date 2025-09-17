@@ -1,5 +1,13 @@
+import { Entypo } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { Platform, Text, TextInput, TextInputProps, View } from "react-native";
+import {
+  Platform,
+  Text,
+  TextInput,
+  TextInputProps,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 type LabeledInputProps = TextInputProps & {
   title?: string;
@@ -25,11 +33,13 @@ const LabeledTextInput: React.FC<LabeledInputProps> = ({
   borderColor = "rgb(164,168,173)",
   activeBorderColor = "#007AFF",
   errorColor = "#D32F2F",
+  secureTextEntry,
   onFocus,
   onBlur,
   ...rest
 }) => {
   const [focused, setFocused] = useState(false);
+  const [isSecure, setIsSecure] = useState(!!secureTextEntry); // track password visibility
   const hasError = !!errorText;
 
   return (
@@ -48,11 +58,7 @@ const LabeledTextInput: React.FC<LabeledInputProps> = ({
         className="relative rounded-lg border"
         style={{
           borderWidth: 1.5,
-          borderColor: hasError
-            ? errorColor
-            : focused
-            ? activeBorderColor
-            : borderColor,
+          borderColor: hasError ? errorColor : borderColor, // 👈 no active border color
           backgroundColor: backgroundColor,
         }}
       >
@@ -69,34 +75,52 @@ const LabeledTextInput: React.FC<LabeledInputProps> = ({
             className={`font-semibold ${
               hasError
                 ? "text-red-600"
-                : focused
-                ? "text-blue-500"
                 : "text-grayWhite"
-            } ${labelStyle ?? ""} ${Platform.OS === "web" ? "text-sm" : "text-base"}`}
+            } ${labelStyle ?? ""} ${
+              Platform.OS === "web" ? "text-sm" : "text-base"
+            }`}
           >
             {label}
           </Text>
         </View>
 
+        {/* TextInput with optional eye icon */}
         <TextInput
-          className={`text-base text-grayWhite py-3 px-4 ${inputStyle ?? ""}`}
+          className={`text-base text-grayWhite py-3 px-4 pr-10 ${inputStyle ?? ""}`}
           style={{
-            outlineStyle:'dashed',
-            outlineWidth:0,
+            outlineStyle: "dashed",
+            outlineWidth: 0,
           }}
-          // onFocus={(e) => {
-          //   setFocused(true);
-          //   onFocus?.(e);
-          // }}
-          // onBlur={(e) => {
-          //   setFocused(false);
-          //   onBlur?.(e);
-          // }}
+          secureTextEntry={isSecure}
+          onFocus={(e) => {
+            setFocused(true);
+            onFocus?.(e);
+          }}
+          onBlur={(e) => {
+            setFocused(false);
+            onBlur?.(e);
+          }}
           {...rest}
         />
+
+        {/* 👁 Eye toggle (only for password fields) */}
+        {secureTextEntry && (
+          <TouchableOpacity
+            onPress={() => setIsSecure(!isSecure)}
+            style={{ position: "absolute", right: 12, top: 14 }}
+          >
+            <Entypo
+              name={isSecure ? "eye-with-line" : "eye"}
+              size={20}
+              color="#ccc"
+            />
+          </TouchableOpacity>
+        )}
       </View>
 
-      {errorText && <Text className="mt-1 text-xs text-red-600">{errorText}</Text>}
+      {errorText && (
+        <Text className="mt-1 text-xs text-red-600">{errorText}</Text>
+      )}
     </View>
   );
 };
@@ -106,28 +130,22 @@ export default LabeledTextInput;
 
 
 
-// import { Colors } from "@/constants/Colors";
+
+
+
+
+
 // import React, { useState } from "react";
-// import {
-//   Platform,
-//   StyleSheet,
-//   Text,
-//   TextInput,
-//   TextInputProps,
-//   TextStyle,
-//   View,
-//   ViewStyle,
-// } from "react-native";
-// import { responsiveFontSize, responsiveHeight } from "react-native-responsive-dimensions";
+// import { Platform, Text, TextInput, TextInputProps, View } from "react-native";
 
 // type LabeledInputProps = TextInputProps & {
-//   title?:string;
+//   title?: string;
 //   label: string;
-//   containerStyle?: ViewStyle;
-//   inputStyle?: TextStyle;
-//   labelStyle?: TextStyle;
+//   containerStyle?: string; // Tailwind class
+//   inputStyle?: string;
+//   labelStyle?: string;
 //   errorText?: string;
-//   backgroundColor?: string; // background behind the label to mask the border
+//   backgroundColor?: string;
 //   borderColor?: string;
 //   activeBorderColor?: string;
 //   errorColor?: string;
@@ -140,8 +158,8 @@ export default LabeledTextInput;
 //   inputStyle,
 //   labelStyle,
 //   errorText,
-//   backgroundColor = "#FFFFFF",
-//   borderColor = Colors.grayWhite,
+//   backgroundColor = "#fff",
+//   borderColor = "rgb(164,168,173)",
 //   activeBorderColor = "#007AFF",
 //   errorColor = "#D32F2F",
 //   onFocus,
@@ -152,98 +170,75 @@ export default LabeledTextInput;
 //   const hasError = !!errorText;
 
 //   return (
-//     <View style={[styles.wrapper, containerStyle]}>
-//       {/* Border container */}
-//       {title &&
-//        <Text style={styles.selectCurrency}>{title}</Text>
-//        }
+//     <View className={`${containerStyle ?? ""}`}>
+//       {title && (
+//         <Text
+//           className={`text-grayWhite font-medium mb-2 ${labelStyle ?? ""} ${
+//             Platform.OS === "web" ? "text-sm" : "text-base"
+//           }`}
+//         >
+//           {title}
+//         </Text>
+//       )}
+
 //       <View
-//         style={[
-//           styles.container,
-//           { borderColor: hasError ? errorColor : focused ? activeBorderColor : borderColor },
-//         ]}
+//         className="relative rounded-lg border"
+//         style={{
+//           borderWidth: 1.5,
+//           borderColor: hasError
+//             ? errorColor
+//             : focused
+//             ? activeBorderColor
+//             : borderColor,
+//           backgroundColor: backgroundColor,
+//         }}
 //       >
-//         {/* Label overlapping the top-left border */}
+//         {/* Floating label */}
 //         <View
-//           style={[
-//             styles.labelWrap,
-//             { backgroundColor },
-//           ]}
+//           className="absolute px-1 z-10"
+//           style={{
+//             top: -10,
+//             left: 12,
+//             backgroundColor,
+//           }}
 //         >
 //           <Text
-//             style={[
-//               styles.label,
-//               { color: hasError ? errorColor : focused ? activeBorderColor : Colors.grayWhite },
-//               labelStyle,
-//             ]}
+//             className={`font-semibold ${
+//               hasError
+//                 ? "text-red-600"
+//                 : focused
+//                 ? "text-blue-500"
+//                 : "text-grayWhite"
+//             } ${labelStyle ?? ""} ${Platform.OS === "web" ? "text-sm" : "text-base"}`}
 //           >
 //             {label}
 //           </Text>
 //         </View>
 
-//         {/* Input */}
 //         <TextInput
-//           style={[styles.input, inputStyle]}
+//           className={`text-base text-grayWhite py-3 px-4 ${inputStyle ?? ""}`}
+//           style={{
+//             outlineStyle:'dashed',
+//             outlineWidth:0,
+//           }}
 //           // onFocus={(e) => {
 //           //   setFocused(true);
 //           //   onFocus?.(e);
 //           // }}
-//           onBlur={(e) => {
-//             setFocused(false);
-//             onBlur?.(e);
-//           }}
+//           // onBlur={(e) => {
+//           //   setFocused(false);
+//           //   onBlur?.(e);
+//           // }}
 //           {...rest}
 //         />
 //       </View>
 
-//       {/* Helper / Error */}
-//       {!!errorText && (
-//         <Text style={[styles.helperText, { color: errorColor }]}>{errorText}</Text>
-//       )}
+//       {errorText && <Text className="mt-1 text-xs text-red-600">{errorText}</Text>}
 //     </View>
 //   );
 // };
 
-// const styles = StyleSheet.create({
-//   wrapper: {
-//     width: "100%",
-//   },
-//   container: {
-//     position: "relative",
-//     borderWidth: 1.5,
-//     borderRadius: 10,
-//     paddingHorizontal: 14,
-//     paddingVertical: 12,
-//   },
-//   labelWrap: {
-//     position: "absolute",
-//     top: -10,       // lifts label above the border
-//     left: 12,
-//     paddingHorizontal: 6, // background padding so border is hidden behind
-//     zIndex: 1,
-//   },
-//   label: {
-//     fontSize: Platform.OS==='web'? 12:14,
-//     fontWeight: "600",
-//     color:'red'
-//   },
-//   input: {
-//     fontSize: 16,
-//     paddingVertical: 4,
-//     outlineStyle:'dashed',
-//     outlineWidth:0,
-//     color:Colors.grayWhite, 
-//   },
-//   helperText: {
-//     marginTop: 6,
-//     fontSize: 12,
-//   },
-//   selectCurrency:{
-//       color: Colors.grayWhite,
-//       marginBottom: responsiveHeight(Platform.OS ==='web'? 2.5 : 2.2),
-//       fontSize: responsiveFontSize(Platform.OS==='web'?1.2: 1.8),
-//       fontWeight: "500",
-//     },
-// });
-
 // export default LabeledTextInput;
+
+
+
