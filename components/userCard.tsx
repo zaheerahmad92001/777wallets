@@ -56,7 +56,7 @@ export default function UserCard({
 
       {/* Column: Username + Phone */}
       <View className="ml-15">
-        <Text className="text-base text-grayWhite">@{username}</Text>
+        <Text className="text-base text-grayWhite">{username}</Text>
         <Text className="text-base text-grayWhite">{phone}</Text>
       </View>
     </View>

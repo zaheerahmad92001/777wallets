@@ -7,9 +7,9 @@ import { fetchTransactions, updatePaymentStatus } from "@/redux/actions/paymentA
 import { AppDispatch, RootState } from "@/redux/store";
 import { UpdatePaymentPayload } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation, useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
-import { FlatList, Platform, RefreshControl, SafeAreaView, TextInput, TouchableOpacity, View } from "react-native";
+import { useFocusEffect, useNavigation, useRouter } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
+import { FlatList, Platform, RefreshControl, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
 export default function Payments() {
@@ -29,31 +29,48 @@ export default function Payments() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [showAlert, setShowAlert] = useState(false);
 
+  const loadAllTransactions = useCallback(
+    async (searchData: string) => {
+      try {
+        await dispatch(fetchTransactions(searchData) as any).unwrap();
+      } catch (error) {
+        console.error("Failed to load transactions:", error);
+      }
+    },
+    [dispatch]
+  );
+  
+  useFocusEffect(
+    React.useCallback(() => {
+      // on focus: load initial data (empty search)
+      loadAllTransactions("");
+  
+      // cleanup runs when screen loses focus (or unmounts)
+      return () => {
+        setSearchQuery("");
+      };
+    }, [loadAllTransactions])
+  );
+  
   useEffect(() => {
-    loadAllTransactions();
-  }, [dispatch]);
-
-  const loadAllTransactions = async () => {
-    try {
-      await dispatch(fetchTransactions() as any).unwrap();
-    } catch (error) {
-      console.error("Failed to load transactions:", error);
+    if (searchQuery === "") {
+      loadAllTransactions(""); // fetch all users when input is cleared
     }
-  };
-
-
-  const [refreshing, setRefreshing] = useState(false);
-
-const onRefresh = async () => {
-  setRefreshing(true);
-  try {
-    await loadAllTransactions();
-  } catch (err) {
-    console.error("Refresh failed:", err);
-  } finally {
-    setRefreshing(false);
-  }
-};
+  }, [searchQuery, loadAllTransactions]);
+  
+  
+    const [refreshing, setRefreshing] = useState(false);
+  
+    const onRefresh = async () => {
+      setRefreshing(true);
+      try {
+        await loadAllTransactions(searchQuery);
+      } catch (err) {
+        console.error("Refresh failed:", err);
+      } finally {
+        setRefreshing(false);
+      }
+    };
 
 
   const updatePaymentTransactions = async (transactionId: string, transStatus: string) => {
@@ -79,7 +96,7 @@ const onRefresh = async () => {
   };
 
   const handleSearch = () => {
-    alert(`Searching for: ${searchQuery}`);
+    loadAllTransactions(searchQuery)
     // 👉 later, filter PaymentCard list based on searchQuery
   };
   return (
@@ -111,8 +128,11 @@ const onRefresh = async () => {
 
 
         <View className={`${Platform.OS === "web" ? "mt-20" : "mt-10"}`}>
-          {loading ?
-            <Loader /> :
+          {loading ? (
+            <Loader /> ): 
+           Array.isArray(allTransactions) && allTransactions?.length > 0 ?
+            (
+             <View className={`${Platform.OS === "web" ? "mt-20" : "mt-10"}`}>
             <FlatList
               data={allTransactions}
               //keyExtractor={(item) => item.id}
@@ -167,6 +187,13 @@ const onRefresh = async () => {
                 />
               )}
             />
+            </View>
+            ) :
+              <View className="mt-[200] items-center justify-center">
+                <Text className="text-grayWhite text-[16px] font-bold">
+                  No Data Found
+                </Text>
+              </View>
           }
         </View>
       {selectedImage && (

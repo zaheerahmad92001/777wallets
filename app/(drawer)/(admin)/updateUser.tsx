@@ -14,7 +14,7 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  View,
+  View
 } from "react-native";
 import {
   responsiveFontSize,
@@ -216,6 +216,18 @@ export default function EditUser() {
                 handleUpdate();
               }}
               isLoading={inProgress}
+              buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green"
+              textStyle="text-white text-lg font-bold"
+            />
+             <Spacer size={Platform.OS === "web" ? 40 : 30} /> 
+            <AppButton
+              title="Change Password"
+              onPress={() =>
+          router.push({
+            pathname: "/(drawer)/(admin)/changePassword",
+            params: { userItem: userItem },
+          })
+        }
               buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green"
               textStyle="text-white text-lg font-bold"
             />

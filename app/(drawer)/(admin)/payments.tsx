@@ -9,7 +9,7 @@ import { UpdatePaymentPayload } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation, useRouter } from "expo-router";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FlatList, ListRenderItem, Platform, RefreshControl, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
@@ -55,6 +55,11 @@ useFocusEffect(
   }, [loadAllTransactions])
 );
 
+useEffect(() => {
+  if (searchQuery === "") {
+    loadAllTransactions(""); // fetch all users when input is cleared
+  }
+}, [searchQuery, loadAllTransactions]);
 
 
   const [refreshing, setRefreshing] = useState(false);
@@ -152,6 +157,7 @@ useFocusEffect(
             onChangeText={setSearchQuery}
             placeholder="Search payments..."
             placeholderTextColor="#ccc"
+            autoCapitalize='none'
             className="flex-1 bg-gray-800 text-white px-4 py-3 rounded-l-lg"
           />
           <TouchableOpacity
