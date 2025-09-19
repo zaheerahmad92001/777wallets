@@ -1,6 +1,7 @@
 import { Transactions, TransactiontState, UpdatePaymentResponse } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
+  fetchSingleUserTransactions,
   fetchTransactions,
   updatePaymentStatus,
 } from "../actions/paymentAction";
@@ -35,7 +36,27 @@ const transactionSlice = createSlice({
       )
       .addCase(fetchTransactions.rejected, (state, action) => {
         state.loading = false;
-        // rejected payload defaults to `unknown` unless you use rejectWithValue
+        state.error =
+          (action.payload as string) ??
+          action.error.message ??
+          "Something went wrong";
+      })
+
+      // fetch user`s transactions
+      .addCase(fetchSingleUserTransactions.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        fetchSingleUserTransactions.fulfilled,
+        (state, action: PayloadAction<Transactions[]>) => {
+
+          state.loading = false;
+          state.allTransactions = action.payload;
+        }
+      )
+      .addCase(fetchSingleUserTransactions.rejected, (state, action) => {
+        state.loading = false;
         state.error =
           (action.payload as string) ??
           action.error.message ??
@@ -51,20 +72,15 @@ const transactionSlice = createSlice({
         updatePaymentStatus.fulfilled,
         (state, action: PayloadAction<UpdatePaymentResponse>) => {
           const { transactionId, transStatus } = action.payload;
-          console.log('payload',action.payload)
-    console.log('payload transactionId ', transactionId)
-    console.log('payload transStatus ', transStatus)
           state.loading = false;
 
           // ✅ Update the transaction in place
           const txIndex = state.allTransactions.findIndex(
             (tx) => tx.transactionId === transactionId
           );
-console.log('find index', txIndex)
           if (txIndex !== -1) {
             state.allTransactions[txIndex].transStatus = transStatus;
           }
-          console.log(' state.allTransactions[txIndex]', state.allTransactions[txIndex])
         }
       )
       .addCase(updatePaymentStatus.rejected, (state, action) => {

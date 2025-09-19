@@ -126,8 +126,10 @@ export default function SignUp() {
           onBackPress={() => handleBackPress()}
           onMenuPress={() => openMenu()}
         />
-        <ScrollView style={styles.wrapper}>
-          {/* <Text style={styles.heading}>Sign Up</Text> */}
+        <ScrollView 
+        showsVerticalScrollIndicator={false}
+        style={styles.wrapper}>
+  
           <View style={styles.inputWrapper}>
             <ImagePickerComponent
               label="User Image"
@@ -137,6 +139,7 @@ export default function SignUp() {
               imageUri={imageUri}
               setImageUri={setImageUri}
             />
+            <Spacer size={Platform.OS === 'web' ? 20 : 20} />
             <LabeledTextInput
               label="Name"
               placeholder="Enter name"
@@ -209,7 +212,7 @@ export default function SignUp() {
             imageUri={imageUri}
             setImageUri={setImageUri}
             /> */}
-           // <Spacer size={Platform.OS === 'web' ? 40 : 30} />
+            <Spacer size={Platform.OS === 'web' ? 40 : 30} />
 
             <AppButton
               title="Create User"
@@ -220,6 +223,7 @@ export default function SignUp() {
               buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green"
               textStyle="text-white text-lg font-bold"
             />
+              <Spacer size={Platform.OS === 'web' ? 40 : 10} />
           </View>
         </ScrollView>
       </SafeAreaView>

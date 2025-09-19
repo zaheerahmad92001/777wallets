@@ -84,7 +84,17 @@ const [imageUri, setImageUri] = useState<string | null>(null);
       <SafeAreaView style={styles.mainwrapper}>
         <AdminHeader title="Add New Account" onMenuPress={() => openMenu()} />
         <ScrollView style={styles.wrapper}>
+           
           <View style={styles.inputWrapper}>
+              <ImagePickerComponent
+               label="Bank Logo"
+               onImageSelected={({ uri, imagebase64 }) => {
+               setSelectedImage({ uri, imagebase64 });
+            }}
+            imageUri={imageUri}
+            setImageUri={setImageUri}
+            />
+              <Spacer size={Platform.OS === 'web' ? 20 : 20} />
             <LabeledTextInput
               label="Bank Name"
               placeholder="Enter bank name"
@@ -137,15 +147,7 @@ const [imageUri, setImageUri] = useState<string | null>(null);
               backgroundColor={Colors.bg}
               containerStyle="w-[90%] md:w-[50%] mx-auto"
             />
-            <Spacer size={Platform.OS === "web" ? 30 : 20} />
-            <ImagePickerComponent
-               label="Bank Logo"
-               onImageSelected={({ uri, imagebase64 }) => {
-               setSelectedImage({ uri, imagebase64 });
-            }}
-            imageUri={imageUri}
-            setImageUri={setImageUri}
-            />
+           
             <Spacer size={Platform.OS === "web" ? 40 : 30} />
 
             <AppButton

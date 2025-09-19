@@ -19,11 +19,6 @@ export const fetchTransactions = createAsyncThunk<any , string>(
 
     try {
       const response = await apiService.get(url);
-      // await AsyncStorage.setItem(
-      //   storagekeys.authToken,
-      //   response?.data?.token,
-      // );
-
       return response?.transactions; 
 
     } catch (error:any) {
@@ -42,6 +37,37 @@ export const fetchTransactions = createAsyncThunk<any , string>(
   },
 );
 
+
+export const fetchSingleUserTransactions = createAsyncThunk<any , string>(
+  'fetch-user-transaction',
+  async (status, {rejectWithValue}) => {
+    let url = ''
+    if(status){
+      url = `/getTransactions?transStatus=${status}`
+    }else{
+      url = `/getTransactions`
+    }
+    console.log('url', url)
+
+    try {
+      const response = await apiService.get(url);
+      return response?.transactions; 
+
+    } catch (error:any) {
+
+      console.log('getting Transactions error', error)
+      if (!error.response) {
+        return rejectWithValue(
+          'Network error: Please check your internet connection.',
+        );
+      }
+      const errorMessage =
+        error?.response?.data?.message ||
+        'getting Transaction failed. Please try again.';
+      return rejectWithValue(errorMessage);
+    }
+  },
+);
 
 // update bank account api call here
 

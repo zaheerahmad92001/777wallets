@@ -3,92 +3,85 @@ import ZoomImageModal from "@/components/imagePreviewModel";
 import Loader from "@/components/Loader";
 import NotificationsCard from "@/components/notificationsCard";
 import { Colors } from "@/constants/Colors";
-import { fetchTransactions, updatePaymentStatus } from "@/redux/actions/paymentAction";
+import {
+  fetchSingleUserTransactions,
+} from "@/redux/actions/paymentAction";
 import { AppDispatch, RootState } from "@/redux/store";
-import { UpdatePaymentPayload } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
-import { FlatList, Platform, RefreshControl, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  RefreshControl,
+  SafeAreaView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
 export default function Payments() {
-
   const navigation = useNavigation();
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, inProgress, allUser } = useSelector((state: RootState) => state.auth);
-  const { allTransactions, loading: transactionLoading, inProgress: transactionInprogress } = useSelector(
-    (state: RootState) => state.transactions
+  const { loading, inProgress, allUser } = useSelector(
+    (state: RootState) => state.auth
   );
+  const {
+    allTransactions,
+    loading: transactionLoading,
+    inProgress: transactionInprogress,
+  } = useSelector((state: RootState) => state.transactions);
 
-  const [selectedIndex, setSelectedIndex] = useState<string>('');
-  const [transStatus, setTransStatus] = useState<string>('');
+  const [selectedIndex, setSelectedIndex] = useState<string>("");
+  const [transStatus, setTransStatus] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [visible, setVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [showAlert, setShowAlert] = useState(false);
 
-  const loadAllTransactions = useCallback(
+  const loadTransactions = useCallback(
     async (searchData: string) => {
       try {
-        await dispatch(fetchTransactions(searchData) as any).unwrap();
+        await dispatch(fetchSingleUserTransactions(searchData) as any).unwrap();
       } catch (error) {
         console.error("Failed to load transactions:", error);
       }
     },
     [dispatch]
   );
-  
+
   useFocusEffect(
     React.useCallback(() => {
       // on focus: load initial data (empty search)
-      loadAllTransactions("");
-  
+      loadTransactions("");
+
       // cleanup runs when screen loses focus (or unmounts)
       return () => {
         setSearchQuery("");
       };
-    }, [loadAllTransactions])
+    }, [loadTransactions])
   );
-  
+
   useEffect(() => {
     if (searchQuery === "") {
-      loadAllTransactions(""); // fetch all users when input is cleared
+      loadTransactions(""); // fetch all users when input is cleared
     }
-  }, [searchQuery, loadAllTransactions]);
-  
-  
-    const [refreshing, setRefreshing] = useState(false);
-  
-    const onRefresh = async () => {
-      setRefreshing(true);
-      try {
-        await loadAllTransactions(searchQuery);
-      } catch (err) {
-        console.error("Refresh failed:", err);
-      } finally {
-        setRefreshing(false);
-      }
-    };
+  }, [searchQuery, loadTransactions]);
 
+  const [refreshing, setRefreshing] = useState(false);
 
-  const updatePaymentTransactions = async (transactionId: string, transStatus: string) => {
-    setTransStatus(transStatus)
-    setSelectedIndex(transactionId)
-    const payload: UpdatePaymentPayload = {
-      transactionId: transactionId,
-      transStatus: transStatus
-    };
+  const onRefresh = async () => {
+    setRefreshing(true);
     try {
-      await dispatch(updatePaymentStatus(payload) as any).unwrap();
-      setTransStatus('')
-      setSelectedIndex('')
-    } catch (error) {
-      console.error("Failed to update transactions:", error);
+      await loadTransactions(searchQuery);
+    } catch (err) {
+      console.error("Refresh failed:", err);
+    } finally {
+      setRefreshing(false);
     }
   };
-
 
 
   const openMenu = () => {
@@ -96,26 +89,29 @@ export default function Payments() {
   };
 
   const handleSearch = () => {
-    loadAllTransactions(searchQuery)
+    loadTransactions(searchQuery);
     // 👉 later, filter PaymentCard list based on searchQuery
   };
   return (
     <View className="flex-1 bg-bg px-4">
       <SafeAreaView className="flex-1 mt-12 px-4">
         <AppHeader
-                  title="Notifications"
-                  showNotification
-                   //onNotificationPress={() => Alert.alert("alert")}
-                  
-                />
+          title="Notifications"
+          showNotification
+          //onNotificationPress={() => Alert.alert("alert")}
+        />
         {/*Search Bar */}
-        <View className="flex-row items-center mt-4 mb-4">
+        <View className="w-[90%] md:w-[50%] mx-auto flex-row items-center mt-4 mb-4">
           <TextInput
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholder="Search payments..."
+            placeholder="Search payments with status"
             placeholderTextColor="#ccc"
             className="flex-1 bg-gray-800 text-white px-4 py-3 rounded-l-lg"
+            style={{
+            outlineStyle: "dashed",
+            outlineWidth: 0,
+          }}
           />
           <TouchableOpacity
             onPress={handleSearch}
@@ -126,31 +122,26 @@ export default function Payments() {
           </TouchableOpacity>
         </View>
 
-
-        <View className={`${Platform.OS === "web" ? "mt-20" : "mt-10"}`}>
-          {loading ? (
-            <Loader /> ): 
-           Array.isArray(allTransactions) && allTransactions?.length > 0 ?
-            (
-             <View className={`${Platform.OS === "web" ? "mt-20" : "mt-10"}`}>
+        <View className={`flex-1`}>
+          {transactionLoading ? (
+            <Loader />
+          ) : Array.isArray(allTransactions) && allTransactions?.length > 0 ? (
             <FlatList
               data={allTransactions}
               //keyExtractor={(item) => item.id}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{
-                paddingBottom: 80, // space for floating button
+                paddingBottom: 10, // space for floating button
               }}
-
-                refreshControl={
-                  <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                    tintColor="#fff"            // iOS spinner color
-                    colors={[Colors.green]}     // Android spinner color
-                  />
-                }
-
-              renderItem={({ item , index }) => (
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  tintColor="#fff" // iOS spinner color
+                  colors={[Colors.green]} // Android spinner color
+                />
+              }
+              renderItem={({ item, index }) => (
                 <NotificationsCard
                   imageUrl={item?.imageUrl}
                   bankName={item.bankName}
@@ -163,49 +154,44 @@ export default function Payments() {
                   transStatus={item.transStatus}
                   amount={item.amount}
                   datetime={item.createdAt}
-                  onAccept={() => {
-                    updatePaymentTransactions(item.transactionId, "accepted");
-                  }}
-                  onReject={() => {
-                    updatePaymentTransactions(item.transactionId, "rejected");
-                  }}
+                  onAccept={() => {}}
+                  onReject={() => {}}
                   selectedStatus={transStatus}
-                  isSelectedIndex={selectedIndex===item.transactionId}
+                  isSelectedIndex={selectedIndex === item.transactionId}
                   containerStyle="w-[92%] md:w-[50%] self-center"
                   onViewImage={() => {
                     if (item?.imageUrl) {
-                      setSelectedImage("https://storage.googleapis.com/bpwallets.firebasestorage.app/users/3fb6b49b-4821-426e-b131-efa406f62f25.jpg");
+                      setSelectedImage(
+                        "https://storage.googleapis.com/bpwallets.firebasestorage.app/users/3fb6b49b-4821-426e-b131-efa406f62f25.jpg"
+                      );
                       setVisible(true);
                     } else {
                       Toast.show({
-                                type: "error",
-                                text1: "Image receipt",
-                                text2: "Receipt image is not found",
-                              });
+                        type: "error",
+                        text1: "Image receipt",
+                        text2: "Receipt image is not found",
+                      });
                     }
                   }}
                 />
               )}
             />
+          ) : (
+            <View className="mt-[200] items-center justify-center">
+              <Text className="text-grayWhite text-[16px] font-bold">
+                No Data Found
+              </Text>
             </View>
-            ) :
-              <View className="mt-[200] items-center justify-center">
-                <Text className="text-grayWhite text-[16px] font-bold">
-                  No Data Found
-                </Text>
-              </View>
-          }
+          )}
         </View>
-      {selectedImage && (
-        <ZoomImageModal
-          imageUrl={selectedImage}
-          visible={visible}
-          onClose={() => setVisible(false)}
-        />
-      )}
-
+        {selectedImage && (
+          <ZoomImageModal
+            imageUrl={selectedImage}
+            visible={visible}
+            onClose={() => setVisible(false)}
+          />
+        )}
       </SafeAreaView>
     </View>
-  )
-
+  );
 }

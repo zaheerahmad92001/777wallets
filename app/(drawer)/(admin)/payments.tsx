@@ -6,14 +6,14 @@ import { Colors } from "@/constants/Colors";
 import { fetchTransactions, updatePaymentStatus } from "@/redux/actions/paymentAction";
 import { AppDispatch, RootState } from "@/redux/store";
 import { UpdatePaymentPayload } from "@/types";
-import { AppDispatch, RootState } from "@/redux/store";
+
 
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation, useRouter } from "expo-router";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { FlatList, ListRenderItem, Platform, RefreshControl, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FlatList, ListRenderItem, RefreshControl, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
 export default function Payments() {
@@ -33,19 +33,6 @@ export default function Payments() {
   const [visible, setVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [showAlert, setShowAlert] = useState(false);
-
-    const navigation = useNavigation();
-    const router = useRouter();
-    const dispatch = useDispatch<AppDispatch>();
-    const { loading, inProgress, allUser } = useSelector((state: RootState) => state.auth);
-
-
-    const [searchQuery, setSearchQuery] = useState("");
-      const openMenu = () => {
-        navigation.openDrawer();
-      };
-
-
 
 
 const loadAllTransactions = useCallback(
@@ -167,7 +154,7 @@ useEffect(() => {
       <SafeAreaView className="flex-1 mt-12 px-4">
         <AdminHeader title="Payments" onMenuPress={() => openMenu()} />
         {/*Search Bar */}
-        <View className="flex-row items-center mt-4 mb-4">
+        <View className="w-[90%] md:w-[50%] mx-auto flex-row items-center mt-4 mb-4">
           <TextInput
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -175,6 +162,10 @@ useEffect(() => {
             placeholderTextColor="#ccc"
             autoCapitalize='none'
             className="flex-1 bg-gray-800 text-white px-4 py-3 rounded-l-lg"
+            style={{
+            outlineStyle: "dashed",
+            outlineWidth: 0,
+          }}
           />
           <TouchableOpacity
             onPress={handleSearch}
@@ -186,7 +177,7 @@ useEffect(() => {
         </View>
 
 
-        <View className={`${Platform.OS === "web" ? "mt-20" : "mt-10"}`}>
+        <View className={`flex-1`}>
           {transactionLoading ?
             <Loader /> :
             Array.isArray(allTransactions) && allTransactions?.length > 0 ?
@@ -197,7 +188,7 @@ useEffect(() => {
                 keyExtractor={(item) => item.id}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{
-                  paddingBottom: 80, // space for floating button
+                  paddingBottom: 10, // space for floating button
                 }}
 
                 refreshControl={

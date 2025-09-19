@@ -135,7 +135,7 @@ export default function Users() {
         <AdminHeader title="User" onMenuPress={() => openMenu()} showBackButton={false} />
 
         {/*Search Bar */}
-        <View className="flex-row items-center mt-4 mb-4">
+        <View className="w-[90%] md:w-[50%] mx-auto flex-row items-center mt-4 mb-4">
           <TextInput
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -143,6 +143,10 @@ export default function Users() {
             placeholderTextColor="#ccc"
             autoCapitalize='none'
             className="flex-1 bg-gray-800 text-white px-4 py-3 rounded-l-lg"
+             style={{
+            outlineStyle: "dashed",
+            outlineWidth: 0,
+          }}
           />
           <TouchableOpacity
             onPress={handleSearch}
