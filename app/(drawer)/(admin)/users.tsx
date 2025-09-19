@@ -139,7 +139,7 @@ export default function Users() {
           <TextInput
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholder="Search User..."
+            placeholder="Search User with username/ID..."
             placeholderTextColor="#ccc"
             autoCapitalize='none'
             className="flex-1 bg-gray-800 text-white px-4 py-3 rounded-l-lg"

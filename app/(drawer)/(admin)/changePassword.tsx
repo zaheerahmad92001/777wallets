@@ -4,22 +4,22 @@ import AdminHeader from "@/components/appHeader";
 import LabeledTextInput from "@/components/labeledTextInput";
 import Spacer from "@/components/spacer";
 import { Colors } from "@/constants/Colors";
-import { updateUser } from "@/redux/actions/authActions";
+import { updatePassword } from "@/redux/actions/authActions";
 import { AppDispatch, RootState } from "@/redux/store";
-import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useFocusEffect, useLocalSearchParams, useNavigation, useRouter } from "expo-router";
+import { useCallback, useState } from "react";
 import {
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    View
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  View
 } from "react-native";
 import {
-    responsiveFontSize,
-    responsiveHeight,
-    responsiveScreenHeight,
-    responsiveScreenWidth,
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveScreenHeight,
+  responsiveScreenWidth,
 } from "react-native-responsive-dimensions";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,13 +38,13 @@ export default function EditPassword() {
   const [password , setPassword]=useState<string>('');
   const [confirmPassword , setConfirmPassword]=useState<string>('');
 
-  useEffect(() => {
-    if (userItem) {
+ 
+useFocusEffect(
+    useCallback(() => {
       setPassword("");
       setConfirmPassword("");
-    }
-  }, [userItem]);
-
+    }, [])
+  );
   const handleUpdate = async () => {
     try {
       if (!password || !confirmPassword) {
@@ -54,13 +54,21 @@ export default function EditPassword() {
           text2: "All fields are required.",
         });
         return;
+      } else if (password !== confirmPassword){
+        Toast.show({
+              type: "error",
+              text1: "Validation Error",
+              text2: "password and confirm password should be same",
+            });
+            return;
       }
 
       const payload = {
-        password,
-      };
-
-      const response = await dispatch(updateUser({ payload, userId })).unwrap();
+         userId: userId,
+         newPassword: password
+      };   
+       console.log("payload password ", payload);
+      const response = await dispatch(updatePassword(payload)).unwrap();
        if (response?.success) {
         Toast.show({
           type: "success",
@@ -72,7 +80,7 @@ export default function EditPassword() {
       if (response?.success === false) {
         Toast.show({
           type: "error",
-          text1: "User Update Error",
+          text1: "Password Update Error",
           text2: response?.message,
         });
         return;
@@ -113,6 +121,7 @@ export default function EditPassword() {
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
               autoCapitalize="none"
+              secureTextEntry={true}
               backgroundColor={Colors.bg}
               containerStyle="w-[90%] md:w-[50%] mx-auto"
             />
@@ -121,6 +130,7 @@ export default function EditPassword() {
               label="Confirm Password"
               placeholder="Confirm password"
               value={confirmPassword}
+              secureTextEntry={true}
               onChangeText={setConfirmPassword}
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"

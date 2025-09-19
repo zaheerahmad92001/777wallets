@@ -1,5 +1,5 @@
 import { storagekeys } from "@/constants/staticData";
-import { AllUser } from "@/types";
+import { AllUser, UpdatePasswordResponse } from "@/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createSlice } from "@reduxjs/toolkit";
 import {
@@ -10,9 +10,10 @@ import {
   fetchWhatsApp,
   loginUser,
   signUp,
+  updatePassword,
   updateUser,
   updateWebsite,
-  updateWhatsApp,
+  updateWhatsApp
 } from "../actions/authActions";
 
 interface AuthState {
@@ -20,6 +21,7 @@ interface AuthState {
   allUser: AllUser[];
   contactNumber: { id: string; whatsAppNumber: string } | null;
   websiteURL: { id: string; websiteURL: string } | null;
+  passwordData:UpdatePasswordResponse | null;
   loading: boolean;
   inProgress: boolean;
   error: string | null;
@@ -33,6 +35,7 @@ const initialState: AuthState = {
   inProgress: false,
   error: null,
   allUser: [],
+  passwordData: null
 };
 
 const authSlice = createSlice({
@@ -236,6 +239,26 @@ const authSlice = createSlice({
         state.websiteURL = newSiteURL;
       })
       .addCase(updateWebsite.rejected, (state, action) => {
+        state.inProgress = false;
+        state.error =
+          (action.payload as string) ??
+          action.error.message ??
+          "Something went wrong";
+      })
+
+
+
+      // update user password  cases
+      .addCase(updatePassword.pending, (state) => {
+        state.inProgress = true;
+        state.error = null;
+      })
+      .addCase(updatePassword.fulfilled, (state, action) => {
+        state.passwordData = action.payload;
+        state.inProgress = false;
+       
+      })
+      .addCase(updatePassword.rejected, (state, action) => {
         state.inProgress = false;
         state.error =
           (action.payload as string) ??
