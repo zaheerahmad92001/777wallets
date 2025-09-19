@@ -130,6 +130,14 @@ export interface AllUser {
   imageUrl: string | null;
 }
 
+
+export interface UpdatePasswordResponse {
+  success: boolean;
+  message: string;
+  userId: string;
+}
+
+
 export interface FetchAllUsersResponse {
   users: AllUser[];
 }
@@ -188,6 +196,12 @@ export interface updateWebsitePayload {
   websiteId: string;
   websiteURL: string;
 }
+
+export interface updatePasswordPayload {
+  userId: string;
+  newPassword: string;
+}
+
 export interface updateWebsiteResponse {
   success: boolean;
   message: string;

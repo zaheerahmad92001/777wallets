@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import apiService from "../../services/apiService";
 
 import { storagekeys } from "@/constants/staticData";
-import { AddWebsitePayload, AddWebsiteResponse, AddWhatsAppPayload, AddWhatsResponse, AllUser, CreateUserPayload, CreateUserResponse, DeleteUserPayload, DeleteUserResponse, LoginPayload, LoginResponse, UpdateUserPayload, updateWebsitePayload, updateWebsiteResponse, updateWhatsAppPayload, updateWhatsAppResponse } from "@/types";
+import { AddWebsitePayload, AddWebsiteResponse, AddWhatsAppPayload, AddWhatsResponse, AllUser, CreateUserPayload, CreateUserResponse, DeleteUserPayload, DeleteUserResponse, LoginPayload, LoginResponse, updatePasswordPayload, UpdatePasswordResponse, UpdateUserPayload, updateWebsitePayload, updateWebsiteResponse, updateWhatsAppPayload, updateWhatsAppResponse } from "@/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 
@@ -271,6 +271,30 @@ export const updateWebsite = createAsyncThunk<updateWebsiteResponse, updateWebsi
       const errorMessage =
         error?.response?.data?.message ||
         "update website failed. Please try again.";
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+
+export const updatePassword = createAsyncThunk<UpdatePasswordResponse, updatePasswordPayload>(
+  "update-password",
+  async (payload, { rejectWithValue }) => {
+    
+    try {
+      const response = await apiService.post("/updateUserPassword",payload);
+      
+      return response;
+    } catch (error: any) {
+      console.log("update password URL api error", error?.response?.data);
+      if (!error.response) {
+        return rejectWithValue(
+          "Network error: Please check your internet connection."
+        );
+      }
+      const errorMessage =
+        error?.response?.data?.message ||
+        "update password failed. Please try again.";
       return rejectWithValue(errorMessage);
     }
   }

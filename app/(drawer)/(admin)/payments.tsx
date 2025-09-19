@@ -158,7 +158,7 @@ useEffect(() => {
           <TextInput
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholder="Search payments..."
+            placeholder="Search payments with username/ID "
             placeholderTextColor="#ccc"
             autoCapitalize='none'
             className="flex-1 bg-gray-800 text-white px-4 py-3 rounded-l-lg"
