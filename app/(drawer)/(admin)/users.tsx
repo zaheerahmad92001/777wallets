@@ -37,6 +37,7 @@ export default function Users() {
   const [showAlert, setShowAlert] = useState<boolean>(false);
 
 
+
   const getAllUser = useCallback(
     async (searchData: string) => {
       try {
@@ -56,6 +57,7 @@ export default function Users() {
       };
     }, [getAllUser])
   );
+
 
   useEffect(() => {
     if (searchQuery === "") {

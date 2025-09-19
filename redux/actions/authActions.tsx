@@ -90,6 +90,7 @@ AllUser[],
   { rejectValue: string }>
   ("fetch-all-user", async (username, { rejectWithValue }) => {
   try {
+
     
     let url = ''
     if(username){
@@ -100,6 +101,7 @@ AllUser[],
     console.log('url', url)
     const response = await apiService.get(url);
    console.log('here all user', response)
+
     return response?.users;
   } catch (error: any) {
     console.log("fetch all user api error", error);

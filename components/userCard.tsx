@@ -34,8 +34,10 @@ export default function UserCard({
         <Image
           source={{ uri: image }}
           className="w-12 h-12 rounded-full mr-3"
+
           resizeMode="cover"
           />
+
         <Text className="text-lg font-semibold text-grayWhite">{name}</Text>
       </View>
 

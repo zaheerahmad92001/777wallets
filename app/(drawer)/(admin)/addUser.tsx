@@ -43,11 +43,10 @@ export default function SignUp() {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
 
-
   
   const createUser = async () => {
     try {
-      if (!name || !username || !phone || !password || !confirmPassword) {
+      if (!name || !username || !phone) {
         Toast.show({
           type: "error",
           text1: "Validation Error",
@@ -81,6 +80,7 @@ export default function SignUp() {
         });
         return
       }
+
 
       // Reset fields
       setName("");

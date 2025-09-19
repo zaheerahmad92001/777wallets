@@ -240,6 +240,7 @@ export interface UpdateUserResponse {
   };
 }
 
+
 export interface UpdatePaymentResponse {
   message: string;
   transactionId: string;

@@ -11,6 +11,7 @@ import {
 
 const initialState: AccountState = {
   bankAccounts: [],
+  transactions: [],
   loading: false,
   inProgress: false,
   error: null,

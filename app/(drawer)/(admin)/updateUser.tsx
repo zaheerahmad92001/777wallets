@@ -69,7 +69,6 @@ export default function EditUser() {
         });
         return;
       }
-
       const payload = {
         name,
         username,
@@ -98,6 +97,7 @@ export default function EditUser() {
         return;
       }
 
+
       router.back();
     } catch (error: any) {
       console.error("Error updating user:", error?.response || error.message);
@@ -116,12 +116,9 @@ export default function EditUser() {
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.mainwrapper}>
+
         <AdminHeader title="Update User" onMenuPress={() => openMenu()} />
         <ScrollView style={styles.wrapper}>
-          {/* <Text style={styles.heading}>Sign Up</Text> */}
-          
-          
-
           <View style={styles.inputWrapper}>
             <ImagePickerComponent
                       label="User Image"
@@ -131,6 +128,7 @@ export default function EditUser() {
                       imageUri={imageUri}
                       setImageUri={setImageUri}
                     />
+
             <LabeledTextInput
             value={name}
              onChangeText={setName}
@@ -186,8 +184,10 @@ export default function EditUser() {
               backgroundColor={Colors.bg}
               containerStyle="w-[90%] md:w-[50%] mx-auto"
             /> */}
+
             {/*<Spacer size={Platform.OS === "web" ? 30 : 20} />
              <LabeledTextInput
+
               label="Confirm Password"
               placeholder="Confirm password"
               value={confirmPassword}
@@ -198,7 +198,9 @@ export default function EditUser() {
               backgroundColor={Colors.bg}
               containerStyle="w-[90%] md:w-[50%] mx-auto"
             /> */}
+
  {/*
+
             <Spacer size={Platform.OS === "web" ? 30 : 20} />
             <ImagePickerComponent
               label="User Image"
@@ -208,7 +210,11 @@ export default function EditUser() {
               imageUri={imageUri}
               setImageUri={setImageUri}
             />
+
             <Spacer size={Platform.OS === "web" ? 40 : 30} /> */}
+
+            <Spacer size={Platform.OS === "web" ? 40 : 30} />
+
 
             <AppButton
               title="Update User"
@@ -216,6 +222,7 @@ export default function EditUser() {
                 handleUpdate();
               }}
               isLoading={inProgress}
+t
               buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green"
               textStyle="text-white text-lg font-bold"
             />
@@ -228,6 +235,7 @@ export default function EditUser() {
             params: { userItem: userItem },
           })
         }
+
               buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green"
               textStyle="text-white text-lg font-bold"
             />

@@ -6,9 +6,12 @@ import { Colors } from "@/constants/Colors";
 import { fetchTransactions, updatePaymentStatus } from "@/redux/actions/paymentAction";
 import { AppDispatch, RootState } from "@/redux/store";
 import { UpdatePaymentPayload } from "@/types";
+import { AppDispatch, RootState } from "@/redux/store";
+
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation, useRouter } from "expo-router";
+
 import React, { useCallback, useEffect, useState } from "react";
 import { FlatList, ListRenderItem, Platform, RefreshControl, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
@@ -23,12 +26,25 @@ export default function Payments() {
     (state: RootState) => state.transactions
   );
 
+
   const [selectedIndex, setSelectedIndex] = useState<string>('');
   const [transStatus, setTransStatus] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState("");
   const [visible, setVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [showAlert, setShowAlert] = useState(false);
+
+    const navigation = useNavigation();
+    const router = useRouter();
+    const dispatch = useDispatch<AppDispatch>();
+    const { loading, inProgress, allUser } = useSelector((state: RootState) => state.auth);
+
+
+    const [searchQuery, setSearchQuery] = useState("");
+      const openMenu = () => {
+        navigation.openDrawer();
+      };
+
 
 
 
