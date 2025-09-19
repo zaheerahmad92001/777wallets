@@ -49,14 +49,14 @@ export default function Website() {
 
 const handleUpdate = async (newUrl: string) => {
     const websiteId = websiteURL.id;
-    const websiteURL = newUrl;
+    const newlink = newUrl;
     const payload = {
       websiteId,
-      websiteURL,
+      websiteURL:newlink,
     };
     const response = await dispatch(updateWebsite(payload)).unwrap();
-    console.log("here is website response", response?.message);
-    if (response?.message === "Website URL updated successfully") {
+    console.log("here is website response", response);
+    if (response?.success) {
       setIsEditing(false);
       Toast.show({
         type: "success",
