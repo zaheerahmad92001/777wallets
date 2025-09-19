@@ -1,6 +1,12 @@
 import { Colors } from "@/constants/Colors";
 import React, { useEffect, useRef } from "react";
-import { ActivityIndicator, Animated, Platform, Pressable, PressableProps } from "react-native";
+import {
+  ActivityIndicator,
+  Animated,
+  Platform,
+  Pressable,
+  PressableProps,
+} from "react-native";
 import { responsiveFontSize } from "react-native-responsive-dimensions";
 
 interface AppButtonProps extends PressableProps {
@@ -9,7 +15,9 @@ interface AppButtonProps extends PressableProps {
   buttonStyle?: string | (string | undefined)[];
   textStyle?: string | (string | undefined)[];
   blink?: boolean;
-  isLoading?:boolean;
+  isLoading?: boolean;
+  disabled?: boolean; // ✅ added
+  bgColor?:string;
 }
 
 const AppButton: React.FC<AppButtonProps> = ({
@@ -18,40 +26,58 @@ const AppButton: React.FC<AppButtonProps> = ({
   buttonStyle,
   textStyle,
   blink = false,
-  isLoading=false,
+  isLoading = false,
+  disabled = false, // ✅ default false
+  bgColor=Colors.green,
   ...rest
 }) => {
   const opacity = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    if (blink) {
+    if (blink && !disabled) {
       Animated.loop(
         Animated.sequence([
-          Animated.timing(opacity, { toValue: 0, duration: 1000, useNativeDriver: true }),
-          Animated.timing(opacity, { toValue: 1, duration: 500, useNativeDriver: true }),
+          Animated.timing(opacity, {
+            toValue: 0,
+            duration: 1000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(opacity, {
+            toValue: 1,
+            duration: 500,
+            useNativeDriver: true,
+          }),
         ])
       ).start();
     }
-  }, [blink]);
+  }, [blink, disabled]);
 
   return (
     <Pressable
       onPress={onPress}
+      disabled={disabled} // ✅ block press when disabled
       className={`rounded-md items-center justify-center px-5 
         ${Platform.OS === "web" ? "py-3" : "py-3"} ${buttonStyle ?? ""}`}
+      style={{
+        backgroundColor: disabled ? "gray" : bgColor?bgColor:undefined, // ✅ force gray background
+        opacity: disabled ? 0.5 : 1, // ✅ lower opacity if disabled
+      }}
       {...rest}
     >
-      {isLoading ? 
-      <ActivityIndicator color={Colors.white} size={'small'}/>:
-      <Animated.Text
-        style={[blink ? { opacity } : {}, {color:Colors.white,},
-          Platform.OS==='web'? {fontSize:responsiveFontSize(1.2)}:{}
-        ]}
-        className={`text-white text-base font-bold ${textStyle ?? ""}`}
-      >
-        {title}
-      </Animated.Text>
-      }
+      {isLoading ? (
+        <ActivityIndicator color={Colors.white} size={"small"} />
+      ) : (
+        <Animated.Text
+          style={[
+            blink && !disabled ? { opacity } : {}, // only blink if not disabled
+            { color: Colors.white },
+            Platform.OS === "web" ? { fontSize: responsiveFontSize(1.2) } : {},
+          ]}
+          className={`text-white text-base font-bold ${textStyle ?? ""}`}
+        >
+          {title}
+        </Animated.Text>
+      )}
     </Pressable>
   );
 };
@@ -59,80 +85,19 @@ const AppButton: React.FC<AppButtonProps> = ({
 export default AppButton;
 
 
-// // import { Colors } from "@/constants/Colors";
-// // import React from "react";
-// // import {
-// //   Pressable,
-// //   PressableProps,
-// //   StyleSheet,
-// //   Text,
-// //   TextStyle,
-// //   ViewStyle,
-// // } from "react-native";
-// // import { responsiveHeight } from "react-native-responsive-dimensions";
-
-// // interface AppButtonProps extends PressableProps {
-// //   title: string;
-// //   onPress: () => void;
-// //   buttonStyle?: ViewStyle | ViewStyle[];
-// //   textStyle?: TextStyle | TextStyle[];
-// // }
-
-// // const AppButton: React.FC<AppButtonProps> = ({
-// //   title,
-// //   onPress,
-// //   buttonStyle,
-// //   textStyle,
-// //   ...rest
-// // }) => {
-// //   return (
-// //     <Pressable
-// //       onPress={onPress}
-// //       style={[styles.buttonContainer, buttonStyle]}
-// //       {...rest}
-// //     >
-// //       <Text style={[styles.buttonText, textStyle]}>{title}</Text>
-// //     </Pressable>
-// //   );
-// // };
-
-// // const styles = StyleSheet.create({
-// //   buttonContainer: {
-// //     backgroundColor: Colors.green,
-// //     paddingVertical: responsiveHeight(1.7),
-// //     paddingHorizontal: 20,
-// //     borderRadius: 5,
-// //     alignItems: "center",
-// //     justifyContent: "center",
-// //   },
-// //   buttonText: {
-// //     color: Colors.light.white,
-// //     fontSize: 16,
-// //     fontWeight: "bold",
-// //   },
-// // });
-
-// // export default AppButton;
 
 // import { Colors } from "@/constants/Colors";
 // import React, { useEffect, useRef } from "react";
-// import {
-//   Animated,
-//   Platform,
-//   Pressable,
-//   PressableProps,
-//   StyleSheet,
-//   TextStyle,
-//   ViewStyle
-// } from "react-native";
-// import { responsiveHeight } from "react-native-responsive-dimensions";
+// import { ActivityIndicator, Animated, Platform, Pressable, PressableProps } from "react-native";
+// import { responsiveFontSize } from "react-native-responsive-dimensions";
 
 // interface AppButtonProps extends PressableProps {
 //   title: string;
 //   onPress: () => void;
-//   buttonStyle?: ViewStyle | ViewStyle[];
-//   textStyle?: TextStyle | TextStyle[];
-//   blink?: boolean; // 👈 new prop to enable blinking
+//   buttonStyle?: string | (string | undefined)[];
+//   textStyle?: string | (string | undefined)[];
+//   blink?: boolean;
+//   isLoading?:boolean;
 // }
 
 // const AppButton: React.FC<AppButtonProps> = ({
@@ -141,6 +106,7 @@ export default AppButton;
 //   buttonStyle,
 //   textStyle,
 //   blink = false,
+//   isLoading=false,
 //   ...rest
 // }) => {
 //   const opacity = useRef(new Animated.Value(1)).current;
@@ -149,16 +115,8 @@ export default AppButton;
 //     if (blink) {
 //       Animated.loop(
 //         Animated.sequence([
-//           Animated.timing(opacity, {
-//             toValue: 0,
-//             duration: 1000,
-//             useNativeDriver: true,
-//           }),
-//           Animated.timing(opacity, {
-//             toValue: 1,
-//             duration: 500,
-//             useNativeDriver: true,
-//           }),
+//           Animated.timing(opacity, { toValue: 0, duration: 1000, useNativeDriver: true }),
+//           Animated.timing(opacity, { toValue: 1, duration: 500, useNativeDriver: true }),
 //         ])
 //       ).start();
 //     }
@@ -167,32 +125,23 @@ export default AppButton;
 //   return (
 //     <Pressable
 //       onPress={onPress}
-//       style={[styles.buttonContainer, buttonStyle]}
+//       className={`rounded-md items-center justify-center px-5 
+//         ${Platform.OS === "web" ? "py-3" : "py-3"} ${buttonStyle ?? ""}`}
 //       {...rest}
 //     >
+//       {isLoading ? 
+//       <ActivityIndicator color={Colors.white} size={'small'}/>:
 //       <Animated.Text
-//         style={[styles.buttonText, textStyle, blink && { opacity }]}
+//         style={[blink ? { opacity } : {}, {color:Colors.white,},
+//           Platform.OS==='web'? {fontSize:responsiveFontSize(1.2)}:{}
+//         ]}
+//         className={`text-white text-base font-bold ${textStyle ?? ""}`}
 //       >
 //         {title}
 //       </Animated.Text>
+//       }
 //     </Pressable>
 //   );
 // };
-
-// const styles = StyleSheet.create({
-//   buttonContainer: {
-//     backgroundColor: Colors.green,
-//     paddingVertical: responsiveHeight(Platform.OS==='web'? 2.7:1.7),
-//     paddingHorizontal: 20,
-//     borderRadius: 5,
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-//   buttonText: {
-//     color: Colors.light.white,
-//     fontSize: 16,
-//     fontWeight: "bold",
-//   },
-// });
 
 // export default AppButton;

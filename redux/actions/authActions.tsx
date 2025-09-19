@@ -85,12 +85,22 @@ export const loginUser = createAsyncThunk<
 });
 
 export const fetchAllUser = createAsyncThunk<
-  AllUser[],
-  void,
+AllUser[],
+  string,
   { rejectValue: string }>
-  ("fetch-all-user", async (_, { rejectWithValue }) => {
+  ("fetch-all-user", async (username, { rejectWithValue }) => {
   try {
-    const response = await apiService.get("/getAllUsers");
+
+    
+    let url = ''
+    if(username){
+      url = `/getAllUsers?username=${username}`
+    }else{
+      url = `/getAllUsers`
+    }
+    console.log('url', url)
+    const response = await apiService.get(url);
+   console.log('here all user', response)
 
     return response?.users;
   } catch (error: any) {

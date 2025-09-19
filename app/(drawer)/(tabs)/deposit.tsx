@@ -1,7 +1,8 @@
 import AccountSelector from "@/components/accountSelector";
 import AppButton from "@/components/appButton";
-import ExpoDocumentPickerComponent from "@/components/documentSelector";
+import AppHeader from "@/components/appHeader";
 import FloatingButton from "@/components/floatingButton";
+import ImagePickerComponent from "@/components/imagePickerComponent";
 import LabeledTextInput from "@/components/labeledTextInput";
 import Spacer from "@/components/spacer";
 import { Colors } from "@/constants/Colors";
@@ -12,7 +13,7 @@ import {
 } from "@/redux/actions/bankAccountActions";
 import { AppDispatch, RootState } from "@/redux/store";
 import { BankAccount } from "@/types";
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -38,6 +39,7 @@ const DepositScreen = () => {
     (state: RootState) => state.bankAccounts
   );
 
+
   // const [isModalVisible, setModalVisible] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState<
     "RS" | "USDT" | null
@@ -50,8 +52,17 @@ const DepositScreen = () => {
   const [amount, setAmount] = useState<string>("");
   const [file, setFile] = useState<PickedFile | null>(null);
   const [fileBase64, setFileBase64] = useState<string | null>(null);
-  const [selectedAccountType, setSelectedAccountType] =
-    useState<BankAccount | null>(null);
+  const [selectedAccountType, setSelectedAccountType] = useState<BankAccount | null>(null);
+  const [selectedImage, setSelectedImage] = useState<{
+    uri: string;
+    imagebase64: string;
+  } | null>(null);
+  const [imageUri, setImageUri] = useState<string | null>(null);
+
+  const { user} = useSelector(
+    (state: RootState) => state.auth
+  );
+  
 
   useEffect(() => {
     loadBankAccounts();
@@ -74,39 +85,87 @@ const DepositScreen = () => {
     });
   };
 
-  const handleDeposit = async () => {
-    if (!userName || !phoneNumber || !amount || !selectedAccount || !file) {
-      Toast.show({
-        type: "error",
-        text1: "Error",
-        text2: "Please fill all the fields and select an account.",
-      });
-      return;
-    }
-    else if(Number(amount) < 500 ){
-       Toast.show({
-        type: "error",
-        text1: "Error",
-        text2: "Minimum ammount is RS:500",
-      });
-      return;
-    }
-    const payload = {
-      username: userName,
-      phoneNumber: phoneNumber,
-      amount: amount,
-      accountType: selectedAccountType?.iban
-        ? "bank"
-        : selectedAccountType?.bankName,
-      bankName: selectedAccountType?.bankName,
-      accountNumber: selectedAccountType?.accountNumber,
-      accountTitle: selectedAccountType?.accountHolderName,
-      transactionType: "deposit",
-      // imageBase64: fileBase64,
-    };
+  
 
-    const resultAction = await dispatch(addTransaction(payload)).unwrap();
+  const handleDeposit = async () => {
+  if (user.username != userName) {
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: "Username/ID does not match",
+    });
+    return;
+  } else if (!userName || !phoneNumber || !amount) {
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: "Please fill all the fields.",
+    });
+    return;
+  } else if (!selectedAccount) {
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: "Please select the account.",
+    });
+    return;
+  } else if (!imageUri) {
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: "Please select the receipt image.",
+    });
+    return;
+  } else if (Number(amount) < 500) {
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: "Minimum amount is RS:500.",
+    });
+    return;
+  }
+
+  const payload = {
+    username: userName,
+    phoneNumber: phoneNumber,
+    amount: amount,
+    accountType: selectedAccountType?.iban ? "bank" : selectedAccountType?.bankName,
+    bankName: selectedAccountType?.bankName,
+    accountNumber: selectedAccountType?.accountNumber,
+    accountTitle: selectedAccountType?.accountHolderName,
+    transactionType: "deposit",
+    imageBase64: selectedImage?.imagebase64,
   };
+
+  try {
+    const resultAction = await dispatch(addTransaction(payload)).unwrap();
+
+    // ✅ Reset fields after success
+    setSelectedAccount("");
+    setCopiedValue("");
+    setSelectedFile(null);
+    setUserName("");
+    setPhoneNumber("");
+    setAmount("");
+    setFile(null);
+    setFileBase64(null);
+    setSelectedAccountType(null);
+
+    Toast.show({
+      type: "success",
+      text1: "Success",
+      text2: "Deposit request submitted successfully!",
+    });
+    router.push("/notifications"); 
+  } catch (error) {
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: "Something went wrong. Please try again.",
+    });
+  }
+};
+
 
   const renderItem = ({ item, index }) => {
     return (
@@ -132,7 +191,14 @@ const DepositScreen = () => {
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.mainwrapper}>
-        {/* <AppHeader userName="Deposit" onPress={() => navigation.openDrawer()} /> */}
+          <AppHeader
+                  title="Deposit"
+                  showNotification
+                  onNotificationPress={() => 
+                        router.push("/notifications") 
+                  }
+                  
+                />
 
         <ScrollView showsVerticalScrollIndicator={false} style={styles.wrapper}>
           <Spacer size={20} />
@@ -198,12 +264,21 @@ const DepositScreen = () => {
 
           <Spacer size={20} />
 
-          <ExpoDocumentPickerComponent
+<ImagePickerComponent
+               label="Receipt Image"
+               onImageSelected={({ uri, imagebase64 }) => {
+               setSelectedImage({ uri, imagebase64 });
+            }}
+            imageUri={imageUri}
+            setImageUri={setImageUri}
+            />
+
+          {/* <ExpoDocumentPickerComponent
             file={file}
             setFile={setFile}
             fileBase64={fileBase64}
             setFileBase64={setFileBase64}
-          />
+          /> */}
 
           <AppButton
             title="Submit"

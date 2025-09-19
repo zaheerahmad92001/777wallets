@@ -152,7 +152,8 @@ const accountSlice = createSlice({
           (action.payload as string) ??
           action.error.message ??
           "Something went wrong";
-      });
+      })
+
   },
 });
 

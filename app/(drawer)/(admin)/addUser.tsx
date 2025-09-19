@@ -30,56 +30,57 @@ export default function SignUp() {
   const router = useRouter();
   const navigation = useNavigation();
   const dispatch = useDispatch<AppDispatch>();
-  const {inProgress} = useSelector((state:RootState) => state.auth)
+  const { inProgress } = useSelector((state: RootState) => state.auth)
 
-    const [selectedImage, setSelectedImage] = useState<{
+  const [selectedImage, setSelectedImage] = useState<{
     uri: string;
     imagebase64: string;
   } | null>(null);
   const [imageUri, setImageUri] = useState<string | null>(null);
-  const [name , setName]=useState<string>('');
-  const [username , setUsername]=useState<string>('');
-  const [phone , setPhone]=useState<string>('');
-  const [password , setPassword]=useState<string>('');
-  const [confirmPassword , setConfirmPassword]=useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+
   
+  const createUser = async () => {
+    try {
+      if (!name || !username || !phone) {
+        Toast.show({
+          type: "error",
+          text1: "Validation Error",
+          text2: "All fields are required.",
+        });
+        return;
+      }
 
-  const createUser = async() => {
-   try {
-    if (!name || !username || !phone || !password || !confirmPassword) {
-      Toast.show({
-        type: "error",
-        text1: "Validation Error",
-        text2: "All fields are required.",
-      });
-      return;
-    }
+      if (password !== confirmPassword) {
+        Toast.show({
+          type: "error",
+          text1: "Validation Error",
+          text2: "Passwords do not match.",
+        });
+        return;
+      }
+      const payload: CreateUserPayload = {
+        name,
+        username,
+        phone,
+        password,
+        role: "user", // default role
+        imageBase64: selectedImage?.imagebase64 || null, // optional
+      };
+      const response = await dispatch(signUp(payload)).unwrap();
+      if (response?.success === false) {
+        Toast.show({
+          type: "error",
+          text1: "User Create Error",
+          text2: response?.error,
+        });
+        return
+      }
 
-    if (password !== confirmPassword) {
-      Toast.show({
-        type: "error",
-        text1: "Validation Error",
-        text2: "Passwords do not match.",
-      });
-      return;
-    }
-    const payload:CreateUserPayload = {
-      name,
-      username,
-      phone,
-      password,
-      role: "user", // default role
-      imageBase64: selectedImage?.imagebase64 || null, // optional
-    };
-    const response = await dispatch(signUp(payload)).unwrap();
-   if(response?.success===false){
-    Toast.show({
-        type: "error",
-        text1: "User Create Error",
-        text2: response?.error,
-      });
-      return 
-   }
 
       // Reset fields
       setName("");
@@ -90,32 +91,55 @@ export default function SignUp() {
       setSelectedImage(null);
       setImageUri(null);
       router.back();
-    
-  } catch (error: any) {
-    console.error("Error creating user:", error?.response || error.message);
-    Toast.show({
-      type: "error",
-      text1: "Error",
-      text2: error?.response?.data?.error || "Something went wrong",
-    });
-  };
+
+    } catch (error: any) {
+      console.error("Error creating user:", error?.response || error.message);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: error?.response?.data?.error || "Something went wrong",
+      });
+    };
 
 
   };
   const openMenu = () => {
     navigation.openDrawer();
   };
+  const handleBackPress = () => {
+    setImageUri(null)
+    setName('')
+    setUsername('')
+    setPhone('')
+    setPassword('')
+    setConfirmPassword('')
+    setPassword('')
+    setConfirmPassword('')
+    navigation.goBack()
+  }
 
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.mainwrapper}>
         <AdminHeader
           title="Add New User"
+          onBackPress={() => handleBackPress()}
           onMenuPress={() => openMenu()}
         />
-        <ScrollView style={styles.wrapper}>
-          {/* <Text style={styles.heading}>Sign Up</Text> */}
+        <ScrollView 
+        showsVerticalScrollIndicator={false}
+        style={styles.wrapper}>
+  
           <View style={styles.inputWrapper}>
+            <ImagePickerComponent
+              label="User Image"
+              onImageSelected={({ uri, imagebase64 }) => {
+                setSelectedImage({ uri, imagebase64 });
+              }}
+              imageUri={imageUri}
+              setImageUri={setImageUri}
+            />
+            <Spacer size={Platform.OS === 'web' ? 20 : 20} />
             <LabeledTextInput
               label="Name"
               placeholder="Enter name"
@@ -157,6 +181,7 @@ export default function SignUp() {
               label="Password"
               placeholder="Enter password"
               value={password}
+              secureTextEntry={true}
               onChangeText={setPassword}
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
@@ -169,6 +194,7 @@ export default function SignUp() {
               label="Confirm Password"
               placeholder="Confirm password"
               value={confirmPassword}
+              secureTextEntry={true}
               onChangeText={setConfirmPassword}
               placeholderTextColor={Colors.grayWhite}
               keyboardType="default"
@@ -177,7 +203,7 @@ export default function SignUp() {
               containerStyle="w-[90%] md:w-[50%] mx-auto"
             />
 
-            <Spacer size={Platform.OS === "web" ? 30 : 20} />
+            {/* <Spacer size={Platform.OS === "web" ? 30 : 20} />
             <ImagePickerComponent
                label="User Image"
                onImageSelected={({ uri, imagebase64 }) => {
@@ -185,8 +211,8 @@ export default function SignUp() {
             }}
             imageUri={imageUri}
             setImageUri={setImageUri}
-            />
-            <Spacer size={Platform.OS==='web'? 40: 30} />
+            /> */}
+            <Spacer size={Platform.OS === 'web' ? 40 : 30} />
 
             <AppButton
               title="Create User"
@@ -197,6 +223,7 @@ export default function SignUp() {
               buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green"
               textStyle="text-white text-lg font-bold"
             />
+              <Spacer size={Platform.OS === 'web' ? 40 : 10} />
           </View>
         </ScrollView>
       </SafeAreaView>

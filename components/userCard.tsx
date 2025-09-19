@@ -34,8 +34,10 @@ export default function UserCard({
         <Image
           source={{ uri: image }}
           className="w-12 h-12 rounded-full mr-3"
-          resizeMode="contain"
-        />
+
+          resizeMode="cover"
+          />
+
         <Text className="text-lg font-semibold text-grayWhite">{name}</Text>
       </View>
 
@@ -56,7 +58,7 @@ export default function UserCard({
 
       {/* Column: Username + Phone */}
       <View className="ml-15">
-        <Text className="text-base text-grayWhite">@{username}</Text>
+        <Text className="text-base text-grayWhite">{username}</Text>
         <Text className="text-base text-grayWhite">{phone}</Text>
       </View>
     </View>

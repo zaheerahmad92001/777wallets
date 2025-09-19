@@ -100,7 +100,17 @@ useEffect(() => {
         <AdminHeader title="Update Account" onBackPress={()=>{router.push("/(drawer)/(admin)/accounts")}} onMenuPress={() => openMenu()} />
         <ScrollView style={styles.wrapper}>
           <View style={styles.inputWrapper}>
+            <ImagePickerComponent
+              label="Bank Logo"
+              onImageSelected={({ uri, imagebase64 }) => {
+                setSelectedImage({ uri, imagebase64 });
+              }}
+              imageUri={imageUri}
+              setImageUri={setImageUri}
+            />
             <LabeledTextInput
+             value={bankName}
+              onChangeText={setBankName}
               label="Bank Name"
               placeholder="Enter bank name"
                value={bankName}
@@ -114,6 +124,8 @@ useEffect(() => {
             <Spacer size={Platform.OS === "web" ? 30 : 20} />
 
             <LabeledTextInput
+             value={accountHolder}
+              onChangeText={setAccountHolder}
               label="Account Holder"
               placeholder="Enter account holder name"
                 value={accountHolder}
@@ -128,6 +140,8 @@ useEffect(() => {
             />
             <Spacer size={Platform.OS === "web" ? 30 : 20} />
             <LabeledTextInput
+             value={accountNumber}
+              onChangeText={setAccountNumber}
               label="Account Number"
               placeholder="Enter account number"
                value={accountNumber}
@@ -142,6 +156,8 @@ useEffect(() => {
             />
             <Spacer size={Platform.OS === "web" ? 30 : 20} />
             <LabeledTextInput
+             value={iban}
+              onChangeText={setIban}
               label="IBAN"
               placeholder="Enter IBAN"
                value={iban}
@@ -152,7 +168,7 @@ useEffect(() => {
               backgroundColor={Colors.bg}
               containerStyle="w-[90%] md:w-[50%] mx-auto"
             />
-            <Spacer size={Platform.OS === "web" ? 30 : 20} />
+            {/* <Spacer size={Platform.OS === "web" ? 30 : 20} />
             <ImagePickerComponent
               label="Bank Logo"
               onImageSelected={({ uri, imagebase64 }) => {
@@ -161,8 +177,8 @@ useEffect(() => {
               imageUri={imageUri}
               setImageUri={setImageUri}
             />
-            <Spacer size={Platform.OS === "web" ? 40 : 30} />
-
+            <Spacer size={Platform.OS === "web" ? 40 : 30} /> */}
+             <Spacer size={Platform.OS === "web" ? 40 : 30} />
             <AppButton
               title="Update Account"
               onPress={() => {

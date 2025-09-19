@@ -9,6 +9,32 @@ export interface BankAccount {
   userId: string;
   id: string;
 }
+
+
+export interface Transactions {
+  accountNumber: string;
+  accountTitle: string;
+  accountType: string;       
+  amount: string;            
+  bankName: string;
+  imageUrl: string | null;
+  phoneNumber: string;
+  transStatus: string;       
+  transactionType: string;   
+  userId: string;
+  username: string;
+  transactionId:string;
+  updatedAt:string;
+  createdAt:string;
+}
+
+export interface TransactiontState {
+  allTransactions: Transactions[];
+  loading: boolean;
+  inProgress: boolean;
+  error: string | null;
+}
+
 export interface BankAccountPayload {
   bankName: string;
   accountHolderName: string;
@@ -38,12 +64,40 @@ export interface TransactionPayload {
 export interface DeleteBankAccountPayload {
   bankId: string;
 }
+
+
 export interface DeleteBankAccountResponse {
   bankId: string;
   response: {
     message: string;
   };
 }
+
+
+export interface UpdateBankAccountPayload {
+  bankId: string;
+  payload: {
+    bankName?: string;
+    accountHolderName?: string;
+    accountNumber?: string;
+    iban?: string;
+    bankLogoBase64?: string;
+  };
+}
+
+export interface UpdatePaymentPayload {
+  transactionId: string;
+  transStatus: string;
+  
+}
+
+export interface UpdateBankAccountResponse {
+  bankId: string;
+  response: {
+    message: string;
+  };
+}
+
 
 export interface WhatsAppNumberResponse {
   updatedAt: string;
@@ -185,3 +239,15 @@ export interface UpdateUserResponse {
     imageUrl?: string;
   };
 }
+
+
+export interface UpdatePaymentResponse {
+  message: string;
+  transactionId: string;
+  transStatus: "accepted" | "pending" | "rejected" | string;
+}
+export interface UpdatePaymentPayloadInterface {
+  transactionId: string;
+  transStatus: "accepted" | "pending" | "rejected" | string;
+}
+

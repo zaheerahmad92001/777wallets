@@ -14,7 +14,7 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  View,
+  View
 } from "react-native";
 import {
   responsiveFontSize,
@@ -69,7 +69,6 @@ export default function EditUser() {
         });
         return;
       }
-
       const payload = {
         name,
         username,
@@ -98,6 +97,7 @@ export default function EditUser() {
         return;
       }
 
+
       router.back();
     } catch (error: any) {
       console.error("Error updating user:", error?.response || error.message);
@@ -116,11 +116,22 @@ export default function EditUser() {
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.mainwrapper}>
-        <AdminHeader title="Add New User" onMenuPress={() => openMenu()} />
+
+        <AdminHeader title="Update User" onMenuPress={() => openMenu()} />
         <ScrollView style={styles.wrapper}>
-          {/* <Text style={styles.heading}>Sign Up</Text> */}
           <View style={styles.inputWrapper}>
+            <ImagePickerComponent
+                      label="User Image"
+                      onImageSelected={({ uri, imagebase64 }) => {
+                        setSelectedImage({ uri, imagebase64 });
+                      }}
+                      imageUri={imageUri}
+                      setImageUri={setImageUri}
+                    />
+
             <LabeledTextInput
+            value={name}
+             onChangeText={setName}
               label="Name"
               placeholder="Enter name"
               value={name}
@@ -134,6 +145,8 @@ export default function EditUser() {
             <Spacer size={Platform.OS === "web" ? 30 : 20} />
 
             <LabeledTextInput
+            value= {username}
+             onChangeText={setUsername}
               label="UserName"
               placeholder="Enter User Name"
               value={username}
@@ -147,6 +160,8 @@ export default function EditUser() {
             />
             <Spacer size={Platform.OS === "web" ? 30 : 20} />
             <LabeledTextInput
+             value= {phone}
+              onChangeText={setPhone}
               label="Phone Number"
               placeholder="Enter number"
               value={phone}
@@ -169,8 +184,10 @@ export default function EditUser() {
               backgroundColor={Colors.bg}
               containerStyle="w-[90%] md:w-[50%] mx-auto"
             /> */}
-            <Spacer size={Platform.OS === "web" ? 30 : 20} />
-            {/* <LabeledTextInput
+
+            {/*<Spacer size={Platform.OS === "web" ? 30 : 20} />
+             <LabeledTextInput
+
               label="Confirm Password"
               placeholder="Confirm password"
               value={confirmPassword}
@@ -182,6 +199,8 @@ export default function EditUser() {
               containerStyle="w-[90%] md:w-[50%] mx-auto"
             /> */}
 
+ {/*
+
             <Spacer size={Platform.OS === "web" ? 30 : 20} />
             <ImagePickerComponent
               label="User Image"
@@ -191,7 +210,11 @@ export default function EditUser() {
               imageUri={imageUri}
               setImageUri={setImageUri}
             />
+
+            <Spacer size={Platform.OS === "web" ? 40 : 30} /> */}
+
             <Spacer size={Platform.OS === "web" ? 40 : 30} />
+
 
             <AppButton
               title="Update User"
@@ -199,6 +222,20 @@ export default function EditUser() {
                 handleUpdate();
               }}
               isLoading={inProgress}
+t
+              buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green"
+              textStyle="text-white text-lg font-bold"
+            />
+             <Spacer size={Platform.OS === "web" ? 40 : 30} /> 
+            <AppButton
+              title="Change Password"
+              onPress={() =>
+          router.push({
+            pathname: "/(drawer)/(admin)/changePassword",
+            params: { userItem: userItem },
+          })
+        }
+
               buttonStyle="w-[90%] md:w-[20%] mx-auto bg-green"
               textStyle="text-white text-lg font-bold"
             />
