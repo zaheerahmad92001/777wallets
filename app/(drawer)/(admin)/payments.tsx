@@ -16,13 +16,14 @@ import React, { useCallback, useEffect, useState } from "react";
 import { FlatList, ListRenderItem, RefreshControl, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
+
 export default function Payments() {
 
   const navigation = useNavigation();
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { loading, inProgress, allUser } = useSelector((state: RootState) => state.auth);
-  const { allTransactions, loading: transactionLoading, inProgress: transactionInprogress } = useSelector(
+  const { allTransactions, loading: transactionLoading, inProgress: updateInProgress } = useSelector(
     (state: RootState) => state.transactions
   );
 

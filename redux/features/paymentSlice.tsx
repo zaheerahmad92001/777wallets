@@ -65,14 +65,14 @@ const transactionSlice = createSlice({
 
       // update payment status
       .addCase(updatePaymentStatus.pending, (state) => {
-        state.loading = true;
+        state.inProgress = true;
         state.error = null;
       })
       .addCase(
         updatePaymentStatus.fulfilled,
         (state, action: PayloadAction<UpdatePaymentResponse>) => {
           const { transactionId, transStatus } = action.payload;
-          state.loading = false;
+          state.inProgress = false;
 
           // ✅ Update the transaction in place
           const txIndex = state.allTransactions.findIndex(
@@ -84,7 +84,7 @@ const transactionSlice = createSlice({
         }
       )
       .addCase(updatePaymentStatus.rejected, (state, action) => {
-        state.loading = false;
+        state.inProgress = false;
         // rejected payload defaults to `unknown` unless you use rejectWithValue
         state.error =
           (action.payload as string) ??
