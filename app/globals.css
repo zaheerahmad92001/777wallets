@@ -1,0 +1,13 @@
+/* Disable browser body scrolling and fill the screen */
+html,
+body,
+#__next,
+#root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* 🚫 Prevent browser scroll */
+  overscroll-behavior: none; /* 🚫 Prevent mobile rubber-band bounce */
+  background-color: #000; /* or match your bg-bg color */
+}

@@ -16,6 +16,7 @@ import "react-native-reanimated";
 import Toast from "react-native-toast-message";
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import "../app/globals.css";
 import { toastConfig } from "../components/toastConfig";
 import { persistor, store } from '../redux/store';
 
