@@ -93,7 +93,7 @@ export default function HomeScreen() {
               repeatSpacer={350}
               marqueeDelay={1000}
             >
-              Welcome to world777 get 5% extra bonus on 1st deposit and 3% extra
+              Welcome to Betpro get 5% extra bonus on 1st deposit and 3% extra
               bonus on regular deposit.
             </TextTicker>
           </View>
